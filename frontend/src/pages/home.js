@@ -1,5 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-export const Home = () => {
-  return <div>home</div>;
-};
+function VoterHome() {
+  const [ongoingVotes, setOngoingVotes] = useState([]);
+
+  // Sample fetch function to simulate getting ongoing votes
+  useEffect(() => {
+    const fetchOngoingVotes = async () => {
+      // Replace this with actual API call
+      const votes = [
+        { id: 1, title: "Election", date: "2024-07-15" },
+        { id: 2, title: "School Board Election", date: "2024-07-20" },
+      ];
+      setOngoingVotes(votes);
+    };
+
+    fetchOngoingVotes();
+  }, []);
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <h1 className="text-xl font-bold">Voter Portal</h1>
+        </div>
+      </header>
+
+      <main className="flex-grow p-6">
+        <h2 className="text-2xl font-bold mb-4">Ongoing Votes</h2>
+        {ongoingVotes.length > 0 ? (
+          <ul className="space-y-4">
+            {ongoingVotes.map((vote) => (
+              <li
+                key={vote.id}
+                className="p-4 border rounded-lg flex justify-between items-center hover:bg-gray-100"
+              >
+                <div>
+                  <h3 className="font-semibold">{vote.title}</h3>
+                  <p>Closing Date: {vote.date}</p>
+                </div>
+                <Link
+                  to={`/viewForm/${vote.id}`}
+                  className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg"
+                >
+                  View Details
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No ongoing votes available.</p>
+        )}
+      </main>
+
+      <footer className="bg-blue-600 text-white p-4 text-center">
+        &copy; {new Date().getFullYear()} Voter Portal. All rights reserved.
+      </footer>
+    </div>
+  );
+}
+
+export default VoterHome;

@@ -1,79 +1,70 @@
 CREATE TABLE `Users` (
-  `user_id` int PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255),
-  `email` varchar(100)
+  `user_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `name` VARCHAR(255),
+  `email` VARCHAR(100) UNIQUE NOT NULL -- Added UNIQUE constraint and NOT NULL
 );
 
 CREATE TABLE `Elections` (
-  `election_id` int PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(100),
-  `start_date` date,
-  `end_date` date
+  `election_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL, -- Added NOT NULL
+  `start_date` DATE NOT NULL, -- Added NOT NULL
+  `end_date` DATE NOT NULL -- Added NOT NULL
 );
 
 CREATE TABLE `Positions` (
-  `position_id` int PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(100),
-  `description` text
+  `position_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL, -- Added NOT NULL
+  `description` TEXT
 );
 
 CREATE TABLE `Candidates` (
-  `candidate_id` int PRIMARY KEY AUTO_INCREMENT,
-  `student_id` int,
-  `election_id` int,
-  `essay` varchar(3500),
-  `position_id` int
+  `candidate_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `student_id` INT,
+  `election_id` INT,
+  `essay` VARCHAR(3500),
+  `position_id` INT,
+  FOREIGN KEY (`student_id`) REFERENCES `Users` (`user_id`),
+  FOREIGN KEY (`election_id`) REFERENCES `Elections` (`election_id`),
+  FOREIGN KEY (`position_id`) REFERENCES `Positions` (`position_id`),
+  UNIQUE (`student_id`, `election_id`, `position_id`) 
 );
 
 CREATE TABLE `Votes` (
-  `vote_id` int PRIMARY KEY AUTO_INCREMENT,
-  `election_id` int,
-  `voter_id` int,
-  `candidate_id` int,
-  `timestamp` datetime
+  `vote_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `election_id` INT,
+  `voter_id` INT,
+  `candidate_id` INT,
+  `timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`election_id`) REFERENCES `Elections` (`election_id`),
+  FOREIGN KEY (`voter_id`) REFERENCES `Users` (`user_id`),
+  FOREIGN KEY (`candidate_id`) REFERENCES `Candidates` (`candidate_id`)
 );
 
 CREATE TABLE `EligibleVoters` (
-  `eligible_voter_id` int PRIMARY KEY AUTO_INCREMENT,
-  `election_id` int,
-  `student_id` int
+  `eligible_voter_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `election_id` INT,
+  `student_id` INT,
+  FOREIGN KEY (`election_id`) REFERENCES `Elections` (`election_id`),
+  FOREIGN KEY (`student_id`) REFERENCES `Users` (`user_id`)
 );
 
-CREATE TABLE `Admin` (
-  `admin_id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int
+CREATE TABLE `Admins` ( 
+  `admin_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `user_id` INT UNIQUE, 
+  FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
 );
 
-CREATE TABLE `Group` (
-  `group_id` int PRIMARY KEY AUTO_INCREMENT,
-  `group_name` varchar(255)
+CREATE TABLE `Groups` (
+  `group_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `group_name` VARCHAR(255) NOT NULL 
 );
 
-CREATE TABLE `Group_Member` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
-  `group_id` int,
-  `member_id` int,
-  `dateadded` date
+CREATE TABLE `Group_Members` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `group_id` INT,
+  `member_id` INT,
+  `date_added` DATE NOT NULL,
+  FOREIGN KEY (`group_id`) REFERENCES `Groups` (`group_id`),
+  FOREIGN KEY (`member_id`) REFERENCES `Users` (`user_id`),
+  UNIQUE (`group_id`, `member_id`)
 );
-
-ALTER TABLE `EligibleVoters` ADD FOREIGN KEY (`election_id`) REFERENCES `Elections` (`election_id`);
-
-ALTER TABLE `EligibleVoters` ADD FOREIGN KEY (`student_id`) REFERENCES `Users` (`user_id`);
-
-ALTER TABLE `Group_Member` ADD FOREIGN KEY (`group_id`) REFERENCES `Group` (`group_id`);
-
-ALTER TABLE `Group_Member` ADD FOREIGN KEY (`member_id`) REFERENCES `Users` (`user_id`);
-
-ALTER TABLE `Candidates` ADD FOREIGN KEY (`student_id`) REFERENCES `Users` (`user_id`);
-
-ALTER TABLE `Candidates` ADD FOREIGN KEY (`election_id`) REFERENCES `Elections` (`election_id`);
-
-ALTER TABLE `Candidates` ADD FOREIGN KEY (`position_id`) REFERENCES `Positions` (`position_id`);
-
-ALTER TABLE `Votes` ADD FOREIGN KEY (`election_id`) REFERENCES `Elections` (`election_id`);
-
-ALTER TABLE `Votes` ADD FOREIGN KEY (`voter_id`) REFERENCES `Users` (`user_id`);
-
-ALTER TABLE `Votes` ADD FOREIGN KEY (`candidate_id`) REFERENCES `Candidates` (`candidate_id`);
-
-ALTER TABLE `Admin` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`);

@@ -10,11 +10,10 @@ module.exports = {
   },
   plugins: [],
   theme: {
-    colors: {
-      transparent: "transparent",
-      current: "currentColor",
-      white: "#ffffff",
-      amber: "#ddb41f",
+    extend: {
+      colors: {
+        amber: "#ddb41f",
+      },
     },
   },
 };
