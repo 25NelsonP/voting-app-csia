@@ -44,7 +44,7 @@ function Header() {
           className="text-2xl text-black font-bold inline-flex items-center space-x-4"
         >
           <img className="max-w-16" src={logo} alt="logo" />
-          <p className="font-bold">ISY HS STUCO</p>
+          <p className="font-bold hover:text-gray-800">ISY HS STUCO</p>
         </Link>
       </div>
       <div className="flex items-center gap-x-5">

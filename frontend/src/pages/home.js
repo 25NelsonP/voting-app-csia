@@ -19,7 +19,7 @@ function VoterHome() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-min flex flex-col">
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold">Voter Portal</h1>
@@ -33,7 +33,7 @@ function VoterHome() {
             {ongoingVotes.map((vote) => (
               <li
                 key={vote.id}
-                className="p-4 border rounded-lg flex justify-between items-center hover:bg-gray-100"
+                className="p-4 border rounded-lg flex justify-between items-center bg-white shadow-sm hover:bg-gray-50"
               >
                 <div>
                   <h3 className="font-semibold">{vote.title}</h3>
@@ -52,10 +52,6 @@ function VoterHome() {
           <p>No ongoing votes available.</p>
         )}
       </main>
-
-      <footer className="bg-blue-600 text-white p-4 text-center">
-        &copy; {new Date().getFullYear()} Voter Portal. All rights reserved.
-      </footer>
     </div>
   );
 }
