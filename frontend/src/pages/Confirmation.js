@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ConfirmationPage = ({
   positions,
@@ -14,12 +15,6 @@ const ConfirmationPage = ({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold">Confirm Your Selection</h1>
-        </div>
-      </header>
-
       <main className="flex flex-col items-center p-3">
         {positions.map((position) => (
           <div key={position.id} className="mb-10 m-10">
@@ -47,16 +42,18 @@ const ConfirmationPage = ({
         <div className="p-10 flex justify-between w-full max-w-md">
           <button
             onClick={onBack}
-            className="bg-gray-400 text-white p-2 rounded-lg"
+            className="bg-gray-400 text-white p-2 rounded-lg hover:bg-gray-500"
           >
             Go Back
           </button>
-          <button
-            onClick={onSubmit}
-            className="bg-blue-600 text-white p-2 rounded-lg"
-          >
-            Confirm Selection
-          </button>
+          <Link to={"/voteSuccess"}>
+            <button
+              onClick={onSubmit}
+              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"
+            >
+              Confirm Selection
+            </button>
+          </Link>
         </div>
       </main>
     </div>

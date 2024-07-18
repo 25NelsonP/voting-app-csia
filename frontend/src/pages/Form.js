@@ -40,23 +40,33 @@ const ViewCandidatesPage = () => {
     setIsConfirming(true); // Navigate to confirmation page
   };
 
-  return isConfirming ? (
-    <ConfirmationPage
-      positions={positions}
-      selectedCandidates={selectedCandidates}
-      onBack={() => setIsConfirming(false)}
-      onSubmit={() => {
-        console.log("Confirmed Candidates:", selectedCandidates);
-        // Perform any additional actions such as sending the selected candidates to an API
-      }}
-    />
-  ) : (
-    <CandidatesForm
-      positions={positions}
-      selectedCandidates={selectedCandidates}
-      selectCandidate={selectCandidate}
-      handleSubmit={handleSubmit}
-    />
+  return (
+    <>
+      <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <h1 className="text-xl font-bold">Vote for AKK</h1>
+        </div>
+      </header>
+      {isConfirming ? (
+        <ConfirmationPage
+          positions={positions}
+          selectedCandidates={selectedCandidates}
+          onBack={() => setIsConfirming(false)}
+          onSubmit={() => {
+            console.log("Confirmed Candidates:", selectedCandidates);
+            // Perform any additional actions such as sending the selected candidates to an API
+          }}
+        />
+      ) : (
+        <CandidatesForm
+          positions={positions}
+          selectedCandidates={selectedCandidates}
+          selectCandidate={selectCandidate}
+          handleSubmit={handleSubmit}
+        />
+      )}
+      ;
+    </>
   );
 };
 

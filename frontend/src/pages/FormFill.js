@@ -8,12 +8,6 @@ const CandidatesForm = ({
 }) => {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold">Vote for AKK</h1>
-        </div>
-      </header>
-
       <main className="flex flex-col items-center p-3 ">
         {positions.map((position) => (
           <div key={position.id} className="mb-10 m-10">
@@ -47,7 +41,7 @@ const CandidatesForm = ({
         <div className="p-10 flex justify-end">
           <button
             onClick={handleSubmit}
-            className="bg-blue-600 text-white p-2 rounded-lg"
+            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-800"
           >
             Next
           </button>

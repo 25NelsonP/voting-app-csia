@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import Adminheader from "../../components/adminheader";
+import { Link } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
 
 const AdminHome = () => {
   const forms = ["Form 1", "Form 2", "Form 3"];
@@ -18,23 +21,10 @@ const AdminHome = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100">
-      <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold">Admin Dashboard</h1>
-        </div>
-      </header>
+    <div>
+      <Adminheader />
       <hr />
-      <div className="flex justify-center space-x-4 p-6">
-        <button className="bg-blue-600 text-white p-4 rounded-lg shadow-md hover:bg-blue-700">
-          + New Voting Form
-        </button>
-        <button className="bg-blue-600 text-white p-4 rounded-lg shadow-md hover:bg-blue-700">
-          User Management
-        </button>
-      </div>
-
-      <main className="flex-grow px-6">
+      <main className="flex-grow p-6">
         <h2 className="text-2xl font-bold mb-4"> Voting Forms </h2>
         <hr className="mb-2" />
         {votings.length > 0 ? (

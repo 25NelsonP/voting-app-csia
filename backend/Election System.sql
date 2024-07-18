@@ -2,6 +2,7 @@ CREATE TABLE `Users` (
   `user_id` INT PRIMARY KEY AUTO_INCREMENT,
   `name` VARCHAR(255),
   `email` VARCHAR(100) UNIQUE NOT NULL -- Added UNIQUE constraint and NOT NULL
+  'is_admin' TINYINT(1) NOT NULL
 );
 
 CREATE TABLE `Elections` (
@@ -46,12 +47,6 @@ CREATE TABLE `EligibleVoters` (
   `student_id` INT,
   FOREIGN KEY (`election_id`) REFERENCES `Elections` (`election_id`),
   FOREIGN KEY (`student_id`) REFERENCES `Users` (`user_id`)
-);
-
-CREATE TABLE `Admins` ( 
-  `admin_id` INT PRIMARY KEY AUTO_INCREMENT,
-  `user_id` INT UNIQUE, 
-  FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
 );
 
 CREATE TABLE `Groups` (
