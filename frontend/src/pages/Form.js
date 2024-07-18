@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ConfirmationPage from "./Confirmation"; // Import the ConfirmationPage component
-import CandidatesForm from "./FormFill"; // Import the new CandidatesForm component
+import ConfirmationPage from "../components/Confirmation"; // Import the ConfirmationPage component
+import CandidatesForm from "../components/FormFill"; // Import the new CandidatesForm component
 
 const ViewCandidatesPage = () => {
   const candidateImage =

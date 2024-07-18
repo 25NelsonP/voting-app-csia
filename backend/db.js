@@ -1,5 +1,3 @@
-import express from "express";
-import cors from "cors";
 import mysql from "mysql2";
 import dotenv from "dotenv";
 
@@ -11,20 +9,14 @@ const dbUser = process.env.DB_USER;
 const dbPass = process.env.DB_PASS;
 const dbName = process.env.DB_NAME;
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
 // Create a connection to the database
-export const pool = mysql
+const pool = mysql
   .createPool({
     host: dbHost,
     user: dbUser,
-    password: dbName,
-    database: dbPass,
+    password: dbPass,
+    database: dbName,
   })
   .promise();
 
-app.listen(8080, () => {
-  console.log("Hi! El es de backend!");
-});
+export default pool;

@@ -7,6 +7,7 @@ import {
   ViewForm,
   VoteSuccessful,
   ManageAdmins,
+  ManageUsers,
 } from "./pages";
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/viewForm" element={<ViewForm />} />
             <Route path="/voteSuccess" element={<VoteSuccessful />} />
             <Route path="/admin/manageAdmins" element={<ManageAdmins />} />
+            <Route path="/admin/manageUsers" element={<ManageUsers />} />
           </Routes>
           <Footer />
         </BrowserRouter>
