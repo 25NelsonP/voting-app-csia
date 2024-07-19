@@ -1,17 +1,22 @@
-import React, { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Adminheader from "./../../components/adminheader";
 import { Link } from "react-router-dom";
 
-const exampleUsers = [
-  { user_id: 1, name: "Alice Johnson", email: "alice@example.com" },
-  { user_id: 2, name: "Bob Smith", email: "bob@example.com" },
-  { user_id: 3, name: "Charlie Brown", email: "charlie@example.com" },
-  { user_id: 4, name: "Diana Prince", email: "diana@example.com" },
-];
-
 const Users = () => {
-  const [users, setUsers] = useState(exampleUsers);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/users");
+        setUsers(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center">
@@ -30,11 +35,11 @@ const Users = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((admin) => (
-                  <tr className="bg-gray-100 border-b " key={admin.user_id}>
-                    <td className="px-4 py-2 text-left">{admin.name}</td>
+                {users.map((user) => (
+                  <tr className="bg-gray-100 border-b " key={user.user_id}>
+                    <td className="px-4 py-2 text-left">{user.name}</td>
                     <td className="px-4 py-2 text-center">
-                      <Link to={"mailto:" + admin.email}>{admin.email}</Link>
+                      <Link to={"mailto:" + user.email}>{user.email}</Link>
                     </td>
                   </tr>
                 ))}

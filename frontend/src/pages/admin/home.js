@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Adminheader from "../../components/adminheader";
-import { Link } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
 
 const AdminHome = () => {
-  const forms = ["Form 1", "Form 2", "Form 3"];
   const [votings, setVotings] = useState([]);
 
   useEffect(() => {

@@ -1,41 +1,71 @@
-import React, { useState } from "react";
-import { FaEnvelope, FaPlus, FaTimes } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaPlus, FaTimes } from "react-icons/fa";
 import Adminheader from "./../../components/adminheader";
-
-const exampleAdministrators = [
-  { user_id: 1, name: "Alice Johnson" },
-  { user_id: 2, name: "Bob Smith" },
-];
-
-const exampleUsers = [
-  { user_id: 3, name: "Charlie Brown", email: "charlie@example.com" },
-  { user_id: 4, name: "Diana Prince", email: "diana@example.com" },
-];
+import axios from "axios";
 
 const Admins = () => {
-  const [administrators, setAdministrators] = useState(exampleAdministrators);
-  const [users, setUsers] = useState(exampleUsers);
+  const [administrators, setAdministrators] = useState([]);
+  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const handleAddAdmin = (user_id) => {
-    const selectedUser = users.find(
-      (user) => user.user_id === parseInt(user_id)
-    );
-    if (selectedUser) {
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/non_admins");
+        setUsers(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/admins");
+        setAdministrators(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAdmin();
+  }, []);
+
+  const handleAddAdmin = async (e, user_id) => {
+    e.preventDefault();
+
+    try {
+      await axios.put(`http://localhost:8080/set_admin/${user_id}`, {
+        is_admin: true,
+      });
+      const selectedUser = users.find(
+        (user) => user.user_id === parseInt(user_id)
+      );
       setAdministrators([...administrators, selectedUser]);
       setUsers(users.filter((user) => user.user_id !== user_id));
+      setModalIsOpen(false);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleRemoveAdmin = (user_id) => {
-    const selectedAdmin = administrators.find(
-      (administrators) => administrators.user_id === parseInt(user_id)
-    );
-    setAdministrators(
-      administrators.filter((admin) => admin.user_id !== user_id)
-    );
-    setUsers([...users, selectedAdmin]);
+  const handleRemoveAdmin = async (user_id) => {
+    try {
+      await axios.put(`http://localhost:8080/set_admin/${user_id}`, {
+        is_admin: false,
+      });
+      const selectedAdmin = administrators.find(
+        (admin) => admin.user_id === parseInt(user_id)
+      );
+      setAdministrators(
+        administrators.filter((admin) => admin.user_id !== user_id)
+      );
+      setUsers([...users, selectedAdmin]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const filteredUsers = users.filter((user) =>
@@ -68,7 +98,7 @@ const Admins = () => {
                 {administrators.map((admin) => (
                   <tr className="bg-gray-100 border-b " key={admin.user_id}>
                     <td className="px-4 py-2 text-left">{admin.name}</td>
-                    <td className="px-4 py-2 text-center">
+                    <td className="px-4 py-2 text-right">
                       <button
                         onClick={() => handleRemoveAdmin(admin.user_id)}
                         className="bg-red-600 text-white p-2 rounded items-center hover:bg-red-700 "
@@ -110,7 +140,7 @@ const Admins = () => {
                           <td className="px-4 py-2 text-left flex justify-between items-center">
                             {user.name}{" "}
                             <button
-                              onClick={() => handleAddAdmin(user.user_id)}
+                              onClick={(e) => handleAddAdmin(e, user.user_id)}
                               className="bg-green-600 text-white p-2 rounded"
                             >
                               <FaPlus />

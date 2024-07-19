@@ -10,13 +10,11 @@ const dbPass = process.env.DB_PASS;
 const dbName = process.env.DB_NAME;
 
 // Create a connection to the database
-const pool = mysql
-  .createPool({
-    host: dbHost,
-    user: dbUser,
-    password: dbPass,
-    database: dbName,
-  })
-  .promise();
+const pool = mysql.createPool({
+  host: dbHost,
+  user: dbUser,
+  password: dbPass,
+  database: dbName,
+});
 
 export default pool;

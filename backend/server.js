@@ -1,12 +1,17 @@
 import express from "express";
 import cors from "cors";
-import pool from "./db.js"; // Ensure db.js uses ES module syntax as described earlier
-import apiRoutes from "./routes/api.js"; // Adjust the path as necessary
+import apiRoutes from "./routes/user.js"; // Adjust the path as necessary
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 app.use(express.json());
 
-app.listen(8000, () => {
+app.use(apiRoutes);
+
+app.listen(8080, () => {
   console.log("Hi! El es de backend!");
 });
