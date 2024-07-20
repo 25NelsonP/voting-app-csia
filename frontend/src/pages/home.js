@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
+import FormatDate from "../components/FormatDate";
 
 function VoterHome() {
   const [ongoingVotes, setOngoingVotes] = useState([]);
 
-  // Sample fetch function to simulate getting ongoing votes
   useEffect(() => {
     const fetchOngoingVotes = async () => {
-      // Replace this with actual API call
-      const votes = [
-        { id: 1, title: "Election", date: "2024-07-15" },
-        { id: 2, title: "School Board Election", date: "2024-07-20" },
-      ];
-      setOngoingVotes(votes);
+      try {
+        const res = await axios.get("http://localhost:8080/user_elections");
+        setOngoingVotes(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchOngoingVotes();
@@ -32,12 +33,14 @@ function VoterHome() {
           <ul className="space-y-4">
             {ongoingVotes.map((vote) => (
               <li
-                key={vote.id}
+                key={vote.election_id}
                 className="p-4 border rounded-lg flex justify-between items-center bg-white shadow-sm hover:bg-gray-50"
               >
                 <div>
                   <h3 className="font-semibold">{vote.title}</h3>
-                  <p>Closing Date: {vote.date}</p>
+                  <p>
+                    Closing Date: {<FormatDate dateString={vote.end_date} />}
+                  </p>
                 </div>
                 <Link
                   to={`/vote/${vote.id}`}

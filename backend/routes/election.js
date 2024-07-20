@@ -13,8 +13,9 @@ router.get("/elections", (req, res) => {
 });
 
 // Example of another route
-router.get("/admins", (req, res) => {
-  const q = "SELECT user_id, name, email FROM users where is_admin = 1";
+router.get("/user_elections", (req, res) => {
+  const q =
+    "SELECT elections.election_id, elections.title, elections.start_date, elections.end_date FROM eligiblevoters INNER JOIN Elections ON Elections.election_id = EligibleVoters.election_id where EligibleVoters.student_id = 1;"; // to replace 1 with ? after login and session is implemented
   db.query(q, (err, data) => {
     if (err) return res.json("Error" + err);
     return res.json(data);
