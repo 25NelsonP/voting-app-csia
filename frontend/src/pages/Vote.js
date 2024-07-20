@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import ConfirmationPage from "../components/Confirmation"; // Import the ConfirmationPage component
-import CandidatesForm from "../components/FormFill"; // Import the new CandidatesForm component
+import ConfirmationPage from "../components/VoteConfirmation"; // Import the ConfirmationPage component
+import CandidatesForm from "../components/VoteFormFill"; // Import the new CandidatesForm component
+import { useLocation } from "react-router-dom";
 
-const ViewCandidatesPage = () => {
+const VotingPage = () => {
+  const location = useLocation();
+
+  const vote_id = location.pathname.split("/")[2];
+  console.log("vote_id", vote_id);
+
   const candidateImage =
     "https://yearbooks.isyedu.org/wp-content/uploads/2024/02/Aung-Kaung-Khant-Kelvin.jpg";
   const positions = [
@@ -70,4 +76,4 @@ const ViewCandidatesPage = () => {
   );
 };
 
-export default ViewCandidatesPage;
+export default VotingPage;

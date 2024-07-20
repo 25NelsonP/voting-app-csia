@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import apiRoutes from "./routes/user.js"; // Adjust the path as necessary
+import userRoutes from "./routes/user.js";
+import electionRoutes from "./routes/election.js";
 
 const app = express();
 app.use(
@@ -10,7 +11,8 @@ app.use(
 );
 app.use(express.json());
 
-app.use(apiRoutes);
+app.use(userRoutes);
+app.use(electionRoutes);
 
 app.listen(8080, () => {
   console.log("Hi! El es de backend!");

@@ -40,7 +40,7 @@ function VoterHome() {
                   <p>Closing Date: {vote.date}</p>
                 </div>
                 <Link
-                  to={`/viewForm/${vote.id}`}
+                  to={`/vote/${vote.id}`}
                   className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg"
                 >
                   View Details

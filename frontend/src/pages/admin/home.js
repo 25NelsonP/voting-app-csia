@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Adminheader from "../../components/adminheader";
+import Adminheader from "../../components/AdminHeader";
 
 const AdminHome = () => {
   const [votings, setVotings] = useState([]);

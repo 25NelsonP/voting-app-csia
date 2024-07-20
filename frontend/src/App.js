@@ -1,10 +1,10 @@
-import Header from "./components/header";
-import Footer from "./components/footer";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   Home,
   Adminhome,
-  ViewForm,
+  Vote,
   VoteSuccessful,
   ManageAdmins,
   ManageUsers,
@@ -19,7 +19,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/admin" element={<Adminhome />} />
-            <Route path="/viewForm" element={<ViewForm />} />
+            <Route path="/vote/:id" element={<Vote />} />
             <Route path="/voteSuccess" element={<VoteSuccessful />} />
             <Route path="/admin/manageAdmins" element={<ManageAdmins />} />
             <Route path="/admin/manageUsers" element={<ManageUsers />} />
