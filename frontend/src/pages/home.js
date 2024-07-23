@@ -11,6 +11,7 @@ function VoterHome() {
       try {
         const res = await axios.get("http://localhost:8080/user_elections");
         setOngoingVotes(res.data);
+        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -43,7 +44,7 @@ function VoterHome() {
                   </p>
                 </div>
                 <Link
-                  to={`/vote/${vote.id}`}
+                  to={`/vote/${vote.election_id}`}
                   className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg"
                 >
                   View Details

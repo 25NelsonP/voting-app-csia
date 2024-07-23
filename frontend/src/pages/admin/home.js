@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Adminheader from "../../components/AdminHeader";
 import axios from "axios";
 import FormatDate from "../../components/FormatDate";
+import { Link } from "react-router-dom";
 
 const AdminHome = () => {
   const [votings, setVotings] = useState([]);
@@ -40,9 +41,12 @@ const AdminHome = () => {
                   </p>
                 </div>
                 <div className="flex space-x-4">
-                  <button className="bg-blue-500 text-white p-2 rounded shadow-md hover:bg-blue-600">
+                  <Link
+                    to={`/manage_vote/${vote.election_id}`}
+                    className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg"
+                  >
                     Manage
-                  </button>
+                  </Link>
                 </div>
               </li>
             ))}

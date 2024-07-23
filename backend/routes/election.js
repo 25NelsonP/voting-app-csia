@@ -22,22 +22,4 @@ router.get("/user_elections", (req, res) => {
   });
 });
 
-router.get("/non_admins", (req, res) => {
-  const q = "SELECT user_id, name, email FROM users where is_admin = 0";
-  db.query(q, (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.json(data);
-  });
-});
-
-router.put("/set_admin/:id", (req, res) => {
-  const user_id = req.params.id;
-  const is_admin = req.body.is_admin;
-  const q = "UPDATE users SET is_admin = ? WHERE user_id = ?";
-
-  db.query(q, [is_admin, user_id], (err, data) => {
-    if (err) return res.json(err);
-    return res.json("User admin status updated");
-  });
-});
 export default router;

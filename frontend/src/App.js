@@ -8,6 +8,7 @@ import {
   VoteSuccessful,
   ManageAdmins,
   ManageUsers,
+  Login,
 } from "./pages";
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <hr />
           <Routes>
             <Route exact path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<Adminhome />} />
             <Route path="/vote/:id" element={<Vote />} />
             <Route path="/voteSuccess" element={<VoteSuccessful />} />

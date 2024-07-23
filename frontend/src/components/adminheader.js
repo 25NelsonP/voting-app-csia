@@ -22,7 +22,7 @@ const Adminheader = () => {
           </li>
           <li>
             <NavLink to="/admin/manageUsers" className="hover:text-gray-300">
-              User Management
+              View User
             </NavLink>
           </li>
           <li>
