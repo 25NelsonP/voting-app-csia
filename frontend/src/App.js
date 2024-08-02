@@ -9,6 +9,8 @@ import {
   ManageAdmins,
   ManageUsers,
   Login,
+  ManageGroups,
+  Group,
 } from "./pages";
 function App() {
   return (
@@ -23,8 +25,10 @@ function App() {
             <Route path="/admin" element={<Adminhome />} />
             <Route path="/vote/:id" element={<Vote />} />
             <Route path="/voteSuccess" element={<VoteSuccessful />} />
-            <Route path="/admin/manageAdmins" element={<ManageAdmins />} />
-            <Route path="/admin/manageUsers" element={<ManageUsers />} />
+            <Route path="/admin/manageadmins" element={<ManageAdmins />} />
+            <Route path="/admin/manageusers" element={<ManageUsers />} />
+            <Route path="/admin/managegroups" element={<ManageGroups />} />
+            <Route path="/admin/managegroup/:id" element={<Group />} />
           </Routes>
           <Footer />
         </BrowserRouter>

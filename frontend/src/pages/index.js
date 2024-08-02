@@ -5,3 +5,5 @@ export { default as VoteSuccessful } from "./VoteSuccessful";
 export { default as ManageAdmins } from "./admin/Admins";
 export { default as ManageUsers } from "./admin/Users";
 export { default as Login } from "./Login";
+export { default as ManageGroups } from "./admin/UserGroups";
+export { default as Group } from "./admin/Group";

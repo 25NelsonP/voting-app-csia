@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import Adminheader from "./../../components/AdminHeader";
 import axios from "axios";
-import AddAdminModal from "./../../components/AddAdminModal";
-import ConfirmRemoveAdminModal from "./../../components/ConfirmRemoveAdminModal";
+import AddAdminModal from "./../../components/modals/AddAdminModal";
+import ConfirmRemoveAdminModal from "./../../components/modals/ConfirmRemoveAdminModal";
 
 const Admins = () => {
   const [administrators, setAdministrators] = useState([]);
@@ -17,7 +17,7 @@ const Admins = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/non_admins");
+        const res = await axios.get("http://localhost:8080/users/non_admins");
         setUsers(res.data);
       } catch (error) {
         console.log(error);
@@ -29,7 +29,7 @@ const Admins = () => {
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/admins");
+        const res = await axios.get("http://localhost:8080/users/admins");
         setAdministrators(res.data);
       } catch (error) {
         console.log(error);
@@ -42,7 +42,7 @@ const Admins = () => {
     e.preventDefault();
 
     try {
-      await axios.put(`http://localhost:8080/set_admin/${user_id}`, {
+      await axios.put(`http://localhost:8080/users/set_admin/${user_id}`, {
         is_admin: true,
       });
       const selectedUser = users.find(
@@ -58,9 +58,12 @@ const Admins = () => {
 
   const handleRemoveAdmin = async () => {
     try {
-      await axios.put(`http://localhost:8080/set_admin/${adminToRemove}`, {
-        is_admin: false,
-      });
+      await axios.put(
+        `http://localhost:8080/users/set_admin/${adminToRemove}`,
+        {
+          is_admin: false,
+        }
+      );
       const selectedAdmin = administrators.find(
         (admin) => admin.user_id === parseInt(adminToRemove)
       );

@@ -4,7 +4,7 @@ import db from "../db.js";
 const router = express.Router();
 
 //get user route
-router.get("/users", (req, res) => {
+router.get("/", (req, res) => {
   const q = "SELECT user_id, name, email FROM users";
   db.query(q, (err, data) => {
     if (err) return res.json("Error" + err);

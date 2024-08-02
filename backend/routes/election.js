@@ -3,8 +3,8 @@ import db from "../db.js";
 
 const router = express.Router();
 
-//get election form route
-router.get("/elections", (req, res) => {
+//get election from route / admin
+router.get("/", (req, res) => {
   const q = "SELECT * FROM elections";
   db.query(q, (err, data) => {
     if (err) return res.json("Error" + err);
@@ -12,7 +12,7 @@ router.get("/elections", (req, res) => {
   });
 });
 
-// Example of another route
+// get eleciton from route for a specific user
 router.get("/user_elections", (req, res) => {
   const q =
     "SELECT elections.election_id, elections.title, elections.start_date, elections.end_date FROM eligiblevoters INNER JOIN Elections ON Elections.election_id = EligibleVoters.election_id where EligibleVoters.student_id = 1;"; // to replace 1 with ? after login and session is implemented

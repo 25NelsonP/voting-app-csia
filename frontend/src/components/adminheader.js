@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import { adminHeaderLinks } from "./../assets/constants/index";
 
 const Adminheader = () => {
   return (
@@ -15,18 +16,20 @@ const Adminheader = () => {
       </div>
       <div className="flex items-center gap-x-5">
         <ul className="flex items-center space-x-6">
+          {adminHeaderLinks.map((item) => {
+            return (
+              <li key={item.route}>
+                <NavLink
+                  to={item.route}
+                  className="hover:text-gray-300 active:text-gray-500"
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            );
+          })}
           <li>
-            <NavLink to="/admin/manageAdmins" className="hover:text-gray-300">
-              Admin Management
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/admin/manageUsers" className="hover:text-gray-300">
-              View User
-            </NavLink>
-          </li>
-          <li>
-            <Link to="/admin/new-voting-form">
+            <Link to="/admin/create">
               <button className="bg-blue-700 text-white p-4 rounded-full hover:bg-blue-900 hover:shadow-md flex items-center">
                 <FaPlus className="m-1" /> New Form
               </button>
