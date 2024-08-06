@@ -1,39 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ConfirmationPage from "../components/VoteConfirmation"; // Import the ConfirmationPage component
-import CandidatesForm from "../components/VoteFormFill"; // Import the new CandidatesForm component
+import CandidatesForm from "../components/ElectionFormFill"; // Import the new CandidatesForm component
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const VotingPage = () => {
   const location = useLocation();
 
-  const vote_id = location.pathname.split("/")[2];
-  console.log("vote_id", vote_id);
-
-  const candidateImage =
-    "https://yearbooks.isyedu.org/wp-content/uploads/2024/02/Aung-Kaung-Khant-Kelvin.jpg";
-  const positions = [
-    {
-      id: 1,
-      description: "Position Description 1",
-      candidates: [
-        { id: 1, name: "Candidate Name 1", image: candidateImage },
-        { id: 2, name: "Candidate Name 2", image: candidateImage },
-        { id: 3, name: "Candidate Name 3", image: candidateImage },
-      ],
-    },
-    {
-      id: 2,
-      description: "Position Description 2",
-      candidates: [
-        { id: 1, name: "Candidate Name 4", image: candidateImage },
-        { id: 2, name: "Candidate Name 5", image: candidateImage },
-        { id: 3, name: "Candidate Name 6", image: candidateImage },
-      ],
-    },
-  ];
-
+  const electionId = location.pathname.split("/")[2];
+  const [title, setTitle] = useState("");
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [isConfirming, setIsConfirming] = useState(false);
+  const [positions, setPositions] = useState([]);
+
+  useEffect(() => {
+    const fetchTitle = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/elections/${electionId}`
+        );
+        setTitle(res.data.title);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const fetchPositions = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/elections/positions/${electionId}`
+        );
+        setPositions(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchTitle();
+    fetchPositions();
+  }, [electionId]);
 
   const selectCandidate = (positionId, candidateId) => {
     setSelectedCandidates((prevSelectedCandidates) => ({
@@ -43,14 +48,14 @@ const VotingPage = () => {
   };
 
   const handleSubmit = () => {
-    setIsConfirming(true); // Navigate to confirmation page
+    console.log("Confirmed Candidates:", selectedCandidates);
   };
 
   return (
     <>
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold">Vote for AKK</h1>
+          <h1 className="text-xl font-bold">{title}</h1>
         </div>
       </header>
       {isConfirming ? (
@@ -58,17 +63,14 @@ const VotingPage = () => {
           positions={positions}
           selectedCandidates={selectedCandidates}
           onBack={() => setIsConfirming(false)}
-          onSubmit={() => {
-            console.log("Confirmed Candidates:", selectedCandidates);
-            // Perform any additional actions such as sending the selected candidates to an API
-          }}
+          onSubmit={handleSubmit()}
         />
       ) : (
         <CandidatesForm
           positions={positions}
           selectedCandidates={selectedCandidates}
           selectCandidate={selectCandidate}
-          handleSubmit={handleSubmit}
+          setIsConfirming={setIsConfirming}
         />
       )}
       ;

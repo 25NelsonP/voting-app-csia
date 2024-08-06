@@ -1,9 +1,17 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { adminHeaderLinks } from "./../assets/constants/index";
+import axios from "axios";
 
 const Adminheader = () => {
+  const navigate = useNavigate();
+  const handleCreateFrom = async (e) => {
+    e.preventDefault();
+    const response = await axios.post("http://localhost:8080/elections");
+    const electionId = await response.data.election_id;
+    navigate(`/admin/create/${electionId}`);
+  };
   return (
     <nav className="bg-blue-600 px-6 py-3 flex justify-between w-full text-white">
       <div className="flex space-x-4">
@@ -29,11 +37,12 @@ const Adminheader = () => {
             );
           })}
           <li>
-            <Link to="/admin/create">
-              <button className="bg-blue-700 text-white p-4 rounded-full hover:bg-blue-900 hover:shadow-md flex items-center">
-                <FaPlus className="m-1" /> New Form
-              </button>
-            </Link>
+            <button
+              onClick={handleCreateFrom}
+              className="bg-blue-700 text-white p-4 rounded-full hover:bg-blue-900 hover:shadow-md flex items-center"
+            >
+              <FaPlus className="m-1" /> New Form
+            </button>
           </li>
         </ul>
       </div>

@@ -10,7 +10,7 @@ const AdminHome = () => {
   useEffect(() => {
     const fetchVotes = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/elections");
+        const res = await axios.get(`http://localhost:8080/elections`);
         setVotings(res.data);
       } catch (error) {
         console.log(error);

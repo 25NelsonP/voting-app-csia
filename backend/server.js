@@ -3,7 +3,6 @@ import cors from "cors";
 import userRoutes from "./routes/user.js";
 import electionRoutes from "./routes/election.js";
 import groupRoutes from "./routes/groups.js";
-
 const app = express();
 app.use(
   cors({

@@ -9,11 +9,8 @@ function VoterHome() {
   useEffect(() => {
     const fetchOngoingVotes = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:8080/elections/user_elections"
-        );
+        const res = await axios.get("http://localhost:8080/elections/user/1");
         setOngoingVotes(res.data);
-        console.log(res.data);
       } catch (error) {
         console.log(error);
       }

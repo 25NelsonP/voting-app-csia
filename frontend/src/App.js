@@ -11,6 +11,7 @@ import {
   Login,
   ManageGroups,
   Group,
+  CreateForm,
 } from "./pages";
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/admin/manageusers" element={<ManageUsers />} />
             <Route path="/admin/managegroups" element={<ManageGroups />} />
             <Route path="/admin/managegroup/:id" element={<Group />} />
+            <Route path="/admin/create/:id" element={<CreateForm />} />
           </Routes>
           <Footer />
         </BrowserRouter>

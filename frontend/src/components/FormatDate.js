@@ -6,6 +6,7 @@ const FormatDate = ({ dateString }) => {
     month: "2-digit",
     year: "numeric",
   };
+  if (!dateString) return "N/A";
   const date = new Date(dateString);
   const fdate = `${date.toLocaleDateString(
     "en-GB",

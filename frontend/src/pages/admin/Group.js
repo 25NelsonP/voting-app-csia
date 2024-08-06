@@ -7,11 +7,13 @@ import ConfirmRemoveMemberModal from "../../components/modals/ConfirmRemoveMembe
 import AddMemberModal from "../../components/modals/AddMemberModal";
 import { useNavigate } from "react-router-dom";
 import ConfirmDeleteGroupModal from "../../components/modals/ConfirmDeleteGroupModal";
+import { MdEdit } from "react-icons/md";
 
 const Group = () => {
   const [members, setMembers] = useState([]);
   const location = useLocation();
   const [groupName, setGroupName] = useState("");
+  const [editingGroupName, setEditingGroupName] = useState(false);
   const [rmvmember_id, setRmvmember_id] = useState(null);
   const [memberToRemove, setMemberToRemove] = useState(null);
   const [openConfirmRmvMemberModal, setOpenConfirmRmvMemberModal] =
@@ -82,6 +84,7 @@ const Group = () => {
       await axios.put(`http://localhost:8080/groups/${group_id}`, {
         group_name: groupName,
       });
+      setEditingGroupName(false);
     } catch (error) {
       console.log(error);
     }
@@ -143,11 +146,42 @@ const Group = () => {
       <Adminheader />
       <main className="flex flex-col items-center p-5 w-full max-w-2xl">
         <div className="w-full flex justify-between items-center mb-5">
-          <h2 className="text-2xl font-bold">{groupName}</h2>
+          {editingGroupName ? (
+            <div className="flex items-center">
+              <input
+                type="text"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                className="p-2 border rounded mr-2"
+              />
+              <button
+                onClick={handleUpdateGroupName}
+                className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEditingGroupName(false)}
+                className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-900 ml-2"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold mr-3">{groupName}</h2>
+              <button
+                onClick={() => setEditingGroupName(true)}
+                className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-900 mr-2"
+              >
+                <MdEdit />
+              </button>
+            </div>
+          )}
           <div className="flex items-center">
             <button
               onClick={() => setOpenAddMemberModal(true)}
-              className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-900 mr-2"
+              className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-900"
             >
               <FaPlus size={20} />
             </button>
