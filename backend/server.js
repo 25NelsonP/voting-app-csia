@@ -25,7 +25,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.ORIGIN,
     credentials: true,
   })
 );
@@ -62,7 +62,7 @@ app.get(
   }),
   // middleware for user add or create
   function (req, res) {
-    res.redirect("http://localhost:3000/");
+    res.redirect(process.env.ORIGIN);
   }
 );
 
