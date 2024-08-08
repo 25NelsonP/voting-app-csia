@@ -8,18 +8,19 @@ import CreateGroupModal from "../../components/modals/CreateGroupModal";
 const UserGroups = () => {
   const [groups, setGroups] = useState([]);
   const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/groups/");
+        const res = await axios.get(`${API_URL}/groups/`);
         setGroups(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchGroups();
-  }, []);
+  }, [API_URL]);
 
   return (
     <div className="min-h-screen flex flex-col items-center">

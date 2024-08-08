@@ -19,13 +19,12 @@ const Create = () => {
   const [newCandidateImageUrl, setNewCandidateImageUrl] = useState("");
   const [addingCandidate, setAddingCandidate] = useState(null);
   const [addingPosition, setAddingPosition] = useState(false);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchTitle = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/elections/${electionId}`
-        );
+        const res = await axios.get(`${API_URL}/elections/${electionId}`);
         setTitle(res.data.title);
       } catch (error) {
         console.log(error);
@@ -35,7 +34,7 @@ const Create = () => {
     const fetchPositions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8080/elections/positions/${electionId}`
+          `${API_URL}/elections/positions/${electionId}`
         );
         console.log(res.data);
         setPositions(res.data);
@@ -46,14 +45,12 @@ const Create = () => {
 
     fetchTitle();
     fetchPositions();
-  }, [electionId]);
+  }, [electionId, API_URL]);
 
   const handleRemovePosition = async (positionId) => {
     try {
       await deleteCandidates(positionId);
-      await axios.delete(
-        `http://localhost:8080/elections/positions/${positionId}`
-      );
+      await axios.delete(`${API_URL}/elections/positions/${positionId}`);
       setPositions(positions.filter((pos) => pos.position_id !== positionId));
     } catch (error) {
       console.log(error);
@@ -65,9 +62,7 @@ const Create = () => {
     console.log(position);
     try {
       const deletePromises = position.candidates.map((cand) =>
-        axios.delete(
-          `http://localhost:8080/elections/candidates/${cand.candidate_id}`
-        )
+        axios.delete(`${API_URL}/elections/candidates/${cand.candidate_id}`)
       );
       await Promise.all(deletePromises);
     } catch (error) {
@@ -77,9 +72,7 @@ const Create = () => {
 
   const handleRemoveCandidate = async (positionId, candidateId) => {
     try {
-      await axios.delete(
-        `http://localhost:8080/elections/candidates/${candidateId}`
-      );
+      await axios.delete(`${API_URL}/elections/candidates/${candidateId}`);
       setPositions(
         positions.map((pos) =>
           pos.position_id === positionId
@@ -99,7 +92,7 @@ const Create = () => {
 
   const handleUpdateTitle = async () => {
     try {
-      await axios.put(`http://localhost:8080/elections/`, {
+      await axios.put(`${API_URL}/elections/`, {
         election_id: electionId,
         title: title,
       });
@@ -117,7 +110,7 @@ const Create = () => {
 
   const handleUpdatePosition = async (positionId) => {
     try {
-      await axios.put("http://localhost:8080/elections/positions", {
+      await axios.put(`${API_URL}/elections/positions`, {
         position_id: positionId,
         title: newDescription,
       });
@@ -147,7 +140,7 @@ const Create = () => {
 
   const handleUpdateCandidate = async (positionId, candidateId) => {
     try {
-      await axios.put("http://localhost:8080/elections/candidates", {
+      await axios.put(`${API_URL}/elections/candidates`, {
         candidate_id: candidateId,
         name: newCandidateName,
         grade: newCandidateGrade,
@@ -187,15 +180,12 @@ const Create = () => {
 
   const handleSaveNewCandidate = async (positionId) => {
     try {
-      const res = await axios.post(
-        `http://localhost:8080/elections/candidates`,
-        {
-          position_id: positionId,
-          name: newCandidateName,
-          grade: newCandidateGrade,
-          img_url: newCandidateImageUrl,
-        }
-      );
+      const res = await axios.post(`${API_URL}/elections/candidates`, {
+        position_id: positionId,
+        name: newCandidateName,
+        grade: newCandidateGrade,
+        img_url: newCandidateImageUrl,
+      });
       setPositions(
         positions.map((pos) =>
           pos.position_id === positionId
@@ -219,13 +209,10 @@ const Create = () => {
 
   const handleSaveNewPosition = async () => {
     try {
-      const res = await axios.post(
-        `http://localhost:8080/elections/positions`,
-        {
-          election_id: electionId,
-          title: newDescription,
-        }
-      );
+      const res = await axios.post(`${API_URL}/elections/positions`, {
+        election_id: electionId,
+        title: newDescription,
+      });
       console.log(res);
       setPositions([...positions, res.data]);
       setAddingPosition(false);

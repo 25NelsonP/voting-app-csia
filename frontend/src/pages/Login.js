@@ -1,56 +1,36 @@
-import React, { useState } from "react";
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import React from "react";
+import { FcGoogle } from "react-icons/fc";
 
-const LoginPage = () => {
-  const [user, setUser] = useState(null);
+const Login = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
 
-  const handleLoginSuccess = (credentialResponse) => {
-    const decoded = jwtDecode(credentialResponse.credential);
-    console.log("Login Success: currentUser:", decoded);
-    setUser(decoded); // Save user information in the state
-  };
-
-  const handleLoginFailure = () => {
-    console.log("Login failed");
-    setUser(null); // Clear user information on login failure
+  const handleLogin = () => {
+    window.location.href = `${API_URL}/auth/google`;
   };
 
   return (
-    <div style={styles.container}>
-      <h2>Login with Google</h2>
-      <GoogleLogin
-        onSuccess={handleLoginSuccess}
-        onError={handleLoginFailure}
-      />
-      {user && (
-        <div style={styles.profile}>
-          <img src={user.get} alt="Profile" style={styles.profilePic} />
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email}</p>
-        </div>
-      )}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-10 rounded shadow-md text-center">
+        <img
+          src="./assets/isylogo.png"
+          alt="STUCO Logo"
+          className="mb-4"
+          style={{ width: "150px", height: "auto" }}
+        />
+        <button
+          onClick={handleLogin}
+          className="bg-blue-600 text-white border font-medium flex items-center justify-center hover:bg-blue-700 transition duration-200"
+        >
+          <div className="bg-white p-3">
+            <FcGoogle size={20} />
+          </div>
+          <span className="flex-1 text-center py-2 px-4">
+            Continue with Google
+          </span>
+        </button>
+      </div>
     </div>
   );
 };
 
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-  },
-  profile: {
-    marginTop: "20px",
-    textAlign: "center",
-  },
-  profilePic: {
-    borderRadius: "50%",
-    width: "100px",
-    height: "100px",
-  },
-};
-
-export default LoginPage;
+export default Login;

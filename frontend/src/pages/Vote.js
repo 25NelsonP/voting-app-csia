@@ -12,13 +12,12 @@ const VotingPage = () => {
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [isConfirming, setIsConfirming] = useState(false);
   const [positions, setPositions] = useState([]);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchTitle = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/elections/${electionId}`
-        );
+        const res = await axios.get(`${API_URL}/elections/${electionId}`);
         setTitle(res.data.title);
       } catch (error) {
         console.log(error);
@@ -28,7 +27,7 @@ const VotingPage = () => {
     const fetchPositions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8080/elections/positions/${electionId}`
+          `${API_URL}/elections/positions/${electionId}`
         );
         setPositions(res.data);
       } catch (error) {
@@ -38,7 +37,7 @@ const VotingPage = () => {
 
     fetchTitle();
     fetchPositions();
-  }, [electionId]);
+  }, [electionId, API_URL]);
 
   const selectCandidate = (positionId, candidateId) => {
     setSelectedCandidates((prevSelectedCandidates) => ({

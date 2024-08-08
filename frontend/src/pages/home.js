@@ -2,22 +2,29 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import FormatDate from "../components/FormatDate";
+import useSession from "./../utils/useSession";
 
 function VoterHome() {
   const [ongoingVotes, setOngoingVotes] = useState([]);
+  const { user } = useSession();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchOngoingVotes = async () => {
-      try {
-        const res = await axios.get("http://localhost:8080/elections/user/1");
-        setOngoingVotes(res.data);
-      } catch (error) {
-        console.log(error);
+      if (user) {
+        try {
+          const res = await axios.get(
+            `${API_URL}/elections/user/${user.user_id}`
+          );
+          setOngoingVotes(res.data);
+        } catch (error) {
+          console.log("ERROR", error);
+        }
       }
     };
 
     fetchOngoingVotes();
-  }, []);
+  }, [user, API_URL]);
 
   return (
     <div className="min-h-min flex flex-col">

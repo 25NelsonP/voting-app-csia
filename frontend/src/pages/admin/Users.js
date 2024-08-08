@@ -6,18 +6,19 @@ import { Link } from "react-router-dom";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/users");
+        const res = await axios.get(`${API_URL}/users`);
         setUsers(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchUser();
-  }, []);
+  }, [API_URL]);
 
   return (
     <div className="min-h-screen flex flex-col items-center">

@@ -21,6 +21,7 @@ router.get("/admins", (req, res) => {
   });
 });
 
+//get non admin users
 router.get("/non_admins", (req, res) => {
   const q = "SELECT user_id, name, email FROM users where is_admin = 0";
   db.query(q, (err, data) => {
@@ -29,6 +30,7 @@ router.get("/non_admins", (req, res) => {
   });
 });
 
+//update a user as admin
 router.put("/set_admin/:id", (req, res) => {
   const user_id = req.params.id;
   const is_admin = req.body.is_admin;

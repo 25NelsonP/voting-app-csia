@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 
 const AddMemberModal = ({ setOpenAddMemberModal, users, handleAddMember }) => {

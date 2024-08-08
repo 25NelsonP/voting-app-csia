@@ -6,9 +6,11 @@ import axios from "axios";
 
 const Adminheader = () => {
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleCreateFrom = async (e) => {
     e.preventDefault();
-    const response = await axios.post("http://localhost:8080/elections");
+    const response = await axios.post(`${API_URL}/elections`);
     const electionId = await response.data.election_id;
     navigate(`/admin/create/${electionId}`);
   };

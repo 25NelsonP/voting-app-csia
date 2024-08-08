@@ -6,19 +6,20 @@ import { Link } from "react-router-dom";
 
 const AdminHome = () => {
   const [votings, setVotings] = useState([]);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchVotes = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/elections`);
+        const res = await axios.get(`${API_URL}/elections`);
         setVotings(res.data);
       } catch (error) {
-        console.log(error);
+        console.log("Error", error);
       }
     };
 
     fetchVotes();
-  }, []);
+  }, [API_URL]);
 
   return (
     <div className="min-h-min flex flex-col">

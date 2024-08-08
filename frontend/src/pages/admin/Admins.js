@@ -13,36 +13,37 @@ const Admins = () => {
   const [openConfirmRmvAdminModal, setOpenConfirmRmvAdminModal] =
     useState(false);
   const [adminToRemove, setAdminToRemove] = useState(null);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/users/non_admins");
+        const res = await axios.get(`${API_URL}/users/non_admins`);
         setUsers(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchUser();
-  }, []);
+  }, [API_URL]);
 
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/users/admins");
+        const res = await axios.get(`${API_URL}/users/admins`);
         setAdministrators(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchAdmin();
-  }, []);
+  }, [API_URL]);
 
   const handleAddAdmin = async (e, user_id) => {
     e.preventDefault();
 
     try {
-      await axios.put(`http://localhost:8080/users/set_admin/${user_id}`, {
+      await axios.put(`${API_URL}/users/set_admin/${user_id}`, {
         is_admin: true,
       });
       const selectedUser = users.find(
@@ -58,12 +59,9 @@ const Admins = () => {
 
   const handleRemoveAdmin = async () => {
     try {
-      await axios.put(
-        `http://localhost:8080/users/set_admin/${adminToRemove}`,
-        {
-          is_admin: false,
-        }
-      );
+      await axios.put(`${API_URL}/users/set_admin/${adminToRemove}`, {
+        is_admin: false,
+      });
       const selectedAdmin = administrators.find(
         (admin) => admin.user_id === parseInt(adminToRemove)
       );

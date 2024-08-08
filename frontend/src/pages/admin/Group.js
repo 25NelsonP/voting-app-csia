@@ -22,13 +22,14 @@ const Group = () => {
   const [openDeleteGroupModal, setOpenDeleteGroupModal] = useState(false);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const group_id = location.pathname.split("/")[3];
 
   useEffect(() => {
     const fetchGroupName = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/groups/${group_id}`);
+        const res = await axios.get(`${API_URL}/groups/${group_id}`);
         setGroupName(res.data[0].group_name);
       } catch (error) {
         navigate(`/admin/managegroups`);
@@ -36,26 +37,24 @@ const Group = () => {
       }
     };
     fetchGroupName();
-  }, [group_id]);
+  }, [group_id, navigate, API_URL]);
 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8080/groups/${group_id}/members`
-        );
+        const res = await axios.get(`${API_URL}/groups/${group_id}/members`);
         setMembers(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchMembers();
-  }, [group_id]);
+  }, [group_id, API_URL]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/users/");
+        const res = await axios.get(`${API_URL}/users/`);
         const rmv = new Set(members.map((member) => member.user_id));
         const filteredUsers = res.data.filter((user) => !rmv.has(user.user_id));
         setUsers(filteredUsers);
@@ -64,12 +63,12 @@ const Group = () => {
       }
     };
     fetchUser();
-  }, [members]);
+  }, [members, API_URL]);
 
   const handleRemoveMember = async () => {
     try {
       await axios.delete(
-        `http://localhost:8080/groups/${group_id}/members/${rmvmember_id}`
+        `${API_URL}/groups/${group_id}/members/${rmvmember_id}`
       );
       setMembers(members.filter((member) => member.user_id !== rmvmember_id));
       setOpenConfirmRmvMemberModal(false);
@@ -81,7 +80,7 @@ const Group = () => {
 
   const handleUpdateGroupName = async () => {
     try {
-      await axios.put(`http://localhost:8080/groups/${group_id}`, {
+      await axios.put(`${API_URL}/groups/${group_id}`, {
         group_name: groupName,
       });
       setEditingGroupName(false);
@@ -93,7 +92,7 @@ const Group = () => {
   const handleDeleteGroup = async () => {
     try {
       await deleteAllMembers();
-      await axios.delete(`http://localhost:8080/groups/${group_id}`);
+      await axios.delete(`${API_URL}/groups/${group_id}`);
       navigate(`/admin/managegroups`);
     } catch (error) {
       console.log(error);
@@ -103,9 +102,7 @@ const Group = () => {
   const deleteAllMembers = async () => {
     try {
       const deletePromises = members.map((member) =>
-        axios.delete(
-          `http://localhost:8080/groups/${group_id}/members/${member.user_id}`
-        )
+        axios.delete(`${API_URL}/groups/${group_id}/members/${member.user_id}`)
       );
       await Promise.all(deletePromises);
       setMembers([]);
@@ -118,7 +115,7 @@ const Group = () => {
     e.preventDefault();
 
     try {
-      await axios.post(`http://localhost:8080/groups/${group_id}/members`, {
+      await axios.post(`${API_URL}/groups/${group_id}/members`, {
         member_id: member_id,
       });
       const selectedUser = users.find(

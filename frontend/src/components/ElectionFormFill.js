@@ -7,7 +7,7 @@ const CandidatesForm = ({
   setIsConfirming,
 }) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-min flex flex-col">
       <main className="flex flex-col items-center p-3 ">
         {positions.map((position) => (
           <div key={position.position_id} className="mb-10 m-10">

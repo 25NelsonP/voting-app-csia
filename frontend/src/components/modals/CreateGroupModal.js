@@ -4,12 +4,13 @@ import axios from "axios";
 
 const CreateGroupModal = ({ setShowModal, setGroups, groups }) => {
   const [groupName, setGroupName] = useState("");
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleAddGroup = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`http://localhost:8080/groups/`, {
+      const response = await axios.post(`${API_URL}/groups/`, {
         group_name: groupName,
       });
 
