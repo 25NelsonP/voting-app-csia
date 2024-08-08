@@ -5,7 +5,7 @@ const router = express.Router();
 
 //get user route
 router.get("/", (req, res) => {
-  const q = "SELECT user_id, name, email FROM users";
+  const q = "SELECT user_id, name, email FROM Users";
   db.query(q, (err, data) => {
     if (err) return res.json("Error" + err);
     return res.json(data);
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 
 // Example of another route
 router.get("/admins", (req, res) => {
-  const q = "SELECT user_id, name, email FROM users where is_admin = 1";
+  const q = "SELECT user_id, name, email FROM Users where is_admin = 1";
   db.query(q, (err, data) => {
     if (err) return res.json("Error" + err);
     return res.json(data);
@@ -23,7 +23,7 @@ router.get("/admins", (req, res) => {
 
 //get non admin users
 router.get("/non_admins", (req, res) => {
-  const q = "SELECT user_id, name, email FROM users where is_admin = 0";
+  const q = "SELECT user_id, name, email FROM Users where is_admin = 0";
   db.query(q, (err, data) => {
     if (err) return res.json("Error" + err);
     return res.json(data);
@@ -34,7 +34,7 @@ router.get("/non_admins", (req, res) => {
 router.put("/set_admin/:id", (req, res) => {
   const user_id = req.params.id;
   const is_admin = req.body.is_admin;
-  const q = "UPDATE users SET is_admin = ? WHERE user_id = ?";
+  const q = "UPDATE Users SET is_admin = ? WHERE user_id = ?";
 
   db.query(q, [is_admin, user_id], (err, data) => {
     if (err) return res.json(err);

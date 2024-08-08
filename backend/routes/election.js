@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Get all elections
 router.get("/", (req, res) => {
-  const q = "SELECT * FROM elections";
+  const q = "SELECT * FROM Elections";
   db.query(q, (err, data) => {
     if (err) return res.json("Error" + err);
     return res.json(data);
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 
 //get a specific election
 router.get("/:id", (req, res) => {
-  const q = "SELECT * FROM elections WHERE election_id = ?";
+  const q = "SELECT * FROM Elections WHERE election_id = ?";
   const id = req.params.id;
   db.query(q, [id], (err, data) => {
     if (err) return res.json("Error" + err);
@@ -25,7 +25,7 @@ router.get("/:id", (req, res) => {
 // Get elections for a specific user
 router.get("/user/:id", (req, res) => {
   const q =
-    "SELECT elections.election_id, elections.title, elections.start_date, elections.end_date FROM eligiblevoters INNER JOIN Elections ON Elections.election_id = EligibleVoters.election_id WHERE EligibleVoters.student_id = ?;"; // to replace 1 with ? after login and session is implemented
+    "SELECT Elections.election_id, Elections.title, Elections.start_date, Elections.end_date FROM EligibleVoters INNER JOIN Elections ON Elections.election_id = EligibleVoters.election_id WHERE EligibleVoters.student_id = ?;"; // to replace 1 with ? after login and session is implemented
   const id = req.params.id;
   db.query(q, [id], (err, data) => {
     if (err) return res.json("Error" + err);
