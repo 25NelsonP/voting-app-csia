@@ -27,7 +27,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, // for local testing
+      secure: true, // for local testing
       sameSite: "None", // or "strict" for local
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
