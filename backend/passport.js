@@ -18,7 +18,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         db.query(
-          "SELECT * FROM users WHERE googleId = ?",
+          "SELECT * FROM Users WHERE googleId = ?",
           [profile.id],
           (err, results) => {
             if (err) {
@@ -38,7 +38,7 @@ passport.use(
               };
 
               db.query(
-                "INSERT INTO users (name, email, googleId, is_admin) VALUES (?, ?, ?, ?)",
+                "INSERT INTO Users (name, email, googleId, is_admin) VALUES (?, ?, ?, ?)",
                 [
                   newUser.name,
                   newUser.email,
@@ -68,7 +68,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  db.query("SELECT * FROM users WHERE user_id = ?", [id], (err, results) => {
+  db.query("SELECT * FROM Users WHERE user_id = ?", [id], (err, results) => {
     if (err) {
       return done(err);
     }
