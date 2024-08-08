@@ -10,3 +10,11 @@ body {
     @apply font-semibold;
   }
   
+/* Additional CSS for Bouncing Animation */
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}

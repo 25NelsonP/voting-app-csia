@@ -7,7 +7,7 @@ import axios from "axios";
 const Create = () => {
   const location = useLocation();
   const electionId = location.pathname.split("/")[3];
-  const [editingTitle, setEditingTitle] = useState(true);
+  const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState("");
   const [positions, setPositions] = useState([]);
 
@@ -36,10 +36,9 @@ const Create = () => {
         const res = await axios.get(
           `${API_URL}/elections/positions/${electionId}`
         );
-        console.log(res.data);
         setPositions(res.data);
       } catch (error) {
-        console.log(error);
+        console.log("Position", error);
       }
     };
 
@@ -59,7 +58,6 @@ const Create = () => {
 
   const deleteCandidates = async (positionId) => {
     const position = positions.find((pos) => pos.position_id === positionId);
-    console.log(position);
     try {
       const deletePromises = position.candidates.map((cand) =>
         axios.delete(`${API_URL}/elections/candidates/${cand.candidate_id}`)
@@ -99,6 +97,7 @@ const Create = () => {
       setEditingTitle(false);
     } catch (error) {
       console.log(error);
+      setEditingTitle(false);
     }
   };
 
@@ -213,7 +212,6 @@ const Create = () => {
         election_id: electionId,
         title: newDescription,
       });
-      console.log(res);
       setPositions([...positions, res.data]);
       setAddingPosition(false);
     } catch (error) {

@@ -1,94 +1,120 @@
 import express from "express";
 import db from "../db.js";
+import Group from "../models/Group.js";
+import GroupMember from "../models/GroupMember.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
 // Get all groups
-router.get("/", (req, res) => {
-  const q = "SELECT * FROM `Groups`;";
-  db.query(q, (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.json(data);
-  });
+router.get("/", async (req, res) => {
+  try {
+    const groups = await Group.findAll();
+    return res.json(groups);
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
-//Get specific group
-router.get("/:groupId", (req, res) => {
-  const q = "SELECT * FROM `Groups` WHERE group_id = ?";
-  const group_id = req.params.groupId;
-
-  db.query(q, [group_id], (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.json(data);
-  });
+// Get specific group
+router.get("/:groupId", async (req, res) => {
+  const { groupId } = req.params;
+  try {
+    const group = await Group.findOne({ where: { group_id: groupId } });
+    return res.json(group.dataValues);
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
 // Add a new group
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { group_name } = req.body;
-  const q = "INSERT INTO `Groups` (group_name) VALUES (?)";
-  db.query(q, [group_name], (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.status(201).json({ group_id: data.insertId, group_name });
-  });
+  try {
+    const newGroup = await Group.create({ group_name });
+    return res.status(201).json(newGroup);
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
 // Update a group
-router.put("/:groupId", (req, res) => {
+router.put("/:groupId", async (req, res) => {
   const { groupId } = req.params;
   const { group_name } = req.body;
-  const q = "UPDATE `Groups` SET group_name = ? WHERE group_id = ?";
-  db.query(q, [group_name, groupId], (err, data) => {
-    if (err) return res.json("Error" + err);
+  try {
+    await Group.update({ group_name }, { where: { group_id: groupId } });
     return res.json({ group_id: groupId, group_name });
-  });
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
 // Delete a group
-router.delete("/:groupId", (req, res) => {
+router.delete("/:groupId", async (req, res) => {
   const { groupId } = req.params;
-  const q = "DELETE FROM `Groups` WHERE group_id = ?";
-  db.query(q, [groupId], (err, data) => {
-    if (err) return res.json("Error" + err);
+  try {
+    await Group.destroy({ where: { group_id: groupId } });
     return res.status(204).end();
-  });
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
 // Get all members of a group
-router.get("/:groupId/members", (req, res) => {
+router.get("/:groupId/members", async (req, res) => {
   const { groupId } = req.params;
-  const q = `SELECT Users.user_id, Users.name, Group_Members.date_added FROM Group_Members JOIN Users ON Group_Members.member_id = Users.user_id WHERE Group_Members.group_id = ?`;
-  db.query(q, [groupId], (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.json(data);
-  });
+
+  try {
+    const members = await GroupMember.findAll({
+      where: { group_id: groupId },
+      include: {
+        model: User,
+        attributes: ["user_id", "name"],
+      },
+      attributes: ["date_added"],
+    });
+
+    // Formatting the response to match the structure you want
+    const response = members.map((member) => ({
+      user_id: member.User.user_id,
+      name: member.User.name,
+      date_added: member.date_added,
+    }));
+
+    res.json(response);
+  } catch (err) {
+    res.status(500).json("Error fetching group members: " + err);
+  }
 });
 
 // Add a user to a group
-router.post("/:groupId/members", (req, res) => {
+router.post("/:groupId/members", async (req, res) => {
   const { groupId } = req.params;
   const { member_id } = req.body;
-  const q =
-    "INSERT INTO Group_Members (group_id, member_id, date_added) VALUES (?, ?, NOW())";
-  db.query(q, [groupId, member_id], (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.status(201).json({
-      id: data.insertId,
+  try {
+    const newMember = await GroupMember.create({
       group_id: groupId,
       member_id,
       date_added: new Date(),
     });
-  });
+    return res.status(201).json(newMember);
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
 // Remove a user from a group
-router.delete("/:groupId/members/:memberId", (req, res) => {
+router.delete("/:groupId/members/:memberId", async (req, res) => {
   const { groupId, memberId } = req.params;
-  const q = "DELETE FROM Group_Members WHERE group_id = ? AND member_id = ?";
-  db.query(q, [groupId, memberId], (err, data) => {
-    if (err) return res.json("Error" + err);
+  try {
+    await GroupMember.destroy({
+      where: { group_id: groupId, member_id: memberId },
+    });
     return res.status(204).end();
-  });
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
 export default router;

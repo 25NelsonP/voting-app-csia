@@ -1,11 +1,12 @@
 import { Navigate } from "react-router-dom";
 import useSession from "../utils/useSession";
+import LoadingScreen from "./LoadingScreen";
 
 const ProtectedRoute = ({ element }) => {
   const { user, loading } = useSession();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return user ? element : <Navigate to="/login" replace />;

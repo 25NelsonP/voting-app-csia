@@ -1,18 +1,19 @@
 import { Navigate } from "react-router-dom";
 import useSession from "../utils/useSession";
+import LoadingScreen from "./LoadingScreen";
 
 const AdminProtectedRoute = ({ element }) => {
   const { user, loading } = useSession();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.is_admin !== 1) {
+  if (!user.is_admin) {
     return <Navigate to="/" replace />;
   }
 

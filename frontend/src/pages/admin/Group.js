@@ -30,7 +30,7 @@ const Group = () => {
     const fetchGroupName = async () => {
       try {
         const res = await axios.get(`${API_URL}/groups/${group_id}`);
-        setGroupName(res.data[0].group_name);
+        setGroupName(res.data.group_name);
       } catch (error) {
         navigate(`/admin/managegroups`);
         console.log(error);

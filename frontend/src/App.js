@@ -12,6 +12,7 @@ import {
   ManageGroups,
   Group,
   CreateForm,
+  Profile,
 } from "./pages";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import AdminProtectedRoute from "./components/AdminProtectedRoutes";
@@ -39,6 +40,10 @@ function App() {
           <Route
             path="/voteSuccess"
             element={<ProtectedRoute element={<VoteSuccessful />} />}
+          />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute element={<Profile />} />}
           />
           <Route
             path="/admin/manageadmins"

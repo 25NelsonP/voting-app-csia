@@ -12,15 +12,20 @@ const useSession = () => {
       .get("/auth/user")
       .then((response) => {
         setUser(response.data);
-        setLoading(false); // Data has been fetched, set loading to false
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching user:", error);
-        setLoading(false); // Stop loading even if there's an error
-        setUser(null); // Explicitly set user to null on error
+        setUser(null);
+        if (error.response?.status === 401) {
+          navigate("/login"); // Redirect to login page on unauthorized
+        }
+      })
+      .finally(() => {
+        setLoading(false); // Stop loading regardless of the result
       });
-  }, [navigate]);
-  // Return both user and loading state
+  }, [navigate]); // No dependencies needed
+
   return { user, loading };
 };
 

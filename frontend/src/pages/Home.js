@@ -3,10 +3,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import FormatDate from "../components/FormatDate";
 import useSession from "./../utils/useSession";
+import LoadingScreen from "../components/LoadingScreen";
 
 function VoterHome() {
   const [ongoingVotes, setOngoingVotes] = useState([]);
-  const { user } = useSession();
+  const { user, loading } = useSession();
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -25,6 +27,10 @@ function VoterHome() {
 
     fetchOngoingVotes();
   }, [user, API_URL]);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="min-h-min flex flex-col">

@@ -1,44 +1,56 @@
 import express from "express";
-import db from "../db.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
 //get user route
-router.get("/", (req, res) => {
-  const q = "SELECT user_id, name, email FROM Users";
-  db.query(q, (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.json(data);
-  });
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ["user_id", "name", "email"],
+    });
+    return res.json(users);
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
-// Example of another route
-router.get("/admins", (req, res) => {
-  const q = "SELECT user_id, name, email FROM Users where is_admin = 1";
-  db.query(q, (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.json(data);
-  });
+// Get all admin users
+router.get("/admins", async (req, res) => {
+  try {
+    const admins = await User.findAll({
+      where: { is_admin: true },
+      attributes: ["user_id", "name", "email"],
+    });
+    return res.json(admins);
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
-//get non admin users
-router.get("/non_admins", (req, res) => {
-  const q = "SELECT user_id, name, email FROM Users where is_admin = 0";
-  db.query(q, (err, data) => {
-    if (err) return res.json("Error" + err);
-    return res.json(data);
-  });
+// Get all non-admin users
+router.get("/non_admins", async (req, res) => {
+  try {
+    const nonAdmins = await User.findAll({
+      where: { is_admin: false },
+      attributes: ["user_id", "name", "email"],
+    });
+    return res.json(nonAdmins);
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 
-//update a user as admin
-router.put("/set_admin/:id", (req, res) => {
+// Update a user's admin status
+router.put("/set_admin/:id", async (req, res) => {
   const user_id = req.params.id;
-  const is_admin = req.body.is_admin;
-  const q = "UPDATE Users SET is_admin = ? WHERE user_id = ?";
+  const { is_admin } = req.body;
 
-  db.query(q, [is_admin, user_id], (err, data) => {
-    if (err) return res.json(err);
+  try {
+    await User.update({ is_admin }, { where: { user_id } });
     return res.json("User admin status updated");
-  });
+  } catch (err) {
+    return res.status(500).json("Error: " + err);
+  }
 });
 export default router;

@@ -1,24 +1,40 @@
 import express from "express";
 import cors from "cors";
 import session from "express-session";
+import SequelizeStore from "connect-session-sequelize";
 import passport from "passport";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.js";
 import electionRoutes from "./routes/election.js";
 import groupRoutes from "./routes/groups.js";
+import sequelize from "./db.js";
 import "./passport.js";
 
 dotenv.config();
 
 const app = express();
+const SequelizeSessionStore = SequelizeStore(session.Store);
+
+const sessionStore = new SequelizeSessionStore({
+  db: sequelize,
+});
 
 app.use(
   session({
+    secret: process.env.SESSION_SECRET,
+    store: sessionStore,
     resave: false,
     saveUninitialized: false,
-    secret: process.env.SESSION_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false, // for local testing
+      sameSite: "lax", // or "strict" for local
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
   })
 );
+
+sessionStore.sync();
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -55,12 +71,15 @@ app.get(
   })
 );
 
+app.get("/test", (req, res) => {
+  res.json({ session: req.session, user: req.user });
+});
+
 app.get(
   "/auth/google/redirect",
   passport.authenticate("google", {
     failureRedirect: "/",
   }),
-  // middleware for user add or create
   function (req, res) {
     res.redirect(process.env.ORIGIN);
   }
