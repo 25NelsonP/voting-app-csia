@@ -19,12 +19,11 @@ const sessionStore = new SequelizeSessionStore({
   db: sequelize,
 });
 
-if (process.env.NODE_ENV === "local") {
-  sessionStore
-    .sync()
-    .then(() => console.log("Session store synced"))
-    .catch((err) => console.error("Error syncing session store:", err));
-}
+// Sync the session store with the database
+sequelize
+  .sync()
+  .then(() => sessionStore.sync())
+  .catch((error) => console.error("Error syncing session store:", error));
 
 app.use(
   session({
@@ -72,6 +71,11 @@ app.get("/auth/user", (req, res) => {
   }
 });
 
+app.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect(process.env.ORIGIN);
+});
+
 app.get(
   "/auth/google",
   passport.authenticate("google", {
@@ -87,7 +91,7 @@ app.get("/test", (req, res) => {
 app.get(
   "/auth/google/redirect",
   passport.authenticate("google", {
-    failureRedirect: "/",
+    failureRedirect: process.env.ORIGIN,
   }),
 
   function (req, res) {
