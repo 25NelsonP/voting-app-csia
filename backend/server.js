@@ -19,6 +19,13 @@ const sessionStore = new SequelizeSessionStore({
   db: sequelize,
 });
 
+if (process.env.NODE_ENV === "local") {
+  sessionStore
+    .sync()
+    .then(() => console.log("Session store synced"))
+    .catch((err) => console.error("Error syncing session store:", err));
+}
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -33,8 +40,6 @@ app.use(
     },
   })
 );
-
-sessionStore.sync();
 
 app.use(passport.initialize());
 app.use(passport.session());
