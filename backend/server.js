@@ -91,12 +91,9 @@ app.get("/test", (req, res) => {
 app.get(
   "/auth/google/redirect",
   passport.authenticate("google", {
-    failureRedirect: process.env.ORIGIN,
-  }),
-
-  function (req, res) {
-    res.redirect(process.env.ORIGIN);
-  }
+    failureRedirect: `${process.env.ORIGIN}/login`,
+    successRedirect: process.env.ORIGIN,
+  })
 );
 
 app.listen(8080, () => {
