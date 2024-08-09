@@ -51,11 +51,14 @@ passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findByPk(id);
     if (user) {
+      console.log("User found:", user);
       done(null, user);
     } else {
-      done(null, false); // User not found
+      console.log("User not found");
+      done(null, false);
     }
   } catch (err) {
+    console.log("Error during deserialization:", err);
     done(err);
   }
 });
