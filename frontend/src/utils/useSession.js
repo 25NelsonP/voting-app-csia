@@ -1,34 +1,25 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
 
 const useSession = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    axiosInstance
-      .get("/auth/user")
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/auth/user`, {
+        withCredentials: true,
+      })
       .then((response) => {
-        console.log("User data received:", response.data);
         setUser(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-        if (error.response) {
-          console.error("Response error data:", error.response.data);
-          console.error("Response error status:", error.response.status);
-        }
+      .catch(() => {
         setUser(null);
-        if (error.response?.status === 401) {
-          navigate("/login"); // Redirect to login page on unauthorized
-        }
       })
       .finally(() => {
-        setLoading(false); // Stop loading regardless of the result
+        setLoading(false);
       });
-  }, [navigate]);
+  }, []);
 
   return { user, loading };
 };
