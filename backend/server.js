@@ -1,47 +1,17 @@
 import express from "express";
 import cors from "cors";
-import session from "express-session";
-import SequelizeStore from "connect-session-sequelize";
 import passport from "passport";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.js";
 import electionRoutes from "./routes/election.js";
 import groupRoutes from "./routes/groups.js";
-import sequelize from "./db.js";
 import "./passport.js";
 
 dotenv.config();
 
 const app = express();
-const SequelizeSessionStore = SequelizeStore(session.Store);
-
-const sessionStore = new SequelizeSessionStore({
-  db: sequelize,
-});
-
-// Sync the session store with the database
-sequelize
-  .sync()
-  .then(() => sessionStore.sync())
-  .catch((error) => console.error("Error syncing session store:", error));
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // only secure in production
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // lax for local testing
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    },
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(
   cors({
@@ -50,30 +20,12 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
-app.use("/users", userRoutes);
-app.use("/elections", electionRoutes);
-app.use("/groups", groupRoutes);
+app.use(passport.initialize());
 
 app.get("/", (req, res) => {
   res.send('<a href="auth/google">Authenticate with Google</a>');
-});
-
-app.get("/auth/user", (req, res) => {
-  console.log("User:", req.user);
-  console.log("Session:", req.session);
-  if (req.isAuthenticated()) {
-    res.json(req.user);
-  } else {
-    console.log("User:", req.user);
-    console.log("Session:", req.session);
-    res.status(401).json({ error: "Not authenticated" });
-  }
-});
-
-app.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect(process.env.ORIGIN);
 });
 
 app.get(
@@ -84,17 +36,44 @@ app.get(
   })
 );
 
-app.get("/test", (req, res) => {
-  res.json({ session: req.session, user: req.user });
-});
-
 app.get(
   "/auth/google/redirect",
   passport.authenticate("google", {
+    session: false,
     failureRedirect: `${process.env.ORIGIN}/login`,
-    successRedirect: process.env.ORIGIN,
-  })
+  }),
+  (req, res) => {
+    // Send JWT token in cookie
+    res.cookie("jwt", req.user.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+    res.redirect(process.env.ORIGIN);
+  }
 );
+
+app.get("/auth/user", (req, res) => {
+  const token = req.cookies.jwt;
+  if (!token) return res.status(401).json({ error: "Not authenticated" });
+
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    res.json(user);
+  } catch (err) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+app.get("/logout", (req, res) => {
+  res.clearCookie("jwt");
+  res.redirect(process.env.ORIGIN);
+});
+
+app.use("/users", userRoutes);
+app.use("/elections", electionRoutes);
+app.use("/groups", groupRoutes);
 
 app.listen(8080, () => {
   console.log("Server is running on port 8080");

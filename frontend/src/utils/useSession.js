@@ -11,7 +11,7 @@ const useSession = () => {
         withCredentials: true,
       })
       .then((response) => {
-        setUser(response.data);
+        setUser(response.data); // Directly using the full user object
       })
       .catch(() => {
         setUser(null);
