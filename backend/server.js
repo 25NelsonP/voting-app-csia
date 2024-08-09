@@ -62,6 +62,7 @@ app.get("/auth/user", (req, res) => {
     const user = jwt.verify(token, process.env.JWT_SECRET);
     res.json(user);
   } catch (err) {
+    console.log(err);
     res.status(401).json({ error: "Invalid token" });
   }
 });
