@@ -61,6 +61,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/auth/user", (req, res) => {
+  console.log("User:", req.user);
+  console.log("Session:", req.session);
   if (req.isAuthenticated()) {
     res.json(req.user);
   } else {
