@@ -81,7 +81,7 @@ app.get(
 );
 
 app.get("/test", (req, res) => {
-  res.json({ session: req.session, user: req.user });
+  res.json({ session: req.session, user: req.sessionID });
 });
 
 app.get(
