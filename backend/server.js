@@ -89,6 +89,7 @@ app.get(
   passport.authenticate("google", {
     failureRedirect: "/",
   }),
+
   function (req, res) {
     res.redirect(process.env.ORIGIN);
   }
