@@ -47,7 +47,7 @@ app.get(
     res.cookie("jwt", req.user.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // lax for local testing,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
     res.redirect(process.env.ORIGIN);

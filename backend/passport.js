@@ -32,7 +32,13 @@ passport.use(
 
         // Create JWT token
         const token = jwt.sign(
-          { user_id: user.user_id, googleId: user.googleId },
+          {
+            user_id: user.user_id,
+            googleId: user.googleId,
+            name: user.name,
+            email: user.email,
+            is_admin: user.is_admin,
+          },
           jwtSecret,
           { expiresIn: "1d" }
         );
