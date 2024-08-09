@@ -63,7 +63,7 @@ app.get("/auth/user", (req, res) => {
     res.json(user);
   } catch (err) {
     console.log(err);
-    res.status(401).json({ error: "Invalid token" });
+    res.status(401).json({ error: "Invalid token", err });
   }
 });
 
