@@ -27,8 +27,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true, // for local testing
-      sameSite: "None", // or "strict" for local
+      secure: process.env.NODE_ENV === "production", // only secure in production
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // lax for local testing
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
   })
@@ -57,8 +57,6 @@ app.get("/", (req, res) => {
 
 app.get("/auth/user", (req, res) => {
   if (req.isAuthenticated()) {
-    console.log(session);
-    console.log(req.user);
     res.json(req.user);
   } else {
     res.status(401).json({ error: "Not authenticated" });
@@ -83,7 +81,6 @@ app.get(
     failureRedirect: "/",
   }),
   function (req, res) {
-    console.log(session);
     res.redirect(process.env.ORIGIN);
   }
 );
