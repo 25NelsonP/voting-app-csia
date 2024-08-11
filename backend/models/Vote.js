@@ -17,9 +17,10 @@ const Vote = db.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    candidate_id: {
-      type: DataTypes.INTEGER,
+    candidates: {
+      type: DataTypes.JSON,
       allowNull: true,
+      //left: positionId, right: candidateId
     },
     timestamp: {
       type: DataTypes.DATE,

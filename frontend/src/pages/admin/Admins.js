@@ -4,6 +4,7 @@ import Adminheader from "./../../components/AdminHeader";
 import axios from "axios";
 import AddAdminModal from "./../../components/modals/AddAdminModal";
 import ConfirmRemoveAdminModal from "./../../components/modals/ConfirmRemoveAdminModal";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const Admins = () => {
   const [administrators, setAdministrators] = useState([]);
@@ -13,6 +14,7 @@ const Admins = () => {
   const [openConfirmRmvAdminModal, setOpenConfirmRmvAdminModal] =
     useState(false);
   const [adminToRemove, setAdminToRemove] = useState(null);
+  const [loading, setLoading] = useState(true);
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -20,6 +22,7 @@ const Admins = () => {
       try {
         const res = await axios.get(`${API_URL}/users/non_admins`);
         setUsers(res.data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -80,6 +83,10 @@ const Admins = () => {
     setAdminToRemove(user_id);
     setOpenConfirmRmvAdminModal(true);
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center">

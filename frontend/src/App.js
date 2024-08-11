@@ -13,6 +13,7 @@ import {
   Group,
   CreateForm,
   Profile,
+  Responses,
 } from "./pages";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import AdminProtectedRoute from "./components/AdminProtectedRoutes";
@@ -62,8 +63,12 @@ function App() {
             element={<AdminProtectedRoute element={<Group />} />}
           />
           <Route
-            path="/admin/create/:id"
+            path="/admin/edit/:id"
             element={<AdminProtectedRoute element={<CreateForm />} />}
+          />
+          <Route
+            path="/admin/edit/responses/:id"
+            element={<AdminProtectedRoute element={<Responses />} />}
           />
         </Routes>
         <Footer />

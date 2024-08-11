@@ -7,14 +7,14 @@ const CandidatesForm = ({
   setIsConfirming,
 }) => {
   return (
-    <div className="min-h-min flex flex-col">
+    <div className="flex flex-col">
       <main className="flex flex-col items-center p-3 ">
         {positions.map((position) => (
           <div key={position.position_id} className="mb-10 m-10">
             <h2 className="text-2xl font-bold py-3 text-center">
               {position.title}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="flex justify-center items-center space-x-4">
               {position.candidates.map((candidate) => (
                 <div
                   key={candidate.candidate_id}

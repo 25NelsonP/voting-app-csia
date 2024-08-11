@@ -3,9 +3,12 @@ import ConfirmationPage from "../components/VoteConfirmation"; // Import the Con
 import CandidatesForm from "../components/ElectionFormFill"; // Import the new CandidatesForm component
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import useSession from "../utils/useSession";
 
 const VotingPage = () => {
   const location = useLocation();
+
+  const { user } = useSession();
 
   const electionId = location.pathname.split("/")[2];
   const [title, setTitle] = useState("");
@@ -46,7 +49,16 @@ const VotingPage = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    try {
+      await axios.post(`${API_URL}/votes/submit`, {
+        voter_id: user.user_id,
+        election_id: electionId,
+        votes: selectedCandidates,
+      });
+    } catch (error) {
+      console.log(error);
+    }
     console.log("Confirmed Candidates:", selectedCandidates);
   };
 
@@ -62,7 +74,7 @@ const VotingPage = () => {
           positions={positions}
           selectedCandidates={selectedCandidates}
           onBack={() => setIsConfirming(false)}
-          onSubmit={handleSubmit()}
+          onSubmit={() => handleSubmit()}
         />
       ) : (
         <CandidatesForm

@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.js";
 import electionRoutes from "./routes/election.js";
 import groupRoutes from "./routes/groups.js";
+import voteRoutes from "./routes/vote.js";
 import "./passport.js";
 
 dotenv.config();
@@ -75,6 +76,7 @@ app.get("/logout", (req, res) => {
 app.use("/users", userRoutes);
 app.use("/elections", electionRoutes);
 app.use("/groups", groupRoutes);
+app.use("/votes", voteRoutes);
 
 app.listen(8080, () => {
   console.log("Server is running on port 8080");

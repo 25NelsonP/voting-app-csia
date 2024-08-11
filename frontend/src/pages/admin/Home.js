@@ -3,9 +3,11 @@ import Adminheader from "../../components/AdminHeader";
 import axios from "axios";
 import FormatDate from "../../components/FormatDate";
 import { Link } from "react-router-dom";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const AdminHome = () => {
   const [votings, setVotings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -13,13 +15,19 @@ const AdminHome = () => {
       try {
         const res = await axios.get(`${API_URL}/elections`);
         setVotings(res.data);
+        setLoading(false);
       } catch (error) {
         console.log("Error", error);
+        setLoading(false);
       }
     };
 
     fetchVotes();
   }, [API_URL]);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="min-h-min flex flex-col">
@@ -43,7 +51,7 @@ const AdminHome = () => {
                 </div>
                 <div className="flex space-x-4">
                   <Link
-                    to={`/admin/manageform/${vote.election_id}`}
+                    to={`/admin/edit/${vote.election_id}`}
                     className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg"
                   >
                     Manage

@@ -51,7 +51,7 @@ const Users = () => {
             </table>
           </div>
         ) : (
-          <p>No users available.</p>
+          <p>Loading ...</p>
         )}
       </main>
     </div>

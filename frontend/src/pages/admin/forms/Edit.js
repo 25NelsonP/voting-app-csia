@@ -3,12 +3,11 @@ import { FaEdit, FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import FormEditHeader from "../../../components/FormEditHeader";
 
 const Create = () => {
   const location = useLocation();
   const electionId = location.pathname.split("/")[3];
-  const [editingTitle, setEditingTitle] = useState(false);
-  const [title, setTitle] = useState("");
   const [positions, setPositions] = useState([]);
 
   const [editingPosition, setEditingPosition] = useState(null);
@@ -22,15 +21,6 @@ const Create = () => {
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    const fetchTitle = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/elections/${electionId}`);
-        setTitle(res.data.title);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     const fetchPositions = async () => {
       try {
         const res = await axios.get(
@@ -41,8 +31,6 @@ const Create = () => {
         console.log("Position", error);
       }
     };
-
-    fetchTitle();
     fetchPositions();
   }, [electionId, API_URL]);
 
@@ -85,19 +73,6 @@ const Create = () => {
       );
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const handleUpdateTitle = async () => {
-    try {
-      await axios.put(`${API_URL}/elections/`, {
-        election_id: electionId,
-        title: title,
-      });
-      setEditingTitle(false);
-    } catch (error) {
-      console.log(error);
-      setEditingTitle(false);
     }
   };
 
@@ -221,43 +196,9 @@ const Create = () => {
 
   return (
     <div>
-      <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <div className="flex items-center">
-          {editingTitle ? (
-            <div className="flex items-center text-black">
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="p-2 border rounded mr-2"
-              />
-              <button
-                onClick={handleUpdateTitle}
-                className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-800"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setEditingTitle(false)}
-                className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-900 ml-2"
-              >
-                Cancel
-              </button>
-            </div>
-          ) : (
-            <div className="flex justify-between items-center">
-              <h1 className="text-xl font-bold">{title}</h1>
-              <button
-                onClick={() => setEditingTitle(true)}
-                className="ml-2 p-2"
-              >
-                <FaEdit />
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
-      <div className="min-h-screen flex flex-col">
+      <FormEditHeader electionId={electionId} />
+
+      <div className="flex flex-col">
         <main className="flex flex-col items-center p-3 ">
           {positions.map((position) => (
             <div key={position.position_id} className="mb-10 m-10">
@@ -266,6 +207,7 @@ const Create = () => {
                   <div className="flex items-center text-black py-2">
                     <input
                       type="text"
+                      id={position.position_id}
                       value={newDescription}
                       onChange={(e) => setNewDescription(e.target.value)}
                       className="p-2 border rounded mr-2"
@@ -313,18 +255,21 @@ const Create = () => {
                       <div className="flex flex-col items-center text-black border rounded-lg p-2 shadow-md cursor-pointer w-60">
                         <input
                           type="text"
+                          id="candidateName"
                           value={newCandidateName}
                           onChange={(e) => setNewCandidateName(e.target.value)}
                           className="p-2 border rounded mb-2 w-full"
                         />
                         <input
                           type="text"
+                          id="candidateGrade"
                           value={newCandidateGrade}
                           onChange={(e) => setNewCandidateGrade(e.target.value)}
                           className="p-2 border rounded mb-2 w-full"
                         />
                         <input
                           type="text"
+                          id="candidateImage"
                           value={newCandidateImageUrl}
                           onChange={(e) =>
                             setNewCandidateImageUrl(e.target.value)
@@ -398,6 +343,7 @@ const Create = () => {
                   <div className="flex flex-col items-center text-black border rounded-lg p-2 shadow-md cursor-pointer w-60">
                     <input
                       type="text"
+                      id="newName"
                       value={newCandidateName}
                       onChange={(e) => setNewCandidateName(e.target.value)}
                       placeholder="Name"
@@ -405,6 +351,7 @@ const Create = () => {
                     />
                     <input
                       type="text"
+                      id="newGrade"
                       value={newCandidateGrade}
                       onChange={(e) => setNewCandidateGrade(e.target.value)}
                       placeholder="Grade"
@@ -412,6 +359,7 @@ const Create = () => {
                     />
                     <input
                       type="text"
+                      id="newImage"
                       value={newCandidateImageUrl}
                       onChange={(e) => setNewCandidateImageUrl(e.target.value)}
                       placeholder="Image URL"
@@ -455,6 +403,7 @@ const Create = () => {
               <input
                 type="text"
                 value={newDescription}
+                id="newPosition"
                 onChange={(e) => setNewDescription(e.target.value)}
                 placeholder="Position Description"
                 className="p-2 border rounded mb-2 w-full"

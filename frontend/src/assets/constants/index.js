@@ -16,3 +16,22 @@ export const adminHeaderLinks = [
     label: "Manage Groups",
   },
 ];
+
+export const formHeaderLinks = [
+  {
+    route: "/admin/edit",
+    label: "Edit",
+  },
+  {
+    route: "/admin/edit/responses",
+    label: "Responses",
+  },
+  {
+    route: "/admin/edit/settings",
+    label: "Settings",
+  },
+  {
+    route: "/admin/edit/permissions",
+    label: "Permissions/Sharing",
+  },
+];

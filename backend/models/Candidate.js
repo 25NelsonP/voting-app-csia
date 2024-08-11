@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "./../db.js";
+import Position from "./Position.js";
 
 const Candidate = db.define(
   "Candidate",

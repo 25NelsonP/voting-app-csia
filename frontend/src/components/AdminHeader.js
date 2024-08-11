@@ -12,7 +12,7 @@ const Adminheader = () => {
     e.preventDefault();
     const response = await axios.post(`${API_URL}/elections`);
     const electionId = await response.data.election_id;
-    navigate(`/admin/create/${electionId}`);
+    navigate(`/admin/edit/${electionId}`);
   };
   return (
     <nav className="bg-blue-600 px-6 py-3 flex justify-between w-full text-white">
