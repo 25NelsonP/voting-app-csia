@@ -9,7 +9,7 @@ const ConfirmDeleteGroupModal = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-md relative flex flex-col items-center">
-        <h2 className="text-2xl font-bold mb-4">Remove Group Member</h2>
+        <h2 className="text-2xl font-bold mb-4">Delete Group</h2>
         <p className="mb-3 text-center">
           Are you sure you want to delete <b>{groupName}</b>?
         </p>

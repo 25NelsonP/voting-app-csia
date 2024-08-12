@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "./../db.js";
+import User from "./User.js";
+import Group from "./Group.js";
 
 const EligibleVoter = db.define(
   "EligibleVoter",
@@ -28,5 +30,8 @@ const EligibleVoter = db.define(
     timestamps: false,
   }
 );
+
+// Associations
+EligibleVoter.belongsTo(User, { foreignKey: "student_id" });
 
 export default EligibleVoter;

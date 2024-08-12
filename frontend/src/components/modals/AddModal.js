@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 
-const AddMemberModal = ({ setOpenAddMemberModal, users, handleAddMember }) => {
+const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [title, setTitle] = useState("Select a user to add");
+  useEffect(() => {
+    if (type === "group") {
+      setTitle("Add Member");
+    }
+    if (type === "admin") {
+      setTitle("Add Adminstrator");
+    }
+    if (type === "p_user") {
+      setTitle("Add Users");
+    }
+    if (type === "p_group") {
+      setTitle("Add Users");
+    }
+  }, [type]);
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -11,7 +25,7 @@ const AddMemberModal = ({ setOpenAddMemberModal, users, handleAddMember }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
-        <h2 className="text-2xl font-bold mb-4">Add Member</h2>
+        <h2 className="text-2xl font-bold mb-4">{title}</h2>
         <div className="flex flex-col space-y-3">
           <input
             type="text"
@@ -29,7 +43,7 @@ const AddMemberModal = ({ setOpenAddMemberModal, users, handleAddMember }) => {
                       <td className="px-4 py-2 text-left flex justify-between items-center">
                         {user.name}{" "}
                         <button
-                          onClick={(e) => handleAddMember(e, user.user_id)}
+                          onClick={(e) => handleAdd(e, user.user_id)}
                           className="bg-green-600 text-white p-2 rounded"
                         >
                           <FaPlus />
@@ -45,7 +59,7 @@ const AddMemberModal = ({ setOpenAddMemberModal, users, handleAddMember }) => {
           )}
         </div>
         <button
-          onClick={() => setOpenAddMemberModal(false)}
+          onClick={() => setModalStatus(false)}
           className="absolute top-2 right-2 p-2"
         >
           <FaTimes size={20} />
@@ -55,4 +69,4 @@ const AddMemberModal = ({ setOpenAddMemberModal, users, handleAddMember }) => {
   );
 };
 
-export default AddMemberModal;
+export default AddModal;

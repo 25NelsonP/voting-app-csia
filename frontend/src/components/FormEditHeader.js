@@ -38,7 +38,7 @@ const FormEditHeader = ({ electionId }) => {
   };
 
   return (
-    <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <header className="bg-blue-600 text-white p-4 flex justify-between items-center w-full">
       <div className="flex items-center">
         {editingTitle ? (
           <div className="flex items-center text-black">

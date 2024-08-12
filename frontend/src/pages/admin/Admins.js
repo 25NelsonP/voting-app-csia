@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import Adminheader from "./../../components/AdminHeader";
 import axios from "axios";
-import AddAdminModal from "./../../components/modals/AddAdminModal";
+import AddAdminModal from "../../components/modals/AddModal";
 import ConfirmRemoveAdminModal from "./../../components/modals/ConfirmRemoveAdminModal";
 import LoadingScreen from "../../components/LoadingScreen";
 
 const Admins = () => {
   const [administrators, setAdministrators] = useState([]);
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [openAddAdminModal, setAddAdminModal] = useState(false);
   const [openConfirmRmvAdminModal, setOpenConfirmRmvAdminModal] =
     useState(false);
@@ -22,15 +21,11 @@ const Admins = () => {
       try {
         const res = await axios.get(`${API_URL}/users/non_admins`);
         setUsers(res.data);
-        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchUser();
-  }, [API_URL]);
 
-  useEffect(() => {
     const fetchAdmin = async () => {
       try {
         const res = await axios.get(`${API_URL}/users/admins`);
@@ -39,7 +34,9 @@ const Admins = () => {
         console.log(error);
       }
     };
+    fetchUser();
     fetchAdmin();
+    setLoading(false);
   }, [API_URL]);
 
   const handleAddAdmin = async (e, user_id) => {
@@ -135,10 +132,9 @@ const Admins = () => {
       {openAddAdminModal && (
         <AddAdminModal
           users={users}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          handleAddAdmin={handleAddAdmin}
-          setAddAdminModal={setAddAdminModal}
+          handleAdd={handleAddAdmin}
+          setModalStatus={setAddAdminModal}
+          type={`admin`}
         />
       )}
 

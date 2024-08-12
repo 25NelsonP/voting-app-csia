@@ -10,3 +10,4 @@ export { default as Group } from "./admin/Group";
 export { default as CreateForm } from "./admin/forms/Edit";
 export { default as Profile } from "./Profile";
 export { default as Responses } from "./admin/forms/Responses";
+export { default as Permissions } from "./admin/forms/Permissions";

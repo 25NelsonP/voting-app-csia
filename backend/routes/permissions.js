@@ -1,0 +1,73 @@
+import express from "express";
+import EligibleVoter from "../models/EligibleVoter.js";
+import User from "../models/User.js";
+
+const router = express.Router();
+
+router.get("/:id", async (req, res) => {
+  const electionId = req.params.id;
+
+  try {
+    const eligibleVoters = await EligibleVoter.findAll({
+      where: { election_id: electionId },
+      include: [
+        {
+          model: User,
+          attributes: ["name"],
+        },
+      ],
+    });
+
+    const students = eligibleVoters.map((voter) => ({
+      student_id: voter.student_id,
+      name: voter.User.name,
+    }));
+
+    res.json(students);
+  } catch (error) {
+    console.error("Error fetching permissions data", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.delete("/:electionId/:studentId", async (req, res) => {
+  const { electionId, studentId } = req.params;
+
+  try {
+    const result = await EligibleVoter.destroy({
+      where: { election_id: electionId, student_id: studentId },
+    });
+
+    if (result > 0) {
+      res.status(200).send("Access removed successfully");
+    } else {
+      res.status(404).send("Eligible voter not found");
+    }
+  } catch (error) {
+    console.error("Error removing access", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.post("/:id", async (req, res) => {
+  const electionId = req.params.id;
+  const studentId = req.body.student_id;
+
+  try {
+    const result = await EligibleVoter.create({
+      election_id: electionId,
+      student_id: studentId,
+    });
+
+    if (result) {
+      res.status(201).send("Access granted successfully");
+    } else {
+      res.status(409).send("Eligible voter already exists");
+    }
+  } catch (error) {
+    console.error("Error updating access", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+export default router;

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import ConfirmRemoveMemberModal from "../../components/modals/ConfirmRemoveMemberModal";
-import AddMemberModal from "../../components/modals/AddMemberModal";
+import AddMemberModal from "../../components/modals/AddModal";
 import { useNavigate } from "react-router-dom";
 import ConfirmDeleteGroupModal from "../../components/modals/ConfirmDeleteGroupModal";
 import { MdEdit } from "react-icons/md";
@@ -230,10 +230,10 @@ const Group = () => {
       )}
       {openAddMemberModal && (
         <AddMemberModal
-          setOpenAddMemberModal={setOpenAddMemberModal}
-          members={members}
           users={users}
-          handleAddMember={handleAddMember}
+          handleAdd={handleAddMember}
+          setModalStatus={setOpenAddMemberModal}
+          type={`group`}
         />
       )}
 

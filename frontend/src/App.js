@@ -14,6 +14,7 @@ import {
   CreateForm,
   Profile,
   Responses,
+  Permissions,
 } from "./pages";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import AdminProtectedRoute from "./components/AdminProtectedRoutes";
@@ -70,7 +71,12 @@ function App() {
             path="/admin/edit/responses/:id"
             element={<AdminProtectedRoute element={<Responses />} />}
           />
+          <Route
+            path="/admin/edit/permissions/:id"
+            element={<AdminProtectedRoute element={<Permissions />} />}
+          />
         </Routes>
+
         <Footer />
       </BrowserRouter>
     </div>
