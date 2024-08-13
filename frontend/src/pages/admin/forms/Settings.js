@@ -84,7 +84,7 @@ const Settings = () => {
       alert("End date must be after the start date.");
       return;
     }
-
+    console.log(formState);
     try {
       await axios.put(
         `${process.env.REACT_APP_API_URL}/elections/${electionId}`,

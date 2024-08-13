@@ -79,6 +79,7 @@ router.get("/check/:electionId/:studentId", async (req, res) => {
   const { electionId, studentId } = req.params;
 
   try {
+    //check eligibility
     const eligible = await EligibleVoter.findOne({
       where: { election_id: electionId, student_id: studentId },
     });
@@ -90,6 +91,7 @@ router.get("/check/:electionId/:studentId", async (req, res) => {
       });
     }
 
+    //check if voted
     const voted = await Vote.findOne({
       where: { election_id: electionId, voter_id: studentId },
     });

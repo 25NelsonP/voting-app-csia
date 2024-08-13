@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "./../db.js";
 
+//Sequelize Model for Groups Table
 const Group = db.define(
   "Group",
   {

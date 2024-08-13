@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "./../db.js";
 
+// Sequelize Model for Users Table
 const User = db.define(
   "User",
   {
@@ -29,8 +30,8 @@ const User = db.define(
     },
   },
   {
-    tableName: "Users", // Specify the table name if it's different from the model name
-    timestamps: false, // Set to true if your table has `createdAt` and `updatedAt` fields
+    tableName: "Users",
+    timestamps: false,
   }
 );
 

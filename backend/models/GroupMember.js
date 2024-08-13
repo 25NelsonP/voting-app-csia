@@ -3,6 +3,7 @@ import db from "./../db.js";
 import User from "./User.js";
 import Group from "./Group.js";
 
+//Sequelize Model for Group_Members Table
 const GroupMember = db.define(
   "GroupMember",
   {
@@ -30,6 +31,7 @@ const GroupMember = db.define(
   }
 );
 
+//Associations
 GroupMember.belongsTo(User, { foreignKey: "member_id" });
 User.hasMany(GroupMember, { foreignKey: "member_id" });
 

@@ -2,6 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "./../db.js";
 import User from "./User.js";
 
+//Sequelize Model for EligibleVoters Table
 const EligibleVoter = db.define(
   "EligibleVoter",
   {

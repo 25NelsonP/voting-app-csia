@@ -67,7 +67,7 @@ router.post("/submit", async (req, res) => {
         .json({ message: "Voter is not eligible to vote in this election." });
     }
 
-    // Store the votes in JSON format
+    // candidates are stored in the JSON format
     await Vote.create({
       election_id,
       voter_id,

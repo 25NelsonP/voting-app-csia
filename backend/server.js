@@ -27,10 +27,7 @@ app.use(cookieParser());
 
 app.use(passport.initialize());
 
-app.get("/", (req, res) => {
-  res.send('<a href="auth/google">Authenticate with Google</a>');
-});
-
+//Google Authentication
 app.get(
   "/auth/google",
   passport.authenticate("google", {
@@ -39,6 +36,7 @@ app.get(
   })
 );
 
+//Google Authentication Redirect
 app.get(
   "/auth/google/redirect",
   passport.authenticate("google", {
@@ -57,6 +55,7 @@ app.get(
   }
 );
 
+// Verify JWT token on every request
 app.get("/auth/user", async (req, res) => {
   const token = req.cookies.jwt;
   if (!token) return res.status(401).json({ error: "Not authenticated" });
@@ -77,11 +76,13 @@ app.get("/auth/user", async (req, res) => {
   }
 });
 
+// Logout route to clear the JWT token in the cookie
 app.get("/logout", (req, res) => {
   res.clearCookie("jwt");
   res.redirect(process.env.ORIGIN);
 });
 
+// Routes
 app.use("/users", userRoutes);
 app.use("/elections", electionRoutes);
 app.use("/groups", groupRoutes);

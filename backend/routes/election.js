@@ -91,6 +91,8 @@ router.put("/:electionId", async (req, res) => {
     if (!election) {
       return res.status(404).json({ message: "Election not found" });
     }
+
+    //Check dates and usages
     if (use_startdate && start_date !== "") {
       election.use_startdate = use_startdate;
       election.start_date = start_date;

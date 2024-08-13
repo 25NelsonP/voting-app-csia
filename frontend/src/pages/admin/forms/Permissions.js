@@ -83,8 +83,8 @@ const Permissions = () => {
     <div className="flex flex-col items-center w-full">
       <FormEditHeader electionId={electionId} />
       <div className="p-6 w-full flex flex-col items-center">
-        <div className="w-1/2 flex justify-between items-center mb-5">
-          <h2 className="text-xl font-semibold">Students with Access</h2>
+        <div className="w-1/2 flex justify-between items-center">
+          <h2 className="text-xl font-semibold">Permissions</h2>
           <button
             onClick={() => setOpenAddUserModal(true)}
             className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-900 mr-1"
@@ -92,6 +92,12 @@ const Permissions = () => {
             <FaPlus size={20} />
           </button>
         </div>
+        <p className="w-1/2 items-start text-xs">
+          Adding a user here will give them access to vote for this election.
+        </p>
+        <p className="w-1/2 items-start text-xs mb-5">
+          Admin users have access to all election forms.
+        </p>
         <div className="w-1/2 overflow-x-auto rounded-lg shadow-md">
           <table className="w-full text-sm text-black">
             <thead className="bg-blue-700 text-white">

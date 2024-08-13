@@ -3,6 +3,7 @@ import db from "./../db.js";
 import Position from "./Position.js";
 import EligibleVoter from "./EligibleVoter.js";
 
+//Sequelize Model for Elections Table
 const Election = db.define(
   "Election",
   {
@@ -45,6 +46,7 @@ const Election = db.define(
   }
 );
 
+//Assosiations
 Election.hasMany(Position, { foreignKey: "election_id" });
 Position.belongsTo(Election, { foreignKey: "election_id" });
 

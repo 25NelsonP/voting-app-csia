@@ -2,6 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "./../db.js";
 import Candidate from "./Candidate.js";
 
+//Sequelize Model for Positions Table
 const Position = db.define(
   "Position",
   {
@@ -25,6 +26,7 @@ const Position = db.define(
   }
 );
 
+//Associations
 Position.hasMany(Candidate, { foreignKey: "position_id" });
 Candidate.belongsTo(Position, { foreignKey: "position_id" });
 

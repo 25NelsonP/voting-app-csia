@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "./../db.js";
 
+// Sequelize Model for Votes Table
 const Vote = db.define(
   "Vote",
   {

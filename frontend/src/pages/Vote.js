@@ -32,40 +32,33 @@ const VotingPage = () => {
           }
           if (res.data.voted) {
             navigate("/voted");
+          } else {
+            // If the user is eligible and hasn't voted, then fetch title and positions
+            await fetchTitleAndPositions();
           }
         } catch (error) {
           console.log("Error checking status", error);
+        } finally {
+          setLoading(false); // Set loading to false after all operations are done
         }
       }
     };
-    fetchPermission();
-  }, [user, API_URL, navigate, electionId]);
 
-  useEffect(() => {
-    const fetchTitle = async () => {
+    const fetchTitleAndPositions = async () => {
       try {
-        const res = await axios.get(`${API_URL}/elections/${electionId}`);
-        setTitle(res.data.title);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const fetchPositions = async () => {
-      try {
-        const res = await axios.get(
+        const resTitle = await axios.get(`${API_URL}/elections/${electionId}`);
+        setTitle(resTitle.data.title);
+        const resPositions = await axios.get(
           `${API_URL}/elections/positions/${electionId}`
         );
-        setPositions(res.data);
+        setPositions(resPositions.data);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchTitle();
-    fetchPositions();
-    setLoading(false);
-  }, [electionId, API_URL]);
+    fetchPermission();
+  }, [user, API_URL, navigate, electionId]);
 
   const selectCandidate = (positionId, candidateId) => {
     setSelectedCandidates((prevSelectedCandidates) => ({

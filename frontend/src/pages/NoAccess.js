@@ -5,9 +5,7 @@ const NoAccessPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center">
       <header className="bg-red-500 text-white p-4 w-full text-center">
-        <h1 className="text-xl font-bold">
-          You don't have access to this voting form.
-        </h1>
+        <h1 className="text-xl font-bold">Access Denied</h1>
       </header>
 
       <main className="flex flex-col items-center p-3">

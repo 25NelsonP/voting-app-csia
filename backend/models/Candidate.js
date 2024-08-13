@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "./../db.js";
-import Position from "./Position.js";
 
+//Sequelize Model for Candidates Table
 const Candidate = db.define(
   "Candidate",
   {
