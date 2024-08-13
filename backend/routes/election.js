@@ -91,12 +91,21 @@ router.put("/:electionId", async (req, res) => {
     if (!election) {
       return res.status(404).json({ message: "Election not found" });
     }
-
-    election.start_date = start_date;
-    election.end_date = end_date;
+    if (use_startdate && start_date !== "") {
+      election.use_startdate = use_startdate;
+      election.start_date = start_date;
+    }
+    if (use_enddate && end_date !== "") {
+      election.use_enddate = use_enddate;
+      election.end_date = end_date;
+    }
+    if (use_startdate && start_date === "") {
+      election.use_startdate = false;
+    }
+    if (use_enddate && end_date === "") {
+      election.use_enddate = false;
+    }
     election.accepting_responses = accepting_responses;
-    election.use_startdate = use_startdate;
-    election.use_enddate = use_enddate;
 
     await election.save();
 

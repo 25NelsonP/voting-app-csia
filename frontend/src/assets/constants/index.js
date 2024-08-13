@@ -32,6 +32,6 @@ export const formHeaderLinks = [
   },
   {
     route: "/admin/edit/permissions",
-    label: "Permissions/Sharing",
+    label: "Permissions",
   },
 ];

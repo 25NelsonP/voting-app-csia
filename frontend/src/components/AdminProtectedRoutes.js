@@ -14,7 +14,7 @@ const AdminProtectedRoute = ({ element }) => {
   }
 
   if (!user.is_admin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/noaccess" replace />;
   }
 
   return element;
