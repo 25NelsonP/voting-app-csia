@@ -45,6 +45,7 @@ router.get("/user/:id", async (req, res) => {
     res.status(500).json("Error: " + err);
   }
 });
+
 // Add a new election
 router.post("/", async (req, res) => {
   try {
@@ -73,19 +74,55 @@ router.put("/", async (req, res) => {
   }
 });
 
-// Delete an election
-router.delete("/", async (req, res) => {
+// Update settings for an election
+router.put("/:electionId", async (req, res) => {
   try {
-    const deleted = await Election.destroy({
-      where: { election_id: req.body.election_id },
-    });
-    if (deleted) {
-      res.status(204).end();
-    } else {
-      res.status(404).json("Election not found");
+    const { electionId } = req.params;
+    const {
+      start_date,
+      end_date,
+      accepting_responses,
+      use_startdate,
+      use_enddate,
+    } = req.body;
+
+    const election = await Election.findByPk(electionId);
+
+    if (!election) {
+      return res.status(404).json({ message: "Election not found" });
     }
-  } catch (err) {
-    res.status(500).json("Error: " + err);
+
+    election.start_date = start_date;
+    election.end_date = end_date;
+    election.accepting_responses = accepting_responses;
+    election.use_startdate = use_startdate;
+    election.use_enddate = use_enddate;
+
+    await election.save();
+
+    res.json({ message: "Election settings updated", election });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating election settings", error });
+  }
+});
+
+// Delete an election
+router.delete("/:electionId", async (req, res) => {
+  try {
+    const { electionId } = req.params;
+    const election = await Election.findByPk(electionId);
+
+    if (!election) {
+      return res.status(404).json({ message: "Election not found" });
+    }
+
+    await election.destroy();
+
+    res.json({ message: "Election deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting election", error });
   }
 });
 

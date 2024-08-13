@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ConfirmationPage from "../components/VoteConfirmation"; // Import the ConfirmationPage component
-import CandidatesForm from "../components/ElectionFormFill"; // Import the new CandidatesForm component
-import { useLocation } from "react-router-dom";
+import ElectionForm from "../components/ElectionFormFill"; // Import ElectionForm component
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import LoadingScreen from "./../components/LoadingScreen";
 import useSession from "../utils/useSession";
 
 const VotingPage = () => {
@@ -11,11 +12,34 @@ const VotingPage = () => {
   const { user } = useSession();
 
   const electionId = location.pathname.split("/")[2];
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [isConfirming, setIsConfirming] = useState(false);
   const [positions, setPositions] = useState([]);
   const API_URL = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPermission = async () => {
+      if (user) {
+        try {
+          const res = await axios.get(
+            `${API_URL}/permissions/check/${electionId}/${user.user_id}`
+          );
+          if (!res.data.eligible) {
+            navigate("/noaccess");
+          }
+          if (res.data.voted) {
+            navigate("/voted");
+          }
+        } catch (error) {
+          console.log("Error checking status", error);
+        }
+      }
+    };
+    fetchPermission();
+  }, [user, API_URL, navigate, electionId]);
 
   useEffect(() => {
     const fetchTitle = async () => {
@@ -40,6 +64,7 @@ const VotingPage = () => {
 
     fetchTitle();
     fetchPositions();
+    setLoading(false);
   }, [electionId, API_URL]);
 
   const selectCandidate = (positionId, candidateId) => {
@@ -56,11 +81,16 @@ const VotingPage = () => {
         election_id: electionId,
         votes: selectedCandidates,
       });
+      navigate("/votesuccess");
     } catch (error) {
       console.log(error);
     }
     console.log("Confirmed Candidates:", selectedCandidates);
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -77,7 +107,7 @@ const VotingPage = () => {
           onSubmit={() => handleSubmit()}
         />
       ) : (
-        <CandidatesForm
+        <ElectionForm
           positions={positions}
           selectedCandidates={selectedCandidates}
           selectCandidate={selectCandidate}

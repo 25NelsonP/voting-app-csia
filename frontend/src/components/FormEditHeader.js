@@ -78,11 +78,8 @@ const FormEditHeader = ({ electionId }) => {
         <ul className="flex items-center space-x-6">
           {formHeaderLinks.map((item) => {
             return (
-              <li key={item.route}>
-                <NavLink
-                  to={`${item.route}/${electionId}`}
-                  className="hover:text-gray-300 active:text-gray-500"
-                >
+              <li key={item.route} className="hover:text-gray-300">
+                <NavLink to={`${item.route}/${electionId}`}>
                   {item.label}
                 </NavLink>
               </li>

@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "./../db.js";
 import User from "./User.js";
-import Group from "./Group.js";
 
 const EligibleVoter = db.define(
   "EligibleVoter",
@@ -18,11 +17,6 @@ const EligibleVoter = db.define(
     student_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-    },
-    voted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
     },
   },
   {

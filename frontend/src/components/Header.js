@@ -1,39 +1,35 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "./../assets/isylogo.png";
 import { RxAvatar } from "react-icons/rx";
+import useSession from "../utils/useSession";
 
 function Header() {
-  const [tProfile, settProfile] = useState(false);
+  const { user } = useSession();
 
-  function handleMouseEnter() {
-    settProfile(true);
-  }
-
-  function handleMouseLeave() {
-    settProfile(false);
-  }
-
-  function showProfileSettings() {
-    if (tProfile) {
-      return (
-        <div className="flex flex-col bg-white shadow-md rounded-md w-40 p-4 absolute right-0">
+  if (!user) {
+    return (
+      <nav className="bg-amber px-4 py-3 flex justify-between relative">
+        <div className="flex space-x-4">
           <Link
-            className="text-sm font-medium hover:text-blue-500"
-            to="/profile"
+            to="/"
+            className="text-2xl text-black font-bold inline-flex items-center space-x-4"
           >
-            Profile
-          </Link>
-          <Link
-            className="text-sm font-medium hover:text-blue-500"
-            to="/logout"
-          >
-            Logout
+            <img className="max-w-16" src={logo} alt="logo" />
+            <p className="font-bold hover:text-gray-800">ISY HS STUCO</p>
           </Link>
         </div>
-      );
-    }
-    return null;
+        <div className="flex items-center gap-x-5">
+          <ul className="flex space-x-6 cursor-pointer">
+            <li className="relative cursor-pointer">
+              <NavLink to="/profile" className="hover:text-white ">
+                <RxAvatar size={25} className="" />
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    );
   }
 
   return (
@@ -48,22 +44,20 @@ function Header() {
         </Link>
       </div>
       <div className="flex items-center gap-x-5">
-        <ul className="flex items-center space-x-6">
-          <li>
-            <NavLink to="/admin" className="hover:text-white">
-              Admin
+        <ul className="flex space-x-6 cursor-pointer">
+          {user.is_admin ? (
+            <li>
+              <NavLink to="/admin" className="hover:text-white">
+                Admin Dashboard
+              </NavLink>
+            </li>
+          ) : (
+            <></>
+          )}
+          <li className="relative cursor-pointer">
+            <NavLink to="/profile" className="hover:text-white ">
+              <RxAvatar size={25} className="" />
             </NavLink>
-          </li>
-          <li
-            className="relative"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <RxAvatar
-              size={23}
-              className="rounded-full cursor-pointer hover:text-white"
-            />
-            {showProfileSettings()}
           </li>
         </ul>
       </div>

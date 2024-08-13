@@ -23,6 +23,21 @@ const Election = db.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    accepting_responses: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    use_startdate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    use_enddate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     tableName: "Elections",

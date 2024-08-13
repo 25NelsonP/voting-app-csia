@@ -4,14 +4,14 @@ import { useLocation } from "react-router-dom";
 import LoadingScreen from "./../../../components/LoadingScreen";
 import FormEditHeader from "../../../components/FormEditHeader";
 
-const Candidates = () => {
+const Responses = () => {
   const location = useLocation();
   const electionId = location.pathname.split("/")[4];
   const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCandidates = async () => {
+    const fetchResponses = async () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/votes/${electionId}`
@@ -24,7 +24,7 @@ const Candidates = () => {
       }
     };
 
-    fetchCandidates();
+    fetchResponses();
   }, [electionId]);
 
   if (loading) {
@@ -66,4 +66,4 @@ const Candidates = () => {
   );
 };
 
-export default Candidates;
+export default Responses;

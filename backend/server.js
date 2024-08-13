@@ -9,6 +9,7 @@ import electionRoutes from "./routes/election.js";
 import groupRoutes from "./routes/groups.js";
 import voteRoutes from "./routes/vote.js";
 import permissionRoutes from "./routes/permissions.js";
+import User from "./models/User.js";
 import "./passport.js";
 
 dotenv.config();
@@ -56,12 +57,19 @@ app.get(
   }
 );
 
-app.get("/auth/user", (req, res) => {
+app.get("/auth/user", async (req, res) => {
   const token = req.cookies.jwt;
   if (!token) return res.status(401).json({ error: "Not authenticated" });
 
   try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
+    // Decode the token to get the user_id
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.user_id;
+
+    // Query the database to get the user details
+    const user = await User.findOne({ where: { user_id: userId } });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
     res.json(user);
   } catch (err) {
     console.log(err);

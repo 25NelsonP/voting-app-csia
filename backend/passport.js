@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import dotenv from "dotenv";
-import User from "./models/User.js"; // Import the Sequelize User model
+import User from "./models/User.js";
 import jwt from "jsonwebtoken";
 
 dotenv.config();
@@ -34,10 +34,6 @@ passport.use(
         const token = jwt.sign(
           {
             user_id: user.user_id,
-            googleId: user.googleId,
-            name: user.name,
-            email: user.email,
-            is_admin: user.is_admin,
           },
           jwtSecret,
           { expiresIn: "1d" }
@@ -50,13 +46,5 @@ passport.use(
     }
   )
 );
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser(async (user, done) => {
-  done(null, user);
-});
 
 export default passport;

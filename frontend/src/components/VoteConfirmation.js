@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const ConfirmationPage = ({
   positions,
@@ -48,14 +47,12 @@ const ConfirmationPage = ({
           >
             Go Back
           </button>
-          <Link to={"/voteSuccess"}>
-            <button
-              onClick={onSubmit}
-              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"
-            >
-              Confirm Selection
-            </button>
-          </Link>
+          <button
+            onClick={onSubmit}
+            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"
+          >
+            Confirm Selection
+          </button>
         </div>
       </main>
     </div>

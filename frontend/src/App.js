@@ -6,6 +6,8 @@ import {
   Adminhome,
   Vote,
   VoteSuccessful,
+  Voted,
+  NoAccess,
   ManageAdmins,
   ManageUsers,
   Login,
@@ -15,6 +17,7 @@ import {
   Profile,
   Responses,
   Permissions,
+  Settings,
 } from "./pages";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import AdminProtectedRoute from "./components/AdminProtectedRoutes";
@@ -40,8 +43,16 @@ function App() {
             element={<ProtectedRoute element={<Vote />} />}
           />
           <Route
-            path="/voteSuccess"
+            path="/votesuccess"
             element={<ProtectedRoute element={<VoteSuccessful />} />}
+          />
+          <Route
+            path="/voted"
+            element={<ProtectedRoute element={<Voted />} />}
+          />
+          <Route
+            path="/noaccess"
+            element={<ProtectedRoute element={<NoAccess />} />}
           />
           <Route
             path="/profile"
@@ -74,6 +85,10 @@ function App() {
           <Route
             path="/admin/edit/permissions/:id"
             element={<AdminProtectedRoute element={<Permissions />} />}
+          />
+          <Route
+            path="/admin/edit/settings/:id"
+            element={<AdminProtectedRoute element={<Settings />} />}
           />
         </Routes>
 

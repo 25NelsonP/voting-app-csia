@@ -6,6 +6,7 @@ import Position from "../models/Position.js";
 
 const router = express.Router();
 
+//Get Vote Results
 router.get("/:electionId", async (req, res) => {
   const { electionId } = req.params;
 
@@ -66,20 +67,12 @@ router.post("/submit", async (req, res) => {
         .json({ message: "Voter is not eligible to vote in this election." });
     }
 
-    if (eligibleVoter.voted) {
-      return res.status(403).json({ message: "Voter has already voted." });
-    }
-
     // Store the votes in JSON format
     await Vote.create({
       election_id,
       voter_id,
       candidates: votes, // Storing the object as JSON
     });
-
-    // Mark voter as having voted
-    eligibleVoter.voted = true;
-    await eligibleVoter.save();
 
     res.status(201).json({ message: "Votes successfully recorded!" });
   } catch (error) {

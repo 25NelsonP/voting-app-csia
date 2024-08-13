@@ -11,15 +11,15 @@ const Vote = db.define(
     },
     election_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     voter_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     candidates: {
       type: DataTypes.JSON,
-      allowNull: true,
+      allowNull: false,
       //left: positionId, right: candidateId
     },
     timestamp: {

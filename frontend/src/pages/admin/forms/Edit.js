@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import FormEditHeader from "../../../components/FormEditHeader";
 
-const Create = () => {
+const Edit = () => {
   const location = useLocation();
   const electionId = location.pathname.split("/")[3];
   const [positions, setPositions] = useState([]);
@@ -442,4 +442,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Edit;
