@@ -4,6 +4,8 @@ import { MdDelete } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import FormEditHeader from "../../../components/FormEditHeader";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 
 const Edit = () => {
   const location = useLocation();
@@ -195,7 +197,8 @@ const Edit = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
       <FormEditHeader electionId={electionId} />
 
       <div className="flex flex-col">
@@ -438,6 +441,7 @@ const Edit = () => {
           )}
         </main>
       </div>
+      <Footer />
     </div>
   );
 };

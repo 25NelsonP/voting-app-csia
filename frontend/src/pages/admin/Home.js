@@ -4,6 +4,8 @@ import axios from "axios";
 import FormatDate from "../../components/FormatDate";
 import { Link } from "react-router-dom";
 import LoadingScreen from "../../components/LoadingScreen";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const AdminHome = () => {
   const [votings, setVotings] = useState([]);
@@ -30,7 +32,8 @@ const AdminHome = () => {
   }
 
   return (
-    <div className="min-h-min flex flex-col">
+    <div className="min-h-screen flex flex-col">
+      <Header />
       <Adminheader />
       <hr />
       <main className="flex-grow p-6">
@@ -66,6 +69,7 @@ const AdminHome = () => {
 
         <hr className="mt-2" />
       </main>
+      <Footer />
     </div>
   );
 };

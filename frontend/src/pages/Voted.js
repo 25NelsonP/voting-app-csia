@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const VotedPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <Header />
       <header className="bg-blue-600 text-white p-4 w-full text-center">
         <h1 className="text-xl font-bold">
           Your have already submitted a vote
@@ -24,6 +27,7 @@ const VotedPage = () => {
           </Link>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

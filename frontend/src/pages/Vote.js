@@ -5,6 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoadingScreen from "./../components/LoadingScreen";
 import useSession from "../utils/useSession";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const VotingPage = () => {
   const location = useLocation();
@@ -50,10 +52,9 @@ const VotingPage = () => {
         if (res.data.voted) {
           navigate("/voted");
         }
+        setLoading(false);
       } catch (error) {
         console.log("Error checking status", error);
-      } finally {
-        setLoading(false); // Set loading to false after all operations are done
       }
     };
 
@@ -87,6 +88,7 @@ const VotingPage = () => {
 
   return (
     <>
+      <Header />
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold">{election.title}</h1>
@@ -108,6 +110,7 @@ const VotingPage = () => {
         />
       )}
       ;
+      <Footer />
     </>
   );
 };

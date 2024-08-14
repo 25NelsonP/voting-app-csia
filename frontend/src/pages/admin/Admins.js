@@ -5,6 +5,8 @@ import axios from "axios";
 import AddAdminModal from "../../components/modals/AddModal";
 import ConfirmRemoveAdminModal from "./../../components/modals/ConfirmRemoveAdminModal";
 import LoadingScreen from "../../components/LoadingScreen";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const Admins = () => {
   const [administrators, setAdministrators] = useState([]);
@@ -87,6 +89,7 @@ const Admins = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <Header />
       <Adminheader />
       <main className="flex flex-col items-center p-5 w-full max-w-2xl">
         <div className="w-full flex justify-between items-center mb-5">
@@ -144,6 +147,7 @@ const Admins = () => {
           setOpenConfirmRmvAdminModal={setOpenConfirmRmvAdminModal}
         />
       )}
+      <Footer />
     </div>
   );
 };

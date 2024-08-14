@@ -8,6 +8,8 @@ import AddMemberModal from "../../components/modals/AddModal";
 import { useNavigate } from "react-router-dom";
 import ConfirmDeleteGroupModal from "../../components/modals/ConfirmDeleteGroupModal";
 import { MdEdit } from "react-icons/md";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const Group = () => {
   const [members, setMembers] = useState([]);
@@ -140,6 +142,7 @@ const Group = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <Header />
       <Adminheader />
       <main className="flex flex-col items-center p-5 w-full max-w-2xl">
         <div className="w-full flex justify-between items-center mb-5">
@@ -244,6 +247,7 @@ const Group = () => {
           setOpenConfirmDeleteGroupModal={setOpenDeleteGroupModal}
         />
       )}
+      <Footer />
     </div>
   );
 };

@@ -3,6 +3,8 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import FormEditHeader from "../../../components/FormEditHeader";
 import LoadingScreen from "../../../components/LoadingScreen";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 
 const Settings = () => {
   const location = useLocation();
@@ -84,7 +86,6 @@ const Settings = () => {
       alert("End date must be after the start date.");
       return;
     }
-    console.log(formState);
     try {
       await axios.put(
         `${process.env.REACT_APP_API_URL}/elections/${electionId}`,
@@ -114,7 +115,8 @@ const Settings = () => {
   }
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
       <FormEditHeader electionId={electionId} />
       <main className="flex flex-col items-center p-3">
         <h2 className="text-2xl font-bold mb-4">Settings</h2>
@@ -191,6 +193,7 @@ const Settings = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

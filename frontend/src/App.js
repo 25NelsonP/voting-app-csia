@@ -1,5 +1,3 @@
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   Home,
@@ -27,7 +25,6 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       <BrowserRouter>
-        <Header />
         <hr />
         <Routes>
           <Route
@@ -98,8 +95,6 @@ function App() {
           />
           <Route path="/auth/callback" element={<AuthCallback />} />
         </Routes>
-
-        <Footer />
       </BrowserRouter>
     </div>
   );

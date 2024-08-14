@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import FormatDate from "../components/FormatDate";
 import useSession from "./../utils/useSession";
 import LoadingScreen from "../components/LoadingScreen";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function VoterHome() {
   const [ongoingVotes, setOngoingVotes] = useState([]);
@@ -33,7 +35,8 @@ function VoterHome() {
   }
 
   return (
-    <div className="min-h-min flex flex-col">
+    <div className="min-h-screen flex flex-col">
+      <Header />
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold">Voter Portal</h1>
@@ -68,6 +71,7 @@ function VoterHome() {
           <p>No ongoing votes available.</p>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

@@ -16,6 +16,30 @@ dotenv.config();
 
 const app = express();
 
+// Custom middleware to enforce origin checks with exceptions
+app.use((req, res, next) => {
+  const allowedOrigin = process.env.ORIGIN;
+  const openRoutes = ["/auth/google/redirect"];
+
+  // Check if the route is in the openRoutes array
+  if (openRoutes.includes(req.path)) {
+    return next(); // Skip origin check for these routes
+  }
+
+  // Check for `Referer` or `Host` header
+  const referer = req.headers.referer || "";
+  const host = req.headers.host || "";
+
+  if (
+    referer.startsWith(allowedOrigin) ||
+    host === allowedOrigin.replace(/^https?:\/\//, "")
+  ) {
+    next();
+  } else {
+    res.status(403).send("Access forbidden: Unauthorized origin");
+  }
+});
+
 app.use(
   cors({
     origin: process.env.ORIGIN,
@@ -51,21 +75,18 @@ app.get(
 
 // Verify JWT token on every request
 app.get("/auth/user", async (req, res) => {
-  // Extract the token from the Authorization header
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({ error: "Not authenticated" });
   }
 
-  const token = authHeader.split(" ")[1]; // Extract token part after 'Bearer'
+  const token = authHeader.split(" ")[1];
 
   try {
-    // Decode the token to get the user_id
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.user_id;
 
-    // Query the database to get the user details
     const user = await User.findOne({ where: { user_id: userId } });
     if (!user) return res.status(404).json({ error: "User not found" });
 

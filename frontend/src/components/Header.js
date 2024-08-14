@@ -9,7 +9,7 @@ function Header() {
 
   if (!user) {
     return (
-      <nav className="bg-amber px-4 py-3 flex justify-between relative">
+      <nav className="bg-amber px-4 py-3 flex justify-between relative w-full">
         <div className="flex space-x-4">
           <Link
             to="/"
@@ -24,7 +24,7 @@ function Header() {
   }
 
   return (
-    <nav className="bg-amber px-4 py-3 flex justify-between relative">
+    <nav className="bg-amber px-4 py-3 flex justify-between relative w-full">
       <div className="flex space-x-4">
         <Link
           to="/"

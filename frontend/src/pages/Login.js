@@ -4,6 +4,8 @@ import logo from "./../assets/isylogo.png";
 import useSession from "../utils/useSession";
 import LoadingScreen from "../components/LoadingScreen";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,8 +28,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100">
-      <div className="bg-white w-1/4 p-10 rounded-lg shadow-md text-center flex flex-col items-center mt-20">
+    <div className="flex flex-col min-h-screen items-center justify-center bg-gray-100">
+      <Header />
+      <div className="bg-white p-10 rounded-lg shadow-md text-center flex flex-col items-center mt-auto">
         <img
           src={logo}
           alt="STUCO Logo"
@@ -49,6 +52,7 @@ const Login = () => {
           </span>
         </button>
       </div>
+      <Footer />
     </div>
   );
 };

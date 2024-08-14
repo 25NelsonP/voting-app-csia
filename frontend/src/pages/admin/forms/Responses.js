@@ -3,6 +3,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import LoadingScreen from "./../../../components/LoadingScreen";
 import FormEditHeader from "../../../components/FormEditHeader";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 
 const Responses = () => {
   const location = useLocation();
@@ -32,7 +34,8 @@ const Responses = () => {
   }
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
+      <Header />
       <FormEditHeader electionId={electionId} />
       <main className="flex flex-col items-center p-3">
         {positions.map((position) => (
@@ -62,6 +65,7 @@ const Responses = () => {
           </div>
         ))}
       </main>
+      <Footer />
     </div>
   );
 };

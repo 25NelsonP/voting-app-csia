@@ -4,6 +4,8 @@ import Adminheader from "./../../components/AdminHeader";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CreateGroupModal from "../../components/modals/CreateGroupModal";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const UserGroups = () => {
   const [groups, setGroups] = useState([]);
@@ -24,6 +26,7 @@ const UserGroups = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <Header />
       <Adminheader />
       <main className="flex flex-col items-center p-5 w-full max-w-2xl">
         <div className="w-full flex justify-between items-center mb-5">
@@ -72,6 +75,7 @@ const UserGroups = () => {
           groups={groups}
         />
       )}
+      <Footer />
     </div>
   );
 };

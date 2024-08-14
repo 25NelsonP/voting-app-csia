@@ -5,6 +5,8 @@ import { useLocation } from "react-router-dom";
 import { MdPersonRemove } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 import AddPermissionModal from "./../../../components/modals/AddModal";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 
 const Permissions = () => {
   const location = useLocation();
@@ -80,7 +82,8 @@ const Permissions = () => {
     console.log(students);
   };
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-ful min-h-screen">
+      <Header />
       <FormEditHeader electionId={electionId} />
       <div className="p-6 w-full flex flex-col items-center">
         <div className="w-1/2 flex justify-between items-center">
@@ -133,6 +136,7 @@ const Permissions = () => {
           type={`p_user`}
         />
       )}
+      <Footer />
     </div>
   );
 };

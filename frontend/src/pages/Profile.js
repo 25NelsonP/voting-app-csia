@@ -1,6 +1,8 @@
 import React from "react";
 import useSession from "../utils/useSession";
 import LoadingScreen from "../components/LoadingScreen";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const ViewProfile = () => {
   const { user, loading } = useSession();
@@ -19,8 +21,9 @@ const ViewProfile = () => {
   }
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">My Account</h1>
+    <div className="flex flex-col items-center bg-gray-100 min-h-screen">
+      <Header />
+      <h1 className="text-2xl font-bold m-6">My Account</h1>
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
         <div className="flex items-center mb-4">
           <div>
@@ -39,6 +42,7 @@ const ViewProfile = () => {
           Logout
         </button>
       </div>
+      <Footer />
     </div>
   );
 };

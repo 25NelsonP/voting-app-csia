@@ -3,6 +3,8 @@ import axios from "axios";
 import Adminheader from "./../../components/AdminHeader";
 import { MdMail } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -22,6 +24,7 @@ const Users = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center">
+      <Header />
       <Adminheader />
       <main className="flex flex-col items-center p-5 w-full sm:max-w-3xl">
         <div className="w-full flex justify-between items-center mb-5">
@@ -54,6 +57,7 @@ const Users = () => {
           <p>Loading ...</p>
         )}
       </main>
+      <Footer />
     </div>
   );
 };
