@@ -6,9 +6,19 @@ const useSession = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      // No token means no user is logged in
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+
     axios
       .get(`${process.env.REACT_APP_API_URL}/auth/user`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((response) => {
         setUser(response.data);

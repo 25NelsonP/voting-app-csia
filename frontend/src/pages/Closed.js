@@ -1,18 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const VotedPage = () => {
+const ClosedPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center">
       <header className="bg-blue-600 text-white p-4 w-full text-center">
         <h1 className="text-xl font-bold">
-          Your have already submitted a vote
+          This election is no longer accepting responses
         </h1>
       </header>
 
       <main className="flex flex-col items-center p-3">
         <div className="mb-10 text-center">
-          <h2 className="text-2xl font-bold py-3">Thank You for Voting!</h2>
           <p>Contact HS STUCO if you think this is an error.</p>
         </div>
         <div className="p-2">
@@ -28,4 +27,4 @@ const VotedPage = () => {
   );
 };
 
-export default VotedPage;
+export default ClosedPage;

@@ -44,21 +44,21 @@ app.get(
     failureRedirect: `${process.env.ORIGIN}/login`,
   }),
   (req, res) => {
-    // Send JWT token in cookie
-    res.cookie("jwt", req.user.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // lax for local testing,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
-    res.redirect(process.env.ORIGIN);
+    const token = req.user.token;
+    res.redirect(`${process.env.ORIGIN}/auth/callback?token=${token}`);
   }
 );
 
 // Verify JWT token on every request
 app.get("/auth/user", async (req, res) => {
-  const token = req.cookies.jwt;
-  if (!token) return res.status(401).json({ error: "Not authenticated" });
+  // Extract the token from the Authorization header
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
+  const token = authHeader.split(" ")[1]; // Extract token part after 'Bearer'
 
   try {
     // Decode the token to get the user_id
@@ -74,12 +74,6 @@ app.get("/auth/user", async (req, res) => {
     console.log(err);
     res.status(401).json({ error: "Invalid token", err });
   }
-});
-
-// Logout route to clear the JWT token in the cookie
-app.get("/logout", (req, res) => {
-  res.clearCookie("jwt");
-  res.redirect(process.env.ORIGIN);
 });
 
 // Routes

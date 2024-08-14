@@ -1,8 +1,23 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import logo from "./../assets/isylogo.png";
+import useSession from "../utils/useSession";
+import LoadingScreen from "../components/LoadingScreen";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { user, loading: loaded } = useSession();
   const [loading, setLoading] = useState(false);
+
+  if (loaded) {
+    return <LoadingScreen />;
+  }
+
+  if (user) {
+    navigate("/");
+    return null;
+  }
   const API_URL = process.env.REACT_APP_API_URL;
 
   const handleLogin = () => {
@@ -11,14 +26,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-10 rounded shadow-md text-center">
+    <div className="flex items-center justify-center bg-gray-100">
+      <div className="bg-white w-1/4 p-10 rounded-lg shadow-md text-center flex flex-col items-center mt-20">
         <img
-          src="./assets/isylogo.png"
+          src={logo}
           alt="STUCO Logo"
-          className="mb-4"
-          style={{ width: "150px", height: "auto" }}
+          className="mb-4 rounded-full w-32 py-8"
         />
+        <h1 className="text-lg mb-5">STUCO Voting System</h1>
         <button
           onClick={handleLogin}
           className={`bg-blue-600 text-white border font-medium flex items-center justify-center hover:bg-blue-700 transition duration-200 ${

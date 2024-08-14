@@ -19,15 +19,6 @@ function Header() {
             <p className="font-bold hover:text-gray-800">ISY HS STUCO</p>
           </Link>
         </div>
-        <div className="flex items-center gap-x-5">
-          <ul className="flex space-x-6 cursor-pointer">
-            <li className="relative cursor-pointer">
-              <NavLink to="/profile" className="hover:text-white ">
-                <RxAvatar size={25} className="" />
-              </NavLink>
-            </li>
-          </ul>
-        </div>
       </nav>
     );
   }

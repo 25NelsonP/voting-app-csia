@@ -5,6 +5,11 @@ import LoadingScreen from "../components/LoadingScreen";
 const ViewProfile = () => {
   const { user, loading } = useSession();
 
+  const handleLogout = async () => {
+    localStorage.removeItem("jwtToken");
+    window.location.href = "/";
+  };
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -27,7 +32,10 @@ const ViewProfile = () => {
             <strong>Email:</strong> {user.email}
           </p>
         </div>
-        <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+        >
           Logout
         </button>
       </div>

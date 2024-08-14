@@ -13,7 +13,7 @@ const VotingPage = () => {
 
   const electionId = location.pathname.split("/")[2];
   const [loading, setLoading] = useState(true);
-  const [title, setTitle] = useState("");
+  const [election, setElection] = useState([]);
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [isConfirming, setIsConfirming] = useState(false);
   const [positions, setPositions] = useState([]);
@@ -21,43 +21,43 @@ const VotingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPermission = async () => {
-      if (user) {
-        try {
-          const res = await axios.get(
-            `${API_URL}/permissions/check/${electionId}/${user.user_id}`
-          );
-          if (!res.data.eligible) {
-            navigate("/noaccess");
-          }
-          if (res.data.voted) {
-            navigate("/voted");
-          } else {
-            // If the user is eligible and hasn't voted, then fetch title and positions
-            await fetchTitleAndPositions();
-          }
-        } catch (error) {
-          console.log("Error checking status", error);
-        } finally {
-          setLoading(false); // Set loading to false after all operations are done
-        }
-      }
-    };
-
     const fetchTitleAndPositions = async () => {
       try {
-        const resTitle = await axios.get(`${API_URL}/elections/${electionId}`);
-        setTitle(resTitle.data.title);
+        const res = await axios.get(`${API_URL}/elections/${electionId}`);
+        setElection(res.data);
         const resPositions = await axios.get(
           `${API_URL}/elections/positions/${electionId}`
         );
         setPositions(resPositions.data);
+        if (!res.data.accepting_responses) {
+          navigate("/closed");
+        } else {
+          await fetchPermission();
+        }
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchPermission();
+    const fetchPermission = async () => {
+      try {
+        const res = await axios.get(
+          `${API_URL}/permissions/check/${electionId}/${user.user_id}`
+        );
+        if (!res.data.eligible) {
+          navigate("/noaccess");
+        }
+        if (res.data.voted) {
+          navigate("/voted");
+        }
+      } catch (error) {
+        console.log("Error checking status", error);
+      } finally {
+        setLoading(false); // Set loading to false after all operations are done
+      }
+    };
+
+    fetchTitleAndPositions();
   }, [user, API_URL, navigate, electionId]);
 
   const selectCandidate = (positionId, candidateId) => {
@@ -89,7 +89,7 @@ const VotingPage = () => {
     <>
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <h1 className="text-xl font-bold">{title}</h1>
+          <h1 className="text-xl font-bold">{election.title}</h1>
         </div>
       </header>
       {isConfirming ? (

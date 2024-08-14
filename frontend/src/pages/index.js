@@ -4,6 +4,7 @@ export { default as Vote } from "./Vote";
 export { default as VoteSuccessful } from "./VoteSuccessful";
 export { default as Voted } from "./Voted";
 export { default as NoAccess } from "./NoAccess";
+export { default as Closed } from "./Closed";
 export { default as ManageAdmins } from "./admin/Admins";
 export { default as ManageUsers } from "./admin/Users";
 export { default as Login } from "./Login";

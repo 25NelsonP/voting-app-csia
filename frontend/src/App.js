@@ -8,6 +8,7 @@ import {
   VoteSuccessful,
   Voted,
   NoAccess,
+  Closed,
   ManageAdmins,
   ManageUsers,
   Login,
@@ -19,6 +20,7 @@ import {
   Permissions,
   Settings,
 } from "./pages";
+import AuthCallback from "./utils/AuthCallback";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import AdminProtectedRoute from "./components/AdminProtectedRoutes";
 function App() {
@@ -53,6 +55,10 @@ function App() {
           <Route
             path="/noaccess"
             element={<ProtectedRoute element={<NoAccess />} />}
+          />
+          <Route
+            path="/closed"
+            element={<ProtectedRoute element={<Closed />} />}
           />
           <Route
             path="/profile"
@@ -90,6 +96,7 @@ function App() {
             path="/admin/edit/settings/:id"
             element={<AdminProtectedRoute element={<Settings />} />}
           />
+          <Route path="/auth/callback" element={<AuthCallback />} />
         </Routes>
 
         <Footer />
