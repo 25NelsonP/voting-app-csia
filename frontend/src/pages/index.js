@@ -1,10 +1,11 @@
 export { default as Home } from "./Home";
 export { default as Adminhome } from "./admin/Home";
 export { default as Vote } from "./Vote";
-export { default as VoteSuccessful } from "./VoteSuccessful";
-export { default as Voted } from "./Voted";
-export { default as NoAccess } from "./NoAccess";
-export { default as Closed } from "./Closed";
+export { default as VoteSuccessful } from "./info/VoteSuccessful";
+export { default as Voted } from "./info/Voted";
+export { default as NoAccess } from "./info/NoAccess";
+export { default as Closed } from "./info/Closed";
+export { default as NotFound } from "./info/NotFound";
 export { default as ManageAdmins } from "./admin/Admins";
 export { default as ManageUsers } from "./admin/Users";
 export { default as Login } from "./Login";

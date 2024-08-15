@@ -7,6 +7,7 @@ import {
   Voted,
   NoAccess,
   Closed,
+  NotFound,
   ManageAdmins,
   ManageUsers,
   Login,
@@ -57,6 +58,7 @@ function App() {
             path="/closed"
             element={<ProtectedRoute element={<Closed />} />}
           />
+          <Route path="/not-found" element={<NotFound />} />
           <Route
             path="/profile"
             element={<ProtectedRoute element={<Profile />} />}
@@ -94,6 +96,7 @@ function App() {
             element={<AdminProtectedRoute element={<Settings />} />}
           />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -38,6 +38,7 @@ const VotingPage = () => {
         }
       } catch (error) {
         console.log(error);
+        navigate("/not-found");
       }
     };
 

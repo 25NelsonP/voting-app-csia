@@ -74,6 +74,42 @@ router.put("/", async (req, res) => {
   }
 });
 
+// Update position information
+router.put("/positions", async (req, res) => {
+  const { position_id, title } = req.body;
+  try {
+    const [updated] = await Position.update(
+      { title },
+      { where: { position_id } }
+    );
+    if (updated) {
+      res.json("Position Information Updated");
+    } else {
+      res.status(404).json("Position not found");
+    }
+  } catch (err) {
+    res.status(500).json("Error: " + err);
+  }
+});
+
+// Update candidate information
+router.put("/candidates", async (req, res) => {
+  const { candidate_id, name, grade, img_url } = req.body;
+  try {
+    const [updated] = await Candidate.update(
+      { name, grade, img_url },
+      { where: { candidate_id } }
+    );
+    if (updated) {
+      res.json("Candidate Information Updated");
+    } else {
+      res.status(404).json("Candidate not found");
+    }
+  } catch (err) {
+    res.status(500).json("Error: " + err);
+  }
+});
+
 // Update settings for an election
 router.put("/:electionId", async (req, res) => {
   try {
@@ -153,24 +189,6 @@ router.post("/candidates", async (req, res) => {
   }
 });
 
-// Update candidate information
-router.put("/candidates", async (req, res) => {
-  const { candidate_id, name, grade, img_url } = req.body;
-  try {
-    const [updated] = await Candidate.update(
-      { name, grade, img_url },
-      { where: { candidate_id } }
-    );
-    if (updated) {
-      res.json("Candidate Information Updated");
-    } else {
-      res.status(404).json("Candidate not found");
-    }
-  } catch (err) {
-    res.status(500).json("Error: " + err);
-  }
-});
-
 // Delete a candidate
 router.delete("/candidates/:id", async (req, res) => {
   try {
@@ -218,6 +236,7 @@ router.get("/positions/:election_id", async (req, res) => {
     res.status(500).json("Error fetching positions and candidates: " + err);
   }
 });
+
 // Add a new position
 router.post("/positions", async (req, res) => {
   const { election_id, title } = req.body;
@@ -238,24 +257,6 @@ router.post("/positions", async (req, res) => {
   } catch (err) {
     console.log("Error:", err);
     return res.status(500).json({ error: "Database error: " + err });
-  }
-});
-
-// Update position information
-router.put("/positions", async (req, res) => {
-  const { position_id, title } = req.body;
-  try {
-    const [updated] = await Position.update(
-      { title },
-      { where: { position_id } }
-    );
-    if (updated) {
-      res.json("Position Information Updated");
-    } else {
-      res.status(404).json("Position not found");
-    }
-  } catch (err) {
-    res.status(500).json("Error: " + err);
   }
 });
 

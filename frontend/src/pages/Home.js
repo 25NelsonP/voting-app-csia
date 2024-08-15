@@ -9,7 +9,8 @@ import Footer from "../components/Footer";
 
 function VoterHome() {
   const [ongoingVotes, setOngoingVotes] = useState([]);
-  const { user, loading } = useSession();
+  const [loading, setLoading] = useState(true);
+  const { user } = useSession();
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -21,6 +22,7 @@ function VoterHome() {
             `${API_URL}/elections/user/${user.user_id}`
           );
           setOngoingVotes(res.data);
+          setLoading(false);
         } catch (error) {
           console.log("ERROR", error);
         }
@@ -41,6 +43,11 @@ function VoterHome() {
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold">Voter Portal</h1>
         </div>
+        {user.is_admin ? (
+          <p>Navigate to admin dashboard to manage election forms.</p>
+        ) : (
+          <></>
+        )}
       </header>
 
       <main className="flex-grow p-6">

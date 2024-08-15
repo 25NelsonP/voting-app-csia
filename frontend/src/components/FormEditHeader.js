@@ -1,39 +1,52 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { formHeaderLinks } from "./../assets/constants/index";
 
 const FormEditHeader = ({ electionId }) => {
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState("");
   const [newTitle, setNewTitle] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [savingTitle, setSavingTitle] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL;
 
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchTitle = async () => {
       try {
         const res = await axios.get(`${API_URL}/elections/${electionId}`);
         setTitle(res.data.title);
         setNewTitle(res.data.title);
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        navigate("/not-found");
       }
     };
     fetchTitle();
-  }, [electionId, API_URL]);
+  }, [electionId, API_URL, navigate]);
 
   const handleUpdateTitle = async () => {
-    try {
-      await axios.put(`${API_URL}/elections/`, {
-        election_id: electionId,
-        title: newTitle,
-      });
-      setTitle(newTitle);
+    setSavingTitle(true);
+    if (newTitle !== title) {
+      try {
+        await axios.put(`${API_URL}/elections/`, {
+          election_id: electionId,
+          title: newTitle,
+        });
+        setTitle(newTitle);
+        setEditingTitle(false);
+        setSavingTitle(false);
+      } catch (error) {
+        console.log(error);
+        setEditingTitle(false);
+        setSavingTitle(false);
+      }
+    } else {
       setEditingTitle(false);
-    } catch (error) {
-      console.log(error);
-      setEditingTitle(false);
+      setSavingTitle(false);
     }
   };
 
@@ -53,7 +66,7 @@ const FormEditHeader = ({ electionId }) => {
               onClick={handleUpdateTitle}
               className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-800"
             >
-              Save
+              {savingTitle ? "Saving..." : "Save"}
             </button>
             <button
               onClick={() => {
@@ -67,7 +80,9 @@ const FormEditHeader = ({ electionId }) => {
           </div>
         ) : (
           <div className="flex items-center">
-            <h1 className="text-xl font-bold">{title}</h1>
+            <h1 className="text-xl font-bold">
+              {loading ? "Loading..." : title}
+            </h1>
             <button onClick={() => setEditingTitle(true)} className="ml-2 p-2">
               <FaEdit />
             </button>

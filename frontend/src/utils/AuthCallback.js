@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../components/LoadingScreen";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
@@ -15,7 +15,7 @@ const AuthCallback = () => {
     navigate("/");
   }, [navigate]);
 
-  return <div>Loading...</div>;
+  return <LoadingScreen />;
 };
 
 export default AuthCallback;

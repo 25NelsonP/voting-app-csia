@@ -86,7 +86,7 @@ const Edit = () => {
 
   const handleUpdatePosition = async (positionId) => {
     try {
-      await axios.put(`${API_URL}/elections/positions`, {
+      await axios.put(`${API_URL}/elections/positions/`, {
         position_id: positionId,
         title: newDescription,
       });

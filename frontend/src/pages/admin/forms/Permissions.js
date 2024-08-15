@@ -95,11 +95,9 @@ const Permissions = () => {
             <FaPlus size={20} />
           </button>
         </div>
-        <p className="w-1/2 items-start text-xs">
-          Adding a user here will give them access to vote for this election.
-        </p>
-        <p className="w-1/2 items-start text-xs mb-5">
-          Admin users have access to all election forms.
+        <p className="w-1/2 items-start text-xs mb-3">
+          All users need to be added here for them to be able to access this
+          election.
         </p>
         <div className="w-1/2 overflow-x-auto rounded-lg shadow-md">
           <table className="w-full text-sm text-black">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { adminHeaderLinks } from "./../assets/constants/index";
@@ -7,8 +7,10 @@ import axios from "axios";
 const Adminheader = () => {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
+  const [creating, setCreating] = useState(false);
 
   const handleCreateFrom = async (e) => {
+    setCreating(true);
     e.preventDefault();
     const response = await axios.post(`${API_URL}/elections`);
     const electionId = await response.data.election_id;
@@ -43,7 +45,7 @@ const Adminheader = () => {
               onClick={handleCreateFrom}
               className="bg-blue-700 text-white p-4 rounded-full hover:bg-blue-900 hover:shadow-md flex items-center"
             >
-              <FaPlus className="m-1" /> New Form
+              <FaPlus className="m-1" /> {creating ? "Creating..." : "New Form"}
             </button>
           </li>
         </ul>
