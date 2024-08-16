@@ -191,21 +191,49 @@ router.put("/:electionId", async (req, res) => {
   }
 });
 
-// Delete an election
+// Delete an election and its associated data
 router.delete("/:electionId", async (req, res) => {
   try {
     const { electionId } = req.params;
-    const election = await Election.findByPk(electionId);
+    const election = await Election.findByPk(electionId, {
+      include: [
+        {
+          model: Position,
+          include: Candidate,
+        },
+        {
+          model: EligibleGroup,
+        },
+        {
+          model: EligibleVoter,
+        },
+      ],
+    });
 
     if (!election) {
       return res.status(404).json({ message: "Election not found" });
     }
 
+    // Delete associated candidates first
+    for (const position of election.Positions) {
+      await Candidate.destroy({ where: { position_id: position.position_id } });
+      await position.destroy();
+    }
+
+    // Delete associated eligible groups
+    await EligibleGroup.destroy({ where: { election_id: electionId } });
+
+    // Delete associated eligible voters
+    await EligibleVoter.destroy({ where: { election_id: electionId } });
+
+    // Delete the election
     await election.destroy();
 
-    res.json({ message: "Election deleted" });
+    res.json({ message: "Election and all associated data deleted" });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting election", error });
+    res
+      .status(500)
+      .json({ message: "Error deleting election", error: error.message });
   }
 });
 

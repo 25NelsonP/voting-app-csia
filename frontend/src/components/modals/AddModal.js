@@ -3,6 +3,7 @@ import { FaPlus, FaTimes } from "react-icons/fa";
 
 const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("Select a user to add");
   useEffect(() => {
     if (type === "group") {
@@ -20,8 +21,13 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleAddClick = async (e, userId) => {
+    setLoading(true);
+    await handleAdd(e, userId);
+    setLoading(false);
+  };
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
         <h2 className="text-2xl font-bold mb-4">{title}</h2>
         <div className="flex flex-col space-y-3">
@@ -32,7 +38,9 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="border p-2 rounded"
           />
-          {users.length > 0 ? (
+          {loading ? (
+            <div className="text-center">Adding...</div>
+          ) : users.length > 0 ? (
             <div className="w-full overflow-x-auto sm:rounded-lg shadow-md">
               <table className="w-full text-sm text-black">
                 <tbody>
@@ -41,7 +49,7 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
                       <td className="px-4 py-2 text-left flex justify-between items-center">
                         {user.name}{" "}
                         <button
-                          onClick={(e) => handleAdd(e, user.user_id)}
+                          onClick={(e) => handleAddClick(e, user.user_id)}
                           className="bg-green-600 text-white p-2 rounded"
                         >
                           <FaPlus />

@@ -10,12 +10,14 @@ import ConfirmDeleteGroupModal from "../../components/modals/ConfirmDeleteGroupM
 import { MdEdit } from "react-icons/md";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const Group = () => {
   const [members, setMembers] = useState([]);
   const location = useLocation();
   const [groupName, setGroupName] = useState("");
   const [editingGroupName, setEditingGroupName] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [rmvmember_id, setRmvmember_id] = useState(null);
   const [memberToRemove, setMemberToRemove] = useState(null);
   const [openConfirmRmvMemberModal, setOpenConfirmRmvMemberModal] =
@@ -38,10 +40,6 @@ const Group = () => {
         console.log(error);
       }
     };
-    fetchGroupName();
-  }, [group_id, navigate, API_URL]);
-
-  useEffect(() => {
     const fetchMembers = async () => {
       try {
         const res = await axios.get(`${API_URL}/groups/${group_id}/members`);
@@ -50,8 +48,14 @@ const Group = () => {
         console.log(error);
       }
     };
-    fetchMembers();
-  }, [group_id, API_URL]);
+
+    const fetchData = async () => {
+      await Promise.all([fetchGroupName(), fetchMembers()]);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [group_id, navigate, API_URL]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -139,6 +143,10 @@ const Group = () => {
     setMemberToRemove(memberToRemove);
     setOpenConfirmRmvMemberModal(true);
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center">

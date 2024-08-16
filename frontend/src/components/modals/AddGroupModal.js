@@ -3,11 +3,18 @@ import { FaPlus, FaTimes } from "react-icons/fa";
 
 const AddModal = ({ groups, handleAdd, setModalStatus }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
   const title = "Add Group";
 
   const filteredGroups = groups.filter((group) =>
     group.group_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleAddClick = async (e, groupId) => {
+    setLoading(true);
+    await handleAdd(e, groupId);
+    setLoading(false);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -21,7 +28,9 @@ const AddModal = ({ groups, handleAdd, setModalStatus }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="border p-2 rounded"
           />
-          {groups.length > 0 ? (
+          {loading ? (
+            <div className="text-center">Adding...</div>
+          ) : groups.length > 0 ? (
             <div className="w-full overflow-x-auto sm:rounded-lg shadow-md">
               <table className="w-full text-sm text-black">
                 <tbody>
@@ -30,7 +39,7 @@ const AddModal = ({ groups, handleAdd, setModalStatus }) => {
                       <td className="px-4 py-2 text-left flex justify-between items-center">
                         {group.group_name}
                         <button
-                          onClick={(e) => handleAdd(e, group.group_id)}
+                          onClick={(e) => handleAddClick(e, group.group_id)}
                           className="bg-green-600 text-white p-2 rounded"
                         >
                           <FaPlus />

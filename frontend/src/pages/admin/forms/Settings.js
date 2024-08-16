@@ -120,7 +120,7 @@ const Settings = () => {
       <FormEditHeader electionId={electionId} />
       <main className="flex flex-col items-center p-3">
         <h2 className="text-2xl font-bold mb-4">Settings</h2>
-        <div className="mb-4 shadow-md rounded-md p-3 w-1/3 bg-gray-100">
+        <div className="mb-4 shadow-md rounded-md p-3 md:w-1/3 bg-gray-100">
           <div className="mb-4 flex justify-between">
             <label className="text-lg font-bold block mb-2">
               Accepting Votes
@@ -182,13 +182,13 @@ const Settings = () => {
               onClick={handleSave}
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
             >
-              Save Settings
+              Save
             </button>
             <button
               onClick={handleDelete}
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
             >
-              Delete Election
+              Delete
             </button>
           </div>
         </div>

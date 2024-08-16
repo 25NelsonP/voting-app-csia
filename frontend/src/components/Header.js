@@ -45,7 +45,7 @@ function Header() {
           ) : (
             <></>
           )}
-          <li className="relative cursor-pointer">
+          <li className="flex items-center relative cursor-pointer">
             <NavLink to="/profile" className="hover:text-white ">
               <RxAvatar size={25} className="" />
             </NavLink>

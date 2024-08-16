@@ -5,8 +5,10 @@ import axios from "axios";
 const CreateGroupModal = ({ setShowModal, setGroups, groups }) => {
   const [groupName, setGroupName] = useState("");
   const API_URL = process.env.REACT_APP_API_URL;
+  const [creating, setCreating] = useState(false);
 
   const handleAddGroup = async (e) => {
+    setCreating(true);
     e.preventDefault();
 
     try {
@@ -23,6 +25,7 @@ const CreateGroupModal = ({ setShowModal, setGroups, groups }) => {
         const updatedGroups = [...prevGroups, newGroup];
         return updatedGroups;
       });
+      setCreating(false);
       setShowModal(false);
     } catch (error) {
       console.log(error);
@@ -30,7 +33,7 @@ const CreateGroupModal = ({ setShowModal, setGroups, groups }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
         <h2 className="text-2xl font-bold mb-4">Create New Group</h2>
         <form onSubmit={handleAddGroup} className="flex flex-col space-y-3">
@@ -46,7 +49,7 @@ const CreateGroupModal = ({ setShowModal, setGroups, groups }) => {
             type="submit"
             className="bg-blue-600 text-white p-2 rounded flex justify-center items-center"
           >
-            <FaPlus className="mr-2" /> Create
+            <FaPlus className="mr-2" /> {creating ? "Creating..." : "Create"}
           </button>
         </form>
         <button

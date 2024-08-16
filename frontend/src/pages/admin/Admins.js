@@ -34,11 +34,12 @@ const Admins = () => {
         setAdministrators(res.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUser();
     fetchAdmin();
-    setLoading(false);
   }, [API_URL]);
 
   const handleAddAdmin = async (e, user_id) => {
