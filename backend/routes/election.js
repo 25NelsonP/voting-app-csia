@@ -3,6 +3,8 @@ import Election from "../models/Election.js";
 import Candidate from "../models/Candidate.js";
 import Position from "../models/Position.js";
 import EligibleVoter from "../models/EligibleVoter.js";
+import EligibleGroup from "../models/EligibleGroup.js";
+import GroupMember from "../models/GroupMember.js";
 
 const router = express.Router();
 
@@ -33,14 +35,48 @@ router.get("/:id", async (req, res) => {
 // Get elections for a specific user
 router.get("/user/:id", async (req, res) => {
   try {
-    const elections = await Election.findAll({
+    const studentId = req.params.id;
+
+    // Step 1: Get elections where the user is directly an eligible voter
+    const electionsDirect = await Election.findAll({
       include: {
         model: EligibleVoter,
-        where: { student_id: req.params.id },
+        where: { student_id: studentId },
         attributes: [],
       },
     });
-    res.json(elections);
+
+    // Step 2: Get groups where the user is a member
+    const groupMemberships = await GroupMember.findAll({
+      where: { member_id: studentId },
+      attributes: ["group_id"],
+    });
+
+    if (groupMemberships.length > 0) {
+      const groupIds = groupMemberships.map((gm) => gm.group_id);
+
+      // Step 3: Get elections where the user's group is eligible
+      const electionsGroup = await Election.findAll({
+        include: {
+          model: EligibleGroup,
+          where: { group_id: groupIds },
+          attributes: [],
+        },
+      });
+
+      // Combine elections from both sources
+      const allElections = [...electionsDirect, ...electionsGroup];
+
+      // Remove duplicates by election ID (assuming each election has a unique 'id' property)
+      const uniqueElections = allElections.filter(
+        (v, i, a) => a.findIndex((t) => t.election_id === v.election_id) === i
+      );
+
+      res.json(uniqueElections);
+    } else {
+      // If no group memberships, return only direct elections
+      res.json(electionsDirect);
+    }
   } catch (err) {
     res.status(500).json("Error: " + err);
   }

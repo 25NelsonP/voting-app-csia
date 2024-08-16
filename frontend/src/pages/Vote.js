@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ConfirmationPage from "../components/VoteConfirmation"; // Import the ConfirmationPage component
 import ElectionForm from "../components/ElectionFormFill"; // Import ElectionForm component
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoadingScreen from "./../components/LoadingScreen";
 import useSession from "../utils/useSession";
@@ -58,8 +58,9 @@ const VotingPage = () => {
         console.log("Error checking status", error);
       }
     };
-
-    fetchTitleAndPositions();
+    if (user) {
+      fetchTitleAndPositions();
+    }
   }, [user, API_URL, navigate, electionId]);
 
   const selectCandidate = (positionId, candidateId) => {
@@ -94,6 +95,14 @@ const VotingPage = () => {
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold">{election.title}</h1>
         </div>
+        {user.is_admin ? (
+          <p>
+            Looking to edit form?{" "}
+            <Link to={`/admin/edit/${electionId}`}>ClickHere</Link>
+          </p>
+        ) : (
+          <></>
+        )}
       </header>
       {isConfirming ? (
         <ConfirmationPage

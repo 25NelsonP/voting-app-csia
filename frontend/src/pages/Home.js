@@ -43,11 +43,6 @@ function VoterHome() {
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold">Voter Portal</h1>
         </div>
-        {user.is_admin ? (
-          <p>Navigate to admin dashboard to manage election forms.</p>
-        ) : (
-          <></>
-        )}
       </header>
 
       <main className="flex-grow p-6">

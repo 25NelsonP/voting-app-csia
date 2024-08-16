@@ -19,10 +19,12 @@ const FormEditHeader = ({ electionId }) => {
         const res = await axios.get(`${API_URL}/elections/${electionId}`);
         setTitle(res.data.title);
         setNewTitle(res.data.title);
+        if (!res) {
+          navigate("/not-found");
+        }
         setLoading(false);
       } catch (error) {
         console.log(error);
-        navigate("/not-found");
       }
     };
     fetchTitle();

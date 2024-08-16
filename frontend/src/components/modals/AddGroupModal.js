@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 
-const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
+const AddModal = ({ groups, handleAdd, setModalStatus }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [title, setTitle] = useState("Select a user to add");
-  useEffect(() => {
-    if (type === "group") {
-      setTitle("Add Member");
-    }
-    if (type === "admin") {
-      setTitle("Add Adminstrator");
-    }
-    if (type === "p_user") {
-      setTitle("Add Users");
-    }
-  }, [type]);
+  const title = "Add Group";
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredGroups = groups.filter((group) =>
+    group.group_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -27,21 +16,21 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
         <div className="flex flex-col space-y-3">
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Search groups..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="border p-2 rounded"
           />
-          {users.length > 0 ? (
+          {groups.length > 0 ? (
             <div className="w-full overflow-x-auto sm:rounded-lg shadow-md">
               <table className="w-full text-sm text-black">
                 <tbody>
-                  {filteredUsers.map((user) => (
-                    <tr className="bg-gray-100 border-b" key={user.user_id}>
+                  {filteredGroups.map((group) => (
+                    <tr className="bg-gray-100 border-b" key={group.group_id}>
                       <td className="px-4 py-2 text-left flex justify-between items-center">
-                        {user.name}{" "}
+                        {group.group_name}
                         <button
-                          onClick={(e) => handleAdd(e, user.user_id)}
+                          onClick={(e) => handleAdd(e, group.group_id)}
                           className="bg-green-600 text-white p-2 rounded"
                         >
                           <FaPlus />
@@ -53,7 +42,7 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
               </table>
             </div>
           ) : (
-            <p className="text-center">No users found.</p>
+            <p className="text-center">No groups found.</p>
           )}
         </div>
         <button
