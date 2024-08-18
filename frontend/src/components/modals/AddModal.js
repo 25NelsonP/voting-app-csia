@@ -28,7 +28,7 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
   };
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md relative">
+      <div className="bg-white p-6 rounded-lg w-11/12 max-w-md relative">
         <h2 className="text-2xl font-bold mb-4">{title}</h2>
         <div className="flex flex-col space-y-3">
           <input

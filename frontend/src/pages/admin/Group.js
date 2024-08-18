@@ -196,7 +196,7 @@ const Group = () => {
           </div>
         </div>
         {members.length > 0 ? (
-          <div className="w-full overflow-x-auto sm:rounded-lg shadow-md">
+          <div className="w-full overflow-x-auto rounded-lg shadow-md">
             <table className="w-full text-sm text-black">
               <thead className="text-white bg-blue-700">
                 <tr>

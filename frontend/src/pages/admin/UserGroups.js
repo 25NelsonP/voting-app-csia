@@ -39,7 +39,7 @@ const UserGroups = () => {
           </button>
         </div>
         {groups.length > 0 ? (
-          <div className="w-full overflow-x-auto sm:rounded-lg shadow-md">
+          <div className="w-full overflow-x-auto rounded-lg shadow-md">
             <table className="w-full text-sm text-black">
               <thead className="text-white bg-blue-700">
                 <tr>
@@ -56,7 +56,7 @@ const UserGroups = () => {
                         to={`/admin/manageGroup/${groups.group_id}`}
                         className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg"
                       >
-                        View Details
+                        Manage
                       </Link>
                     </td>
                   </tr>

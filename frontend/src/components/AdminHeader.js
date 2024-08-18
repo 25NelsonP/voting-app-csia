@@ -64,7 +64,7 @@ const Adminheader = () => {
               disabled={creating}
               className={`${
                 creating ? "bg-blue-900" : "bg-blue-700 hover:bg-blue-900"
-              } text-white py-2 px-4 md:rounded-full flex items-center transition-all duration-200`}
+              } text-white py-2 px-4 rounded-full flex items-center transition-all duration-200`}
             >
               <FaPlus className="m-1" />
               {creating ? "Creating..." : "New Form"}

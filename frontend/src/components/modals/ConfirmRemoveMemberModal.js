@@ -10,7 +10,12 @@ const ConfirmRemoveMemberModal = ({
   return (
     <ConfirmModal
       title="Remove Group Member"
-      message={`Are you sure you want to remove ${memberToRemove} from ${groupName}?`}
+      message={
+        <>
+          Are you sure you want to remove <b>{memberToRemove}</b> from{" "}
+          <b>{groupName}</b>?
+        </>
+      }
       handleConfirm={handleRemoveMember}
       handleCancel={() => setOpenConfirmRmvMemberModal(false)}
     />

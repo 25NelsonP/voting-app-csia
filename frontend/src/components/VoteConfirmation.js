@@ -1,4 +1,5 @@
 import React from "react";
+import CandidateCard from "./CandidateCard";
 
 const ConfirmationPage = ({
   positions,
@@ -24,16 +25,10 @@ const ConfirmationPage = ({
             </h2>
             <div className="flex justify-center">
               {selectedCandidates[position.position_id] ? (
-                <div className="border rounded-lg p-2 shadow-md flex flex-col items-center w-60">
-                  <img
-                    src={getSelectedCandidate(position.position_id).img_url}
-                    alt="Candidate"
-                    className="h-500 object-contain rounded-md mb-2"
-                  />
-                  <h3 className="text-center text-lg font-semibold">
-                    {getSelectedCandidate(position.position_id).name}
-                  </h3>
-                </div>
+                <CandidateCard
+                  candidate={getSelectedCandidate(position.position_id)}
+                  isSelected={true} // Apply selected style since it's the confirmed candidate
+                />
               ) : (
                 <p>No candidate selected for this position.</p>
               )}

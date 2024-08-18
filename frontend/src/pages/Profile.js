@@ -21,10 +21,10 @@ const ViewProfile = () => {
   }
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 min-h-screen">
+    <div className="flex flex-col items-center bg-gray-100 min-h-screen ">
       <Header />
       <h1 className="text-2xl font-bold m-6">My Account</h1>
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+      <div className="bg-white shadow-md rounded-lg p-6 w-11/12 max-w-md">
         <div className="flex items-center mb-4">
           <div>
             <h2 className="text-xl font-semibold">{user.name}</h2>

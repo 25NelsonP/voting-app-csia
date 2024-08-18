@@ -9,7 +9,11 @@ const ConfirmDeleteGroupModal = ({
   return (
     <ConfirmModal
       title="Delete Group"
-      message={`Are you sure you want to delete ${groupName}?`}
+      message={
+        <>
+          Are you sure you want to delete <b>{groupName}</b>
+        </>
+      }
       handleConfirm={handleDeleteGroup}
       handleCancel={() => setOpenConfirmDeleteGroupModal(false)}
     />

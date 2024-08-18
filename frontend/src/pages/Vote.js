@@ -50,9 +50,9 @@ const VotingPage = () => {
         if (!res.data.eligible) {
           navigate("/noaccess");
         }
-        if (res.data.voted) {
-          navigate("/voted");
-        }
+        // if (res.data.voted) {
+        //   navigate("/voted");
+        // }
         setLoading(false);
       } catch (error) {
         console.log("Error checking status", error);
