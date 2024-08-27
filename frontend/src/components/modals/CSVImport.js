@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Papa from "papaparse";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaQuestionCircle } from "react-icons/fa";
 
 const ImportCSV = ({ groupId, handleCancel }) => {
   const [file, setFile] = useState(null);
   const [importing, setImporting] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -45,10 +46,33 @@ const ImportCSV = ({ groupId, handleCancel }) => {
     }
   };
 
+  const toggleInstructions = () => {
+    setShowInstructions(!showInstructions);
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg w-11/12 max-w-md relative flex flex-col ">
         <h2 className="text-2xl font-bold mb-6">Import from CSV</h2>
+        {showInstructions && (
+          <div className="mb-4 text-gray-600">
+            How to create a CSV file using Google Sheets?
+            <ol className="list-decimal ml-6 mt-2">
+              <li>
+                Open <strong>Google Sheets</strong>.
+              </li>
+              <li>
+                Enter the list of emails into the spreadsheet in a column.
+              </li>
+              <li>
+                Click on <strong>File</strong> &gt; <strong>Download</strong>{" "}
+                &gt; <strong>Comma Separated Values (.csv)</strong>.
+              </li>
+              <li>Save the CSV file to your computer.</li>
+              <li>Upload it here and click Import.</li>
+            </ol>
+          </div>
+        )}
         <input type="file" accept=".csv" onChange={handleFileChange} />
         <button
           onClick={handleFileUpload}
@@ -56,9 +80,14 @@ const ImportCSV = ({ groupId, handleCancel }) => {
         >
           {importing ? "Importing..." : "Import"}
         </button>
-        <button onClick={handleCancel} className="absolute top-6 right-6">
-          <FaTimes size={20} />
-        </button>
+        <div className="absolute top-6 right-6 space-x-3">
+          <button onClick={toggleInstructions}>
+            <FaQuestionCircle size={20} />
+          </button>
+          <button onClick={handleCancel}>
+            <FaTimes size={20} />
+          </button>
+        </div>
       </div>
     </div>
   );

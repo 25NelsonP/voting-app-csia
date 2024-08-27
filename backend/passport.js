@@ -22,14 +22,45 @@ passport.use(
         // Check if user already exists in the database
         let user = await User.findOne({ where: { googleId: profile.id } });
 
-        // If not, create a new user in the database
+        // If not found by googleId, check by email
         if (!user) {
-          user = await User.create({
-            name: profile.displayName,
-            email: profile.emails[0].value,
-            is_admin: false,
-            googleId: profile.id,
+          user = await User.findOne({
+            where: { email: profile.emails[0].value },
           });
+
+          // If found by email, update the user with googleId and possibly the name
+          if (user) {
+            user.googleId = profile.id;
+
+            if (user.name !== profile.displayName) {
+              user.name = profile.displayName;
+            }
+
+            if (user.email !== profile.emails[0].value) {
+              user.email = profile.emails[0].value;
+            }
+
+            await user.save();
+          } else {
+            // Create a new user if no match found by googleId or email
+            user = await User.create({
+              name: profile.displayName,
+              email: profile.emails[0].value,
+              is_admin: false,
+              googleId: profile.id,
+            });
+          }
+        } else {
+          // Update the user if the name or email has changed
+          if (user.name !== profile.displayName) {
+            user.name = profile.displayName;
+            await user.save();
+          }
+
+          if (user.email !== profile.emails[0].value) {
+            user.email = profile.emails[0].value;
+            await user.save();
+          }
         }
 
         // Create JWT token

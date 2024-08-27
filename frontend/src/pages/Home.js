@@ -86,7 +86,7 @@ function VoterHome() {
             ))}
           </ul>
         ) : (
-          <p>No ongoing votes available.</p>
+          <p>No elections available.</p>
         )}
       </main>
       <Footer />

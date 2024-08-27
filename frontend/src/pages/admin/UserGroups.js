@@ -6,9 +6,11 @@ import { Link } from "react-router-dom";
 import CreateGroupModal from "../../components/modals/CreateGroupModal";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const UserGroups = () => {
   const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -19,10 +21,14 @@ const UserGroups = () => {
         setGroups(res.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchGroups();
   }, [API_URL]);
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div className="min-h-screen flex flex-col items-center">

@@ -191,9 +191,9 @@ const Group = () => {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setImporting(true)}
-              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-900"
+              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-900 flex items-center"
             >
-              <FaFileImport size={20} />
+              <FaFileImport className="mr-1" size={20} /> Import
             </button>
             <button
               onClick={() => setOpenAddMemberModal(true)}

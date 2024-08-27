@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Adminheader from "./../../components/AdminHeader";
-import { MdMail } from "react-icons/md";
+import { MdMail, MdDeleteForever } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import LoadingScreen from "../../components/LoadingScreen";
+import ConfirmDeleteUserModal from "../../components/modals/ConfirmDeleteUserModal";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [openDeleteUserModal, setOpenDeleteUserModal] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -17,10 +22,32 @@ const Users = () => {
         setUsers(res.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUser();
   }, [API_URL]);
+
+  const confirmDeleteUser = (user) => {
+    setUserToDelete(user);
+    setOpenDeleteUserModal(true);
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      await axios.delete(`${API_URL}/users/delete/${userToDelete.user_id}`);
+      setUsers(users.filter((user) => user.user_id !== userToDelete.user_id));
+      setUserToDelete(null);
+      setOpenDeleteUserModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (loading) {
+    <LoadingScreen />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center">
@@ -35,8 +62,9 @@ const Users = () => {
             <table className="w-full text-sm text-black">
               <thead className="text-white bg-blue-700">
                 <tr>
-                  <th className="border-b p-2 text-center w-3/5">Name</th>
-                  <th className="border-b p-2 text-center w-1/5">Email</th>
+                  <th className="border-b p-2 text-center w-4/5">Name</th>
+                  <th className="border-b p-2 text-center w-1/6"></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -45,10 +73,13 @@ const Users = () => {
                     <td className="px-4 py-2 text-left">
                       {user.name ? user.name : user.email}
                     </td>
-                    <td className="px-4 py-2 flex justify-center">
+                    <td className="px-4 py-2 flex justify-between">
                       <Link to={"mailto:" + user.email}>
                         <MdMail size={20} />
                       </Link>
+                      <button onClick={() => confirmDeleteUser(user)}>
+                        <MdDeleteForever size={20} />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -56,9 +87,18 @@ const Users = () => {
             </table>
           </div>
         ) : (
-          <p>Loading ...</p>
+          <p>No Users Found</p>
         )}
       </main>
+      {openDeleteUserModal && (
+        <ConfirmDeleteUserModal
+          userToRemove={
+            userToDelete.name ? userToDelete.name : userToDelete.email
+          }
+          handleDeleteUser={handleDeleteUser}
+          setOpenConfirmDeleteUserModal={setOpenDeleteUserModal}
+        />
+      )}
       <Footer />
     </div>
   );

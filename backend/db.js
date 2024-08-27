@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import mysql2 from "mysql2";
+import dotenv from "dotenv";
 
 // Load environment variables from a .env file if not in production
 // for future deployments not vercel
@@ -9,6 +10,7 @@ import mysql2 from "mysql2";
 //   });
 // }
 
+dotenv.config();
 // Define the Sequelize configuration
 const db = new Sequelize(
   process.env.DB_NAME, // The database name
