@@ -82,6 +82,7 @@ const Edit = () => {
     setEditingPosition(positionId);
     const position = positions.find((pos) => pos.position_id === positionId);
     setNewDescription(position.title);
+    setAddingPosition(false);
   };
 
   const handleUpdatePosition = async (positionId) => {
@@ -180,6 +181,7 @@ const Edit = () => {
 
   const handleAddPosition = () => {
     setAddingPosition(true);
+    setEditingPosition(false);
     setNewDescription("");
   };
 

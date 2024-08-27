@@ -1,28 +1,34 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import FormatDate from "../components/FormatDate";
 import useSession from "./../utils/useSession";
-
-const LoadingScreen = lazy(() => import("../components/LoadingScreen"));
-const Header = lazy(() => import("../components/Header"));
-const Footer = lazy(() => import("../components/Footer"));
+import LoadingScreen from "../components/LoadingScreen";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import ElectionCard from "../components/ElectionCard";
 
 function VoterHome() {
-  const [ongoingVotes, setOngoingVotes] = useState([]);
+  const [pastElections, setPastElections] = useState([]);
+  const [ongoingElections, setOngoingElections] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useSession();
 
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    const fetchOngoingVotes = async () => {
+    const fetchElections = async () => {
       if (user) {
         try {
           const res = await axios.get(
             `${API_URL}/elections/user/${user.user_id}`
           );
-          setOngoingVotes(res.data);
+          setOngoingElections(
+            res.data.filter((election) => election.accepting_responses === true)
+          );
+          setPastElections(
+            res.data.filter(
+              (election) => election.accepting_responses === false
+            )
+          );
           setLoading(false);
         } catch (error) {
           console.log("ERROR", error);
@@ -30,23 +36,16 @@ function VoterHome() {
       }
     };
 
-    fetchOngoingVotes();
+    fetchElections();
   }, [user, API_URL]);
 
   if (loading) {
-    return (
-      <Suspense fallback={<div>Loading...</div>}>
-        <LoadingScreen />
-      </Suspense>
-    );
+    return <LoadingScreen />;
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Suspense fallback={<div>Loading...</div>}>
-        <Header />
-      </Suspense>
-
+      <Header />
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold">Voter Portal</h1>
@@ -54,28 +53,35 @@ function VoterHome() {
       </header>
 
       <main className="flex-grow p-4 sm:p-6">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4">Ongoing Votes</h2>
-        {ongoingVotes.length > 0 ? (
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">
+          Ongoing Elections
+        </h2>
+        {ongoingElections.length > 0 ? (
           <ul className="space-y-4">
-            {ongoingVotes.map((vote) => (
+            {ongoingElections.map((election) => (
               <li
-                key={vote.election_id}
+                key={election.election_id}
                 className="p-4 border rounded-lg flex justify-between items-center bg-white shadow-sm hover:bg-gray-50"
               >
-                <div>
-                  <h3 className="font-semibold text-sm sm:text-base md:text-lg">
-                    {vote.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm">
-                    Closing Date: {<FormatDate dateString={vote.end_date} />}
-                  </p>
-                </div>
-                <Link
-                  to={`/vote/${vote.election_id}`}
-                  className="text-white bg-blue-500 hover:bg-blue-600 py-1 px-3 sm:py-2 sm:px-4 rounded-lg text-xs sm:text-sm"
-                >
-                  View
-                </Link>
+                <ElectionCard election={election} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mb-4">No elections available.</p>
+        )}
+
+        <hr className="m-2" />
+
+        <h2 className="text-xl sm:text-2xl font-bold my-4">Closed Elections</h2>
+        {pastElections.length > 0 ? (
+          <ul className="space-y-4">
+            {pastElections.map((election) => (
+              <li
+                key={election.election_id}
+                className="p-4 border rounded-lg flex justify-between items-center bg-white shadow-sm hover:bg-gray-50"
+              >
+                <ElectionCard election={election} />
               </li>
             ))}
           </ul>
@@ -83,10 +89,7 @@ function VoterHome() {
           <p>No ongoing votes available.</p>
         )}
       </main>
-
-      <Suspense fallback={<div>Loading...</div>}>
-        <Footer />
-      </Suspense>
+      <Footer />
     </div>
   );
 }

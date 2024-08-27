@@ -50,9 +50,9 @@ const VotingPage = () => {
         if (!res.data.eligible) {
           navigate("/noaccess");
         }
-        // if (res.data.voted) {
-        //   navigate("/voted");
-        // }
+        if (res.data.voted) {
+          navigate("/voted");
+        }
         setLoading(false);
       } catch (error) {
         console.log("Error checking status", error);
@@ -96,10 +96,7 @@ const VotingPage = () => {
           <h1 className="text-xl font-bold">{election.title}</h1>
         </div>
         {user.is_admin ? (
-          <p>
-            Looking to edit form?{" "}
-            <Link to={`/admin/edit/${electionId}`}>ClickHere</Link>
-          </p>
+          <Link to={`/admin/edit/${electionId}`}>Edit Form</Link>
         ) : (
           <></>
         )}

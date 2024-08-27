@@ -75,7 +75,7 @@ const FormEditHeader = ({ electionId }) => {
                 setEditingTitle(false);
                 setNewTitle(title);
               }}
-              className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-900 ml-2"
+              className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-900 mx-2"
             >
               Cancel
             </button>
@@ -91,7 +91,7 @@ const FormEditHeader = ({ electionId }) => {
           </div>
         )}
       </div>
-      <div className="flex items-center gap-x-5">
+      <div className="flex items-center gap-x-5 overflow-x-auto">
         <ul className="flex items-center space-x-6">
           {formHeaderLinks.map((item) => {
             return (

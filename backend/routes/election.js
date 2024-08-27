@@ -12,7 +12,16 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const elections = await Election.findAll();
-    res.json(elections);
+
+    // Update the accepting_responses field based on current date
+    const electionsWithUpdatedStatus = await Promise.all(
+      elections.map(async (election) => {
+        await election.isCurrentlyAcceptingResponses(); // This will update the field if necessary
+        return election;
+      })
+    );
+
+    res.json(electionsWithUpdatedStatus);
   } catch (err) {
     res.status(500).json("Error: " + err);
   }
@@ -23,6 +32,7 @@ router.get("/:id", async (req, res) => {
   try {
     const election = await Election.findByPk(req.params.id);
     if (election) {
+      await election.isCurrentlyAcceptingResponses();
       res.json(election);
     } else {
       res.status(404).json("Election not found");
@@ -72,7 +82,15 @@ router.get("/user/:id", async (req, res) => {
         (v, i, a) => a.findIndex((t) => t.election_id === v.election_id) === i
       );
 
-      res.json(uniqueElections);
+      // Update the accepting_responses field for each election
+      const updatedElections = await Promise.all(
+        uniqueElections.map(async (election) => {
+          await election.isCurrentlyAcceptingResponses(); // This will update the field if necessary
+          return election;
+        })
+      );
+
+      res.json(updatedElections);
     } else {
       // If no group memberships, return only direct elections
       res.json(electionsDirect);
@@ -163,6 +181,9 @@ router.put("/:electionId", async (req, res) => {
     if (!election) {
       return res.status(404).json({ message: "Election not found" });
     }
+
+    election.use_enddate = use_enddate;
+    election.use_startdate = use_startdate;
 
     //Check dates and usages
     if (use_startdate && start_date !== "") {

@@ -69,7 +69,7 @@ router.get("/:groupId/members", async (req, res) => {
       where: { group_id: groupId },
       include: {
         model: User,
-        attributes: ["user_id", "name"],
+        attributes: ["user_id", "name", "email"],
       },
       attributes: ["date_added"],
     });
@@ -78,6 +78,7 @@ router.get("/:groupId/members", async (req, res) => {
     const response = members.map((member) => ({
       user_id: member.User.user_id,
       name: member.User.name,
+      email: member.User.email,
       date_added: member.date_added,
     }));
 
@@ -113,6 +114,44 @@ router.delete("/:groupId/members/:memberId", async (req, res) => {
     return res.status(204).end();
   } catch (err) {
     return res.status(500).json("Error: " + err);
+  }
+});
+
+router.post("/import-csv/:groupId", async (req, res) => {
+  const { groupId } = req.params;
+  const { emails } = req.body;
+
+  try {
+    const newUsers = [];
+
+    for (let email of emails) {
+      // Check if user exists
+      let user = await User.findOne({ where: { email } });
+
+      // If user doesn't exist, create a new one
+      if (!user) {
+        user = await User.create({ email });
+      }
+
+      // Check if the user is already a member of the group
+      const existingMember = await GroupMember.findOne({
+        where: { member_id: user.user_id, group_id: groupId },
+      });
+
+      // If not a member, add the user to the group
+      if (!existingMember) {
+        await GroupMember.create({
+          member_id: user.user_id,
+          group_id: groupId,
+        });
+        newUsers.push(user);
+      }
+    }
+
+    res.status(200).json({ newUsers });
+  } catch (error) {
+    console.error("Error importing users from CSV", error);
+    res.status(500).json({ error: "Error importing users from CSV" });
   }
 });
 

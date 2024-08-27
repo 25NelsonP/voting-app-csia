@@ -17,9 +17,10 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
     }
   }, [type]);
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter((user) => {
+    const name = user.name ? user.name : user.email; // If user.name is null or undefined, use an empty string
+    return name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   const handleAddClick = async (e, userId) => {
     setLoading(true);
@@ -47,7 +48,7 @@ const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
                   {filteredUsers.map((user) => (
                     <tr className="bg-gray-100 border-b" key={user.user_id}>
                       <td className="px-4 py-2 text-left flex justify-between items-center">
-                        {user.name}{" "}
+                        {user.name ? user.name : user.email}
                         <button
                           onClick={(e) => handleAddClick(e, user.user_id)}
                           className="bg-green-600 text-white p-2 rounded"

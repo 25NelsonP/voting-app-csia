@@ -8,7 +8,6 @@ const useSession = () => {
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
-      // No token means no user is logged in
       setUser(null);
       setLoading(false);
       return;

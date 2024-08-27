@@ -22,6 +22,7 @@ const GroupMember = db.define(
     },
     date_added: {
       type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
       allowNull: false,
     },
   },

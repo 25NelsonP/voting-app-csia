@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Adminheader from "../../components/AdminHeader";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPlus, FaTimes, FaFileImport } from "react-icons/fa";
 import ConfirmRemoveMemberModal from "../../components/modals/ConfirmRemoveMemberModal";
 import AddMemberModal from "../../components/modals/AddModal";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { MdEdit } from "react-icons/md";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import LoadingScreen from "../../components/LoadingScreen";
+import ImportCSV from "../../components/modals/CSVImport";
 
 const Group = () => {
   const [members, setMembers] = useState([]);
@@ -25,6 +26,7 @@ const Group = () => {
   const [openAddMemberModal, setOpenAddMemberModal] = useState(false);
   const [openDeleteGroupModal, setOpenDeleteGroupModal] = useState(false);
   const [users, setUsers] = useState([]);
+  const [importing, setImporting] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -186,7 +188,13 @@ const Group = () => {
               </button>
             </div>
           )}
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setImporting(true)}
+              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-900"
+            >
+              <FaFileImport size={20} />
+            </button>
             <button
               onClick={() => setOpenAddMemberModal(true)}
               className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-900"
@@ -207,7 +215,9 @@ const Group = () => {
               <tbody>
                 {members.map((member) => (
                   <tr className="bg-gray-100 border-b " key={member.user_id}>
-                    <td className="px-4 py-2 text-left">{member.name}</td>
+                    <td className="px-4 py-2 text-left">
+                      {member.name ? member.name : member.email}
+                    </td>
                     <td className="px-4 py-2 text-right">
                       <button
                         onClick={() => confirmRemoveMember(member.user_id)}
@@ -253,6 +263,13 @@ const Group = () => {
           groupName={groupName}
           handleDeleteGroup={handleDeleteGroup}
           setOpenConfirmDeleteGroupModal={setOpenDeleteGroupModal}
+        />
+      )}
+
+      {importing && (
+        <ImportCSV
+          groupId={group_id}
+          handleCancel={() => setImporting(false)}
         />
       )}
       <Footer />

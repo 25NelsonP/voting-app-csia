@@ -9,7 +9,7 @@ export const adminHeaderLinks = [
   },
   {
     route: "/admin/manageUsers",
-    label: "View Users",
+    label: "Manage Users",
   },
   {
     route: "/admin/manageGroups",

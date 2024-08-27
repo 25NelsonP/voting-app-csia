@@ -18,7 +18,7 @@ router.get("/:id", async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["name"],
+          attributes: ["name", "email"],
         },
       ],
     });
@@ -26,6 +26,7 @@ router.get("/:id", async (req, res) => {
     const students = eligibleVoters.map((voter) => ({
       student_id: voter.student_id,
       name: voter.User.name,
+      email: voter.User.email,
     }));
 
     res.json(students);

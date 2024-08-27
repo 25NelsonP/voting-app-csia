@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FormEditHeader from "../../../components/FormEditHeader";
-import { useLocation } from "react-router-dom";
-import { MdPersonRemove } from "react-icons/md";
+import { Link, useLocation } from "react-router-dom";
+import { MdPersonRemove, MdManageAccounts } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 import AddPermissionModal from "./../../../components/modals/AddModal";
 import AddGroupPermissionModal from "./../../../components/modals/AddGroupModal";
@@ -134,6 +134,7 @@ const Permissions = () => {
         {
           student_id: studentId,
           name: users.find((user) => user.user_id === studentId).name,
+          email: users.find((user) => user.user_id === studentId).email,
         },
       ]);
       setUsers((prevUsers) =>
@@ -145,11 +146,11 @@ const Permissions = () => {
     console.log(students);
   };
   return (
-    <div className="flex flex-col items-center w-ful min-h-screen">
+    <div className="flex flex-col items-center w-full min-h-screen">
       <Header />
       <FormEditHeader electionId={electionId} />
       <div className="p-6 w-full flex flex-col items-center">
-        <div className="w-1/2 flex justify-between items-center">
+        <div className="md:w-1/2 w-full flex justify-between items-center">
           <h2 className="text-xl font-semibold">Permissions</h2>
           <button
             onClick={() => setOpenAddUserModal(true)}
@@ -158,11 +159,11 @@ const Permissions = () => {
             <FaPlus size={20} />
           </button>
         </div>
-        <p className="w-1/2 items-start text-xs mb-3">
+        <p className="md:w-1/2 w-full items-start text-xs mb-3">
           All users need to be added here for them to be able to access this
           election.
         </p>
-        <div className="w-1/2 overflow-x-auto rounded-lg shadow-md">
+        <div className="md:w-1/2 w-full overflow-x-auto rounded-lg shadow-md">
           <table className="w-full text-sm text-black">
             <thead className="bg-blue-700 text-white">
               <tr>
@@ -173,11 +174,13 @@ const Permissions = () => {
             <tbody className="bg-gray-100">
               {students.map((student) => (
                 <tr key={student.student_id} className="border-b">
-                  <td className="px-6 py-4 text-left">{student.name}</td>
+                  <td className="px-6 py-4 text-left">
+                    {student.name ? student.name : student.email}
+                  </td>
                   <td className="px-6 py-4 flex justify-center">
                     <button
                       onClick={() => handleRemoveAccess(student.student_id)}
-                      className="text-red-500 hover:underline flex items-center"
+                      className="text-red-500 hover:text-red-700 flex items-center"
                     >
                       <MdPersonRemove className="mr-1" />
                       Remove Access
@@ -190,7 +193,7 @@ const Permissions = () => {
         </div>
       </div>
       <div className="p-6 w-full flex flex-col items-center">
-        <div className="w-1/2 flex justify-between items-center">
+        <div className="md:w-1/2 w-full flex justify-between items-center">
           <h2 className="text-xl font-semibold">Group Permissions</h2>
           <button
             onClick={() => setOpenAddGroupModal(true)}
@@ -199,29 +202,36 @@ const Permissions = () => {
             <FaPlus size={20} />
           </button>
         </div>
-        <p className="w-1/2 items-start text-xs mb-3">
+        <p className="md:w-1/2 w-full items-start text-xs mb-3">
           Adding a group here will give access to all the members of the group
         </p>
-        <div className="w-1/2 overflow-x-auto rounded-lg shadow-md">
+        <div className="md:w-1/2 w-full overflow-x-auto rounded-lg shadow-md">
           <table className="w-full text-sm text-black">
             <thead className="bg-blue-700 text-white">
               <tr>
-                <th className="py-4 px-6 text-center w-3/5">Name</th>
-                <th className="py-4 px-6 text-center w-2/5"></th>
+                <th className="py-4 px-6 text-center w-1/2">Name</th>
+                <th className="py-4 px-6 text-center w-1/2"></th>
               </tr>
             </thead>
             <tbody className="bg-gray-100">
               {groupEligible.map((group) => (
                 <tr key={group.group_id} className="border-b">
                   <td className="px-6 py-4 text-left">{group.group_name}</td>
-                  <td className="px-6 py-4 flex justify-center">
+                  <td className="px-6 py-4 flex justify-between">
                     <button
                       onClick={() => handleRemoveGroupAccess(group.group_id)}
-                      className="text-red-500 hover:underline flex items-center"
+                      className="text-red-500 hover:text-red-700 flex items-center"
                     >
                       <MdPersonRemove className="mr-1" />
                       Remove Access
                     </button>
+                    <Link
+                      to={`/admin/managegroup/${group.group_id}`}
+                      className="text-blue-500 hover:text-blue-700 ml-2 flex items-center"
+                    >
+                      <MdManageAccounts className="mr-1" />
+                      Manage
+                    </Link>
                   </td>
                 </tr>
               ))}

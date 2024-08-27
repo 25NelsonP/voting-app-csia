@@ -114,7 +114,9 @@ const Admins = () => {
               <tbody>
                 {administrators.map((admin) => (
                   <tr className="bg-gray-100 border-b " key={admin.user_id}>
-                    <td className="px-4 py-2 text-left">{admin.name}</td>
+                    <td className="px-4 py-2 text-left">
+                      {admin.name ? admin.name : admin.email}
+                    </td>
                     <td className="px-4 py-2 text-right">
                       <button
                         onClick={() => confirmRemoveAdmin(admin.user_id)}

@@ -12,7 +12,7 @@ const User = db.define(
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -21,7 +21,7 @@ const User = db.define(
     },
     googleId: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
     },
     is_admin: {

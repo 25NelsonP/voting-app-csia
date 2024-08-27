@@ -129,10 +129,12 @@ const Settings = () => {
               type="checkbox"
               name="accepting_responses"
               checked={formState.accepting_responses}
+              disabled={formState.use_enddate || formState.use_startdate}
               onChange={handleChange}
               className="ml-3 h-6 w-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
             />
           </div>
+
           <div className="mb-4 flex flex-col">
             <label className="text-lg font-bold block mb-2">Start Date</label>
             <div className="flex items-center">

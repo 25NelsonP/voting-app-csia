@@ -42,7 +42,9 @@ const Users = () => {
               <tbody>
                 {users.map((user) => (
                   <tr className="bg-gray-100 border-b " key={user.user_id}>
-                    <td className="px-4 py-2 text-left">{user.name}</td>
+                    <td className="px-4 py-2 text-left">
+                      {user.name ? user.name : user.email}
+                    </td>
                     <td className="px-4 py-2 flex justify-center">
                       <Link to={"mailto:" + user.email}>
                         <MdMail size={20} />
