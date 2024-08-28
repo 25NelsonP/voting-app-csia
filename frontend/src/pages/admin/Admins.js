@@ -131,7 +131,7 @@ const Admins = () => {
             </table>
           </div>
         ) : (
-          <p>No administrators available.</p>
+          <p>Loading...</p>
         )}
       </main>
 

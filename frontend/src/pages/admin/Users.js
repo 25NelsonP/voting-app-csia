@@ -87,7 +87,7 @@ const Users = () => {
             </table>
           </div>
         ) : (
-          <p>No Users Found</p>
+          <p>Loading...</p>
         )}
       </main>
       {openDeleteUserModal && (

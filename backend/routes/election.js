@@ -5,6 +5,7 @@ import Position from "../models/Position.js";
 import EligibleVoter from "../models/EligibleVoter.js";
 import EligibleGroup from "../models/EligibleGroup.js";
 import GroupMember from "../models/GroupMember.js";
+import Votes from "../models/Vote.js";
 
 const router = express.Router();
 
@@ -235,6 +236,8 @@ router.delete("/:electionId", async (req, res) => {
       return res.status(404).json({ message: "Election not found" });
     }
 
+    await Votes.destroy({ where: { election_id: electionId } });
+
     // Delete associated candidates first
     for (const position of election.Positions) {
       await Candidate.destroy({ where: { position_id: position.position_id } });
@@ -252,9 +255,7 @@ router.delete("/:electionId", async (req, res) => {
 
     res.json({ message: "Election and all associated data deleted" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error deleting election", error: error.message });
+    res.status(500).json({ message: "Error deleting election", error });
   }
 });
 

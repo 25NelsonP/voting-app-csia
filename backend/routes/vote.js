@@ -3,6 +3,8 @@ import Vote from "../models/Vote.js";
 import EligibleVoter from "../models/EligibleVoter.js";
 import Candidate from "../models/Candidate.js";
 import Position from "../models/Position.js";
+import EligibleGroup from "../models/EligibleGroup.js";
+import GroupMember from "../models/GroupMember.js";
 
 const router = express.Router();
 
@@ -56,18 +58,43 @@ router.post("/submit", async (req, res) => {
   const { voter_id, election_id, votes } = req.body;
 
   try {
-    // Check if the voter is eligible to vote
+    // Check if the voter is eligible to vote directly
     const eligibleVoter = await EligibleVoter.findOne({
       where: { student_id: voter_id, election_id: election_id },
     });
 
-    if (!eligibleVoter) {
+    // Check if there are eligible groups for this election
+    const eligibleGroups = await EligibleGroup.findAll({
+      where: { election_id: election_id },
+    });
+
+    let groupEligible = false;
+
+    if (eligibleGroups && eligibleGroups.length > 0) {
+      // Get the group IDs that are eligible
+      const eligibleGroupIds = eligibleGroups.map((group) => group.group_id);
+
+      // Check if the student belongs to any of the eligible groups
+      const groupMember = await GroupMember.findOne({
+        where: {
+          group_id: eligibleGroupIds,
+          member_id: voter_id,
+        },
+      });
+
+      if (groupMember) {
+        groupEligible = true;
+      }
+    }
+
+    // If neither directly eligible nor group eligible, return error response
+    if (!eligibleVoter && !groupEligible) {
       return res
         .status(403)
         .json({ message: "Voter is not eligible to vote in this election." });
     }
 
-    // candidates are stored in the JSON format
+    // Record the vote
     await Vote.create({
       election_id,
       voter_id,

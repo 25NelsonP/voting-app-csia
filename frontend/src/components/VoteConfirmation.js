@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CandidateCard from "./CandidateCard";
 
 const ConfirmationPage = ({
@@ -7,6 +7,8 @@ const ConfirmationPage = ({
   onBack,
   onSubmit,
 }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   const getSelectedCandidate = (positionId) => {
     const candidateId = selectedCandidates[positionId];
     const position = positions.find((pos) => pos.position_id === positionId);
@@ -44,10 +46,13 @@ const ConfirmationPage = ({
             Go Back
           </button>
           <button
-            onClick={onSubmit}
+            onClick={() => {
+              onSubmit();
+              setSubmitting(true);
+            }}
             className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"
           >
-            Confirm Selection
+            {submitting ? "Submitting" : "Confirm Selection"}
           </button>
         </div>
       </main>
