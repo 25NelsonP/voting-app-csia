@@ -10,7 +10,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 
 const UserGroups = () => {
   const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL;
 

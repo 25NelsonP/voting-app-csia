@@ -46,7 +46,7 @@ const Users = () => {
   };
 
   if (loading) {
-    <LoadingScreen />;
+    return <LoadingScreen />;
   }
 
   return (

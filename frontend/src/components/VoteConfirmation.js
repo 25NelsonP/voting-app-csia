@@ -52,7 +52,7 @@ const ConfirmationPage = ({
             }}
             className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"
           >
-            {submitting ? "Submitting" : "Confirm Selection"}
+            {submitting ? "Submitting..." : "Confirm Selection"}
           </button>
         </div>
       </main>

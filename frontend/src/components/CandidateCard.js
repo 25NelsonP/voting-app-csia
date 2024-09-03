@@ -13,7 +13,7 @@ const CandidateCard = ({ candidate, positionId, isSelected, onSelect }) => {
       }`}
     >
       <img
-        src={candidate.img_url}
+        src={candidate.img_url || "https://via.placeholder.com/400x516"}
         alt="Candidate"
         className="object-contain rounded-lg mb-2 w-full"
       />

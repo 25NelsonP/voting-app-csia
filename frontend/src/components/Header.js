@@ -6,6 +6,7 @@ import useSession from "../utils/useSession";
 
 function Header() {
   const { user } = useSession();
+  const title = "ISY STUCO";
 
   if (!user) {
     return (
@@ -16,7 +17,7 @@ function Header() {
             className="text-2xl text-black font-bold inline-flex items-center space-x-4"
           >
             <img className="max-w-16" src={logo} alt="logo" />
-            <p className="font-bold hover:text-gray-800">ISY HS STUCO</p>
+            <p className="font-bold hover:text-gray-800">{title}</p>
           </Link>
         </div>
       </nav>
@@ -31,7 +32,7 @@ function Header() {
           className="text-2xl text-black font-bold inline-flex items-center space-x-4"
         >
           <img className="max-w-16" src={logo} alt="logo" />
-          <p className="font-bold hover:text-gray-800">ISY HS STUCO</p>
+          <p className="font-bold hover:text-gray-800">{title}</p>
         </Link>
       </div>
       <div className="flex items-center gap-x-5">
