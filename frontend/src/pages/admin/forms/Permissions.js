@@ -8,10 +8,12 @@ import AddPermissionModal from "./../../../components/modals/AddModal";
 import AddGroupPermissionModal from "./../../../components/modals/AddGroupModal";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 const Permissions = () => {
   const location = useLocation();
   const electionId = location.pathname.split("/")[4];
+  const [loading, setLoading] = useState(true);
   const [students, setStudents] = useState([]);
   const [groups, setGroups] = useState([]);
   const [groupEligible, setGroupEligible] = useState([]);
@@ -20,8 +22,10 @@ const Permissions = () => {
   const [openAddGroupModal, setOpenAddGroupModal] = useState(false);
 
   useEffect(() => {
+    //fetching students with permissions
     const fetchStudent = async () => {
       try {
+        //backend call
         const res = await axios.get(
           `${process.env.REACT_APP_API_URL}/permissions/${electionId}`
         );
@@ -30,8 +34,11 @@ const Permissions = () => {
         console.log("Error fetching permissions data", error);
       }
     };
+
+    //fetching groups with permissions
     const fetchGroup = async () => {
       try {
+        //backend call
         const res = await axios.get(
           `${process.env.REACT_APP_API_URL}/permissions/groups/${electionId}`
         );
@@ -41,29 +48,41 @@ const Permissions = () => {
       }
     };
 
-    fetchStudent();
-    fetchGroup();
+    const fetchData = async () => {
+      try {
+        //calling fetchGroup and fetchStudent
+        await Promise.all([fetchStudent(), fetchGroup()]);
+      } catch (error) {
+        console.log("Error during data fetching", error);
+      } finally {
+        setLoading(false); // Set loading to false only after both fetches are completed
+      }
+    };
+
+    fetchData();
   }, [electionId]);
 
   useEffect(() => {
+    // Fetching all users except those who have already been given access as a single student in the election
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/users`); //backend call
         const rmv = new Set(students.map((student) => student.student_id));
-        const filteredUsers = res.data.filter((user) => !rmv.has(user.user_id));
+        const filteredUsers = res.data.filter((user) => !rmv.has(user.user_id)); //filter out users who are given access to the election
         setUsers(filteredUsers);
       } catch (error) {
         console.log("Error fetching user data", error);
       }
     };
 
+    // Fetching all Groups except those which have already been given access to the election.
     const fetchAllGroups = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/groups`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/groups`); //backend call
         const rmv = new Set(groupEligible.map((group) => group.group_id));
         const filteredGroups = res.data.filter(
           (group) => !rmv.has(group.group_id)
-        );
+        ); //filtering out groups that have already been given access to the election
         setGroups(filteredGroups);
       } catch (error) {
         console.log("Error fetching group data", error);
@@ -77,10 +96,10 @@ const Permissions = () => {
     try {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/permissions/groups/${electionId}/${groupId}`
-      );
+      ); //backend call
       setGroupEligible((prevGroups) =>
         prevGroups.filter((group) => group.group_id !== groupId)
-      );
+      ); //remove the group (from frontend)
     } catch (error) {
       console.error("Error removing group access", error);
     }
@@ -90,10 +109,10 @@ const Permissions = () => {
     try {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/permissions/${electionId}/${studentId}`
-      );
+      ); //backend call
       setStudents((prevStudents) =>
         prevStudents.filter((student) => student.student_id !== studentId)
-      );
+      ); //remove the student (from frontend)
     } catch (error) {
       console.error("Error removing access", error);
     }
@@ -145,6 +164,11 @@ const Permissions = () => {
     }
     console.log(students);
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="flex flex-col items-center w-full min-h-screen">
       <Header />

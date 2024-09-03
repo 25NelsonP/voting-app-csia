@@ -48,7 +48,9 @@ const Responses = () => {
                   className="flex bg-white shadow-md rounded-lg overflow-hidden"
                 >
                   <img
-                    src={candidate.img_url || "https://via.placeholder.com/150"}
+                    src={
+                      candidate.img_url || "https://via.placeholder.com/400x516"
+                    }
                     alt={`${candidate.name}`}
                     className="h-52 object-cover"
                   />

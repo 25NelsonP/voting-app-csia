@@ -6,11 +6,13 @@ import axios from "axios";
 import FormEditHeader from "../../../components/FormEditHeader";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 const Edit = () => {
   const location = useLocation();
   const electionId = location.pathname.split("/")[3];
   const [positions, setPositions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [editingPosition, setEditingPosition] = useState(null);
   const [editingCandidate, setEditingCandidate] = useState(null);
@@ -31,6 +33,8 @@ const Edit = () => {
         setPositions(res.data);
       } catch (error) {
         console.log("Position", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPositions();
@@ -198,6 +202,10 @@ const Edit = () => {
     }
   };
 
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -307,7 +315,10 @@ const Edit = () => {
                           className={`border rounded-lg p-2 shadow-md inline-flex flex-col items-center w-60 `}
                         >
                           <img
-                            src={candidate.img_url}
+                            src={
+                              candidate.img_url ||
+                              "https://via.placeholder.com/400x516"
+                            }
                             alt="Candidate"
                             className="object-contain rounded-md mb-2"
                           />
