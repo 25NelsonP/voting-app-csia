@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Adminheader from "../../components/AdminHeader";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { FaPlus, FaTimes, FaFileImport } from "react-icons/fa";
+import { FaPlus, FaTimes, FaFileCsv, FaGoogle } from "react-icons/fa";
 import ConfirmRemoveMemberModal from "../../components/modals/ConfirmRemoveMemberModal";
 import AddMemberModal from "../../components/modals/AddModal";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import LoadingScreen from "../../components/LoadingScreen";
 import ImportCSV from "../../components/modals/CSVImport";
+import GoogleImport from "../../components/modals/GoogleImport";
 
 const Group = () => {
   const [members, setMembers] = useState([]);
@@ -26,7 +27,8 @@ const Group = () => {
   const [openAddMemberModal, setOpenAddMemberModal] = useState(false);
   const [openDeleteGroupModal, setOpenDeleteGroupModal] = useState(false);
   const [users, setUsers] = useState([]);
-  const [importing, setImporting] = useState(false);
+  const [importingcsv, setImportingcsv] = useState(false);
+  const [importingGoogle, setImportingGoogle] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -190,10 +192,16 @@ const Group = () => {
           )}
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => setImporting(true)}
+              onClick={() => setImportingcsv(true)}
               className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-900 flex items-center"
             >
-              <FaFileImport className="mr-1" size={20} /> Import
+              <FaFileCsv className="mr-1" size={20} /> Import
+            </button>
+            <button
+              onClick={() => setImportingGoogle(true)}
+              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-900 flex items-center"
+            >
+              <FaGoogle className="mr-1" size={20} /> Import
             </button>
             <button
               onClick={() => setOpenAddMemberModal(true)}
@@ -266,10 +274,16 @@ const Group = () => {
         />
       )}
 
-      {importing && (
+      {importingcsv && (
         <ImportCSV
           groupId={group_id}
-          handleCancel={() => setImporting(false)}
+          handleCancel={() => setImportingcsv(false)}
+        />
+      )}
+      {importingGoogle && (
+        <GoogleImport
+          groupId={group_id}
+          handleCancel={() => setImportingGoogle(false)}
         />
       )}
       <Footer />

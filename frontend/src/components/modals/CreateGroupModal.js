@@ -43,7 +43,6 @@ const CreateGroupModal = ({ setShowModal, setGroups, groups }) => {
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             className="border p-2 rounded"
-            required
           />
           <button
             type="submit"

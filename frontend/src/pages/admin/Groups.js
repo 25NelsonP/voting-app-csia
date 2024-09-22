@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
-import Adminheader from "./../../components/AdminHeader";
+import Adminheader from "../../components/AdminHeader";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CreateGroupModal from "../../components/modals/CreateGroupModal";
@@ -8,7 +8,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import LoadingScreen from "../../components/LoadingScreen";
 
-const UserGroups = () => {
+const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
@@ -37,12 +37,15 @@ const UserGroups = () => {
       <main className="flex flex-col items-center p-5 w-full max-w-2xl">
         <div className="w-full flex justify-between items-center mb-5">
           <h2 className="text-2xl font-bold">Groups</h2>
-          <button
-            onClick={() => setOpenCreateGroupModal(true)}
-            className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-900"
-          >
-            <FaPlus size={20} />
-          </button>
+          <div className="flex items-center space-x-2">
+            <p>Create a group to import from Google</p>
+            <button
+              onClick={() => setOpenCreateGroupModal(true)}
+              className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-900"
+            >
+              <FaPlus size={20} />
+            </button>
+          </div>
         </div>
         {groups.length > 0 ? (
           <div className="w-full overflow-x-auto rounded-lg shadow-md">
@@ -86,4 +89,4 @@ const UserGroups = () => {
   );
 };
 
-export default UserGroups;
+export default Groups;
