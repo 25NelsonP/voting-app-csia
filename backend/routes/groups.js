@@ -117,14 +117,24 @@ router.delete("/:groupId/members/:memberId", async (req, res) => {
   }
 });
 
-router.post("/import-csv/:groupId", async (req, res) => {
+//add user through google/csv import
+router.post("/import/:groupId", async (req, res) => {
   const { groupId } = req.params;
   const { emails } = req.body;
 
+  // Email validation regex
+  const emailRegex = /\S+@\S+\.\S+/;
+
   try {
     const newUsers = [];
+    const validEmails = emails.filter((email) => emailRegex.test(email)); // Filter valid emails
+    if (validEmails.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "No valid email addresses provided." });
+    }
 
-    for (let email of emails) {
+    for (let email of validEmails) {
       // Check if user exists
       let user = await User.findOne({ where: { email } });
 
@@ -150,8 +160,8 @@ router.post("/import-csv/:groupId", async (req, res) => {
 
     res.status(200).json({ newUsers });
   } catch (error) {
-    console.error("Error importing users from CSV", error);
-    res.status(500).json({ error: "Error importing users from CSV" });
+    console.error("Error importing users", error);
+    res.status(500).json({ error: "Error importing users" });
   }
 });
 

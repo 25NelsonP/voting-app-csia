@@ -37,7 +37,7 @@ const ImportCSV = ({ groupId, handleCancel }) => {
   const importCsv = async (emails) => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/groups/import-csv/${groupId}`,
+        `${process.env.REACT_APP_API_URL}/groups/import/${groupId}`,
         { emails }
       );
       window.location.reload();
