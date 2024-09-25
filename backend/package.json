@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/passport": "^1.0.16",
+    "body-parser": "^1.20.3",
     "connect-session-sequelize": "^7.1.7",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
