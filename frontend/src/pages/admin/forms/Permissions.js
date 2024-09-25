@@ -20,6 +20,8 @@ const Permissions = () => {
   const [users, setUsers] = useState([]);
   const [openAddUserModal, setOpenAddUserModal] = useState(false);
   const [openAddGroupModal, setOpenAddGroupModal] = useState(false);
+  const [removingStudent, setRemovingStudent] = useState(null);
+  const [removingGroup, setRemovingGroup] = useState(null);
 
   useEffect(() => {
     //fetching students with permissions
@@ -93,6 +95,7 @@ const Permissions = () => {
   }, [students, groupEligible]);
 
   const handleRemoveGroupAccess = async (groupId) => {
+    setRemovingGroup(groupId);
     try {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/permissions/groups/${electionId}/${groupId}`
@@ -102,10 +105,13 @@ const Permissions = () => {
       ); //remove the group (from frontend)
     } catch (error) {
       console.error("Error removing group access", error);
+    } finally {
+      setRemovingGroup(null);
     }
   };
 
   const handleRemoveAccess = async (studentId) => {
+    setRemovingStudent(studentId);
     try {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/permissions/${electionId}/${studentId}`
@@ -115,6 +121,8 @@ const Permissions = () => {
       ); //remove the student (from frontend)
     } catch (error) {
       console.error("Error removing access", error);
+    } finally {
+      setRemovingStudent(null);
     }
   };
 
@@ -204,10 +212,17 @@ const Permissions = () => {
                   <td className="px-6 py-4 flex justify-center">
                     <button
                       onClick={() => handleRemoveAccess(student.student_id)}
-                      className="text-red-500 hover:text-red-700 flex items-center"
+                      className="text-red-500 hover:text-red-700 flex items-center disabled:text-red-200"
+                      disabled={removingStudent !== null}
                     >
-                      <MdPersonRemove className="mr-1" />
-                      Remove Access
+                      {removingStudent === student.student_id ? (
+                        "Removing..."
+                      ) : (
+                        <>
+                          <MdPersonRemove className="mr-1" />
+                          Remove Access
+                        </>
+                      )}
                     </button>
                   </td>
                 </tr>
@@ -244,10 +259,17 @@ const Permissions = () => {
                   <td className="px-6 py-4 flex justify-between">
                     <button
                       onClick={() => handleRemoveGroupAccess(group.group_id)}
-                      className="text-red-500 hover:text-red-700 flex items-center"
+                      disabled={removingGroup !== null}
+                      className="text-red-500 hover:text-red-700 flex items-center disabled:text-red-200"
                     >
-                      <MdPersonRemove className="mr-1" />
-                      Remove Access
+                      {removingGroup === group.group_id ? (
+                        "Removing..."
+                      ) : (
+                        <>
+                          <MdManageAccounts className="mr-1" />
+                          Remove Access
+                        </>
+                      )}
                     </button>
                     <Link
                       to={`/admin/managegroup/${group.group_id}`}

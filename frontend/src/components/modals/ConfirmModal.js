@@ -4,11 +4,12 @@ import { FaTimes } from "react-icons/fa";
 const ConfirmModal = ({
   title,
   message,
-  confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
   handleConfirm,
   handleCancel,
+  loading,
 }) => {
+  const confirmLabel = "Confirm";
+  const cancelLabel = "Cancel";
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg w-11/12 max-w-md relative flex flex-col items-center">
@@ -23,9 +24,10 @@ const ConfirmModal = ({
           </button>
           <button
             onClick={handleConfirm}
-            className="bg-green-600 text-white p-2 rounded w-3/5 flex items-center justify-center"
+            disabled={loading}
+            className="bg-green-600 text-white p-2 rounded w-3/5 flex items-center justify-center disabled:bg-green-200"
           >
-            <p>{confirmLabel}</p>
+            <p>{loading ? "Processing..." : confirmLabel}</p>
           </button>
         </div>
         <button onClick={handleCancel} className="absolute top-2 right-2 p-2">

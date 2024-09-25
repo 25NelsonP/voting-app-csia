@@ -10,6 +10,7 @@ const GoogleImport = ({ groupId, handleCancel }) => {
   const [selectedGroupEmail, setSelectedGroupEmail] = useState("");
   const [error, setError] = useState("");
   const [showGroupMembers, setShowGroupMembers] = useState(false);
+  const [adding, setAdding] = useState(false);
   //Pagination State
   const [currentGroupPage, setCurrentGroupPage] = useState(1);
   const [currentMemberPage, setCurrentMemberPage] = useState(1);
@@ -71,6 +72,7 @@ const GoogleImport = ({ groupId, handleCancel }) => {
   };
 
   const handleAddGroup = async () => {
+    setAdding(true);
     try {
       // Ensure groupMembers is an array of strings (emails)
       const emails = groupMembers.map((member) => member.email || member);
@@ -78,6 +80,7 @@ const GoogleImport = ({ groupId, handleCancel }) => {
         `${process.env.REACT_APP_API_URL}/groups/import/${groupId}`,
         { emails }
       );
+      setAdding(false);
       window.location.reload();
     } catch (error) {
       console.error("Error importing users", error);
@@ -234,10 +237,11 @@ const GoogleImport = ({ groupId, handleCancel }) => {
                 Back
               </button>
               <button
-                className="bg-blue-600 text-white p-2 rounded"
+                className="bg-blue-600 text-white p-2 rounded disabled:bg-blue-300"
                 onClick={handleAddGroup}
+                disabled={adding}
               >
-                Add Group
+                {adding ? "Adding Please wait..." : "Add Group"}
               </button>
             </div>
           </div>

@@ -14,21 +14,25 @@ const Edit = () => {
   const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [processingPosition, setProcessingPosition] = useState(false);
+  const [processingCandidate, setProcessingCandidate] = useState(false);
+  const [deletingCandidate, setDeletingCandidate] = useState(false);
+  const [deletingPosition, setDeletingPosition] = useState(false);
   const [editingPosition, setEditingPosition] = useState(null);
   const [editingCandidate, setEditingCandidate] = useState(null);
-  const [newDescription, setNewDescription] = useState("");
+  const [newPositionDescription, setNewPositionDescription] = useState("");
   const [newCandidateName, setNewCandidateName] = useState("");
   const [newCandidateGrade, setNewCandidateGrade] = useState("");
   const [newCandidateImageUrl, setNewCandidateImageUrl] = useState("");
   const [addingCandidate, setAddingCandidate] = useState(null);
   const [addingPosition, setAddingPosition] = useState(false);
-  const API_URL = process.env.REACT_APP_API_URL;
+  const BACKEND_API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchPositions = async () => {
       try {
         const res = await axios.get(
-          `${API_URL}/elections/positions/${electionId}`
+          `${BACKEND_API_URL}/elections/positions/${electionId}`
         );
         setPositions(res.data);
       } catch (error) {
@@ -38,15 +42,21 @@ const Edit = () => {
       }
     };
     fetchPositions();
-  }, [electionId, API_URL]);
+  }, [electionId, BACKEND_API_URL]);
 
   const handleRemovePosition = async (positionId) => {
+    setDeletingPosition(true);
     try {
       await deleteCandidates(positionId);
-      await axios.delete(`${API_URL}/elections/positions/${positionId}`);
+      await axios.delete(
+        `${BACKEND_API_URL}/elections/positions/${positionId}`
+      );
       setPositions(positions.filter((pos) => pos.position_id !== positionId));
     } catch (error) {
       console.log(error);
+      setDeletingPosition(false);
+    } finally {
+      setDeletingPosition(false);
     }
   };
 
@@ -54,7 +64,9 @@ const Edit = () => {
     const position = positions.find((pos) => pos.position_id === positionId);
     try {
       const deletePromises = position.candidates.map((cand) =>
-        axios.delete(`${API_URL}/elections/candidates/${cand.candidate_id}`)
+        axios.delete(
+          `${BACKEND_API_URL}/elections/candidates/${cand.candidate_id}`
+        )
       );
       await Promise.all(deletePromises);
     } catch (error) {
@@ -63,8 +75,11 @@ const Edit = () => {
   };
 
   const handleRemoveCandidate = async (positionId, candidateId) => {
+    setDeletingCandidate(true);
     try {
-      await axios.delete(`${API_URL}/elections/candidates/${candidateId}`);
+      await axios.delete(
+        `${BACKEND_API_URL}/elections/candidates/${candidateId}`
+      );
       setPositions(
         positions.map((pos) =>
           pos.position_id === positionId
@@ -79,36 +94,47 @@ const Edit = () => {
       );
     } catch (error) {
       console.log(error);
+    } finally {
+      setDeletingCandidate(false);
     }
   };
 
   const handleEditPosition = (positionId) => {
     setEditingPosition(positionId);
     const position = positions.find((pos) => pos.position_id === positionId);
-    setNewDescription(position.title);
+    setNewPositionDescription(position.title);
     setAddingPosition(false);
   };
 
   const handleUpdatePosition = async (positionId) => {
+    const position = positions.find((pos) => pos.position_id === positionId);
+    if (newPositionDescription === position.title) {
+      setEditingPosition(null);
+      return;
+    }
+    setProcessingPosition(true);
     try {
-      await axios.put(`${API_URL}/elections/positions/`, {
+      await axios.put(`${BACKEND_API_URL}/elections/positions/`, {
         position_id: positionId,
-        title: newDescription,
+        title: newPositionDescription,
       });
       setPositions(
         positions.map((pos) =>
           pos.position_id === positionId
-            ? { ...pos, title: newDescription }
+            ? { ...pos, title: newPositionDescription }
             : pos
         )
       );
       setEditingPosition(null);
     } catch (error) {
       console.log(error);
+    } finally {
+      setProcessingPosition(false);
     }
   };
 
   const handleEditCandidate = (positionId, candidateId) => {
+    setAddingCandidate(false);
     setEditingCandidate({ positionId, candidateId });
     const position = positions.find((pos) => pos.position_id === positionId);
     const candidate = position.candidates.find(
@@ -120,8 +146,24 @@ const Edit = () => {
   };
 
   const handleUpdateCandidate = async (positionId, candidateId) => {
+    const position = positions.find((pos) => pos.position_id === positionId);
+    const candidate = position.candidates.find(
+      (cand) => cand.candidate_id === candidateId
+    );
+
+    // Check if the new name is the same as the old name
+    if (
+      candidate.name === newCandidateName &&
+      candidate.grade === newCandidateGrade &&
+      candidate.img_url === newCandidateImageUrl
+    ) {
+      setEditingCandidate(null);
+      return; // Exit early without making the backend call
+    }
+
+    setProcessingCandidate(true);
     try {
-      await axios.put(`${API_URL}/elections/candidates`, {
+      await axios.put(`${BACKEND_API_URL}/elections/candidates`, {
         candidate_id: candidateId,
         name: newCandidateName,
         grade: newCandidateGrade,
@@ -149,10 +191,13 @@ const Edit = () => {
       setEditingCandidate(null);
     } catch (error) {
       console.log(error);
+    } finally {
+      setProcessingCandidate(false);
     }
   };
 
   const handleAddCandidate = (positionId) => {
+    setEditingCandidate(false);
     setAddingCandidate(positionId);
     setNewCandidateName("");
     setNewCandidateGrade("");
@@ -160,8 +205,13 @@ const Edit = () => {
   };
 
   const handleSaveNewCandidate = async (positionId) => {
+    if (!newCandidateName || !newCandidateGrade) {
+      alert("Name and grade cannot be empty.");
+      return;
+    }
+    setProcessingCandidate(true);
     try {
-      const res = await axios.post(`${API_URL}/elections/candidates`, {
+      const res = await axios.post(`${BACKEND_API_URL}/elections/candidates`, {
         position_id: positionId,
         name: newCandidateName,
         grade: newCandidateGrade,
@@ -180,25 +230,30 @@ const Edit = () => {
       setAddingCandidate(null);
     } catch (error) {
       console.log(error);
+    } finally {
+      setProcessingCandidate(false);
     }
   };
 
   const handleAddPosition = () => {
     setAddingPosition(true);
     setEditingPosition(false);
-    setNewDescription("");
+    setNewPositionDescription("");
   };
 
   const handleSaveNewPosition = async () => {
+    setProcessingPosition(true);
     try {
-      const res = await axios.post(`${API_URL}/elections/positions`, {
+      const res = await axios.post(`${BACKEND_API_URL}/elections/positions`, {
         election_id: electionId,
-        title: newDescription,
+        title: newPositionDescription,
       });
       setPositions([...positions, res.data]);
       setAddingPosition(false);
     } catch (error) {
       console.log(error);
+    } finally {
+      setProcessingPosition(false);
     }
   };
 
@@ -221,15 +276,19 @@ const Edit = () => {
                     <input
                       type="text"
                       id={position.position_id}
-                      value={newDescription}
-                      onChange={(e) => setNewDescription(e.target.value)}
+                      value={newPositionDescription}
+                      onChange={(e) =>
+                        setNewPositionDescription(e.target.value)
+                      }
+                      disabled={processingPosition}
                       className="p-2 border rounded mr-2"
                     />
                     <button
                       onClick={() => handleUpdatePosition(position.position_id)}
-                      className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900"
+                      className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900 disabled:bg-green-400"
+                      disabled={processingPosition}
                     >
-                      Save
+                      {processingPosition ? "Saving..." : "Save"}
                     </button>
                     <button
                       onClick={() => setEditingPosition(null)}
@@ -249,7 +308,8 @@ const Edit = () => {
                     </button>
                     <button
                       onClick={() => handleRemovePosition(position.position_id)}
-                      className="ml-2 border-2 rounded-lg p-1 text-black"
+                      disabled={deletingPosition}
+                      className="ml-2 border-2 rounded-lg p-1 text-black disabled:text-gray-600"
                     >
                       <MdDelete />
                     </button>
@@ -269,13 +329,15 @@ const Edit = () => {
                         <input
                           type="text"
                           id="candidateName"
+                          disabled={processingCandidate}
                           value={newCandidateName}
                           onChange={(e) => setNewCandidateName(e.target.value)}
                           className="p-2 border rounded mb-2 w-full"
                         />
                         <input
-                          type="text"
+                          type="number"
                           id="candidateGrade"
+                          disabled={processingCandidate}
                           value={newCandidateGrade}
                           onChange={(e) => setNewCandidateGrade(e.target.value)}
                           className="p-2 border rounded mb-2 w-full"
@@ -283,6 +345,7 @@ const Edit = () => {
                         <input
                           type="text"
                           id="candidateImage"
+                          disabled={processingCandidate}
                           value={newCandidateImageUrl}
                           onChange={(e) =>
                             setNewCandidateImageUrl(e.target.value)
@@ -297,9 +360,10 @@ const Edit = () => {
                                 candidate.candidate_id
                               )
                             }
-                            className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900"
+                            disabled={processingCandidate}
+                            className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900 disabled:bg-green-400"
                           >
-                            Save
+                            {processingCandidate ? "Saving..." : "Save"}
                           </button>
                           <button
                             onClick={() => setEditingCandidate(null)}
@@ -346,7 +410,8 @@ const Edit = () => {
                                 candidate.candidate_id
                               )
                             }
-                            className="ml-2 border-2 rounded-lg p-2 text-black"
+                            disabled={deletingCandidate}
+                            className="ml-2 border-2 rounded-lg p-2 text-black disabled:text-gray-600"
                           >
                             <MdDelete />
                           </button>
@@ -361,6 +426,7 @@ const Edit = () => {
                       type="text"
                       id="newName"
                       value={newCandidateName}
+                      disabled={processingCandidate}
                       onChange={(e) => setNewCandidateName(e.target.value)}
                       placeholder="Name"
                       className="p-2 border rounded mb-2 w-full"
@@ -369,6 +435,7 @@ const Edit = () => {
                       type="text"
                       id="newGrade"
                       value={newCandidateGrade}
+                      disabled={processingCandidate}
                       onChange={(e) => setNewCandidateGrade(e.target.value)}
                       placeholder="Grade"
                       className="p-2 border rounded mb-2 w-full"
@@ -377,6 +444,7 @@ const Edit = () => {
                       type="text"
                       id="newImage"
                       value={newCandidateImageUrl}
+                      disabled={processingCandidate}
                       onChange={(e) => setNewCandidateImageUrl(e.target.value)}
                       placeholder="Image URL"
                       className="p-2 border rounded mb-2 w-full"
@@ -386,9 +454,10 @@ const Edit = () => {
                         onClick={() =>
                           handleSaveNewCandidate(position.position_id)
                         }
-                        className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900"
+                        disabled={processingCandidate}
+                        className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900 disabled:bg-green-400"
                       >
-                        Save
+                        {processingCandidate ? "Saving..." : "Save"}
                       </button>
                       <button
                         onClick={() => setAddingCandidate(null)}
@@ -418,18 +487,20 @@ const Edit = () => {
             <div className="flex flex-col items-center text-black border rounded-lg p-2 shadow-md cursor-pointer w-60 mb-4">
               <input
                 type="text"
-                value={newDescription}
+                value={newPositionDescription}
                 id="newPosition"
-                onChange={(e) => setNewDescription(e.target.value)}
+                disabled={processingPosition}
+                onChange={(e) => setNewPositionDescription(e.target.value)}
                 placeholder="Position Description"
                 className="p-2 border rounded mb-2 w-full"
               />
               <div className="flex">
                 <button
                   onClick={handleSaveNewPosition}
-                  className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900"
+                  disabled={processingPosition}
+                  className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-900 disabled:bg-green-400"
                 >
-                  Save
+                  {processingPosition ? "Saving..." : "Save"}
                 </button>
                 <button
                   onClick={() => setAddingPosition(false)}

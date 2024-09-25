@@ -39,7 +39,6 @@ const Users = () => {
       await axios.delete(`${API_URL}/users/delete/${userToDelete.user_id}`);
       setUsers(users.filter((user) => user.user_id !== userToDelete.user_id));
       setUserToDelete(null);
-      setOpenDeleteUserModal(false);
     } catch (error) {
       console.log(error);
     }

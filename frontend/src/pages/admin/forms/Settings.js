@@ -10,6 +10,8 @@ const Settings = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const electionId = location.pathname.split("/")[4];
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formState, setFormState] = useState({
     use_startdate: false,
@@ -82,6 +84,7 @@ const Settings = () => {
   };
 
   const handleSave = async () => {
+    setSaving(true);
     if (!validateDates(formState)) {
       alert("End date must be after the start date.");
       return;
@@ -94,11 +97,14 @@ const Settings = () => {
       alert("Settings saved successfully.");
     } catch (error) {
       console.error("Error saving settings:", error);
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this election?")) {
+      setDeleting(true);
       try {
         await axios.delete(
           `${process.env.REACT_APP_API_URL}/elections/${electionId}`
@@ -106,6 +112,8 @@ const Settings = () => {
         navigate("/admin"); // Redirect to elections list page
       } catch (error) {
         console.error("Error deleting election:", error);
+      } finally {
+        setDeleting(false);
       }
     }
   };
@@ -182,15 +190,17 @@ const Settings = () => {
           <div className="flex justify-between">
             <button
               onClick={handleSave}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+              disabled={saving}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 disabled:bg-green-300"
             >
-              Save
+              {saving ? "Saving..." : "Save"}
             </button>
             <button
               onClick={handleDelete}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+              disabled={deleting}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 disabled:bg-red-300"
             >
-              Delete
+              {deleting ? "Deleting..." : "Delete"}
             </button>
           </div>
         </div>

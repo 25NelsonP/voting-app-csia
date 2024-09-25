@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 
 const ConfirmRemoveMemberModal = ({
@@ -7,6 +7,15 @@ const ConfirmRemoveMemberModal = ({
   handleRemoveMember,
   setOpenConfirmRmvMemberModal,
 }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    await handleRemoveMember();
+    setLoading(false); // Reset loading state
+    setOpenConfirmRmvMemberModal(false); // Close modal
+  };
+
   return (
     <ConfirmModal
       title="Remove Group Member"
@@ -16,8 +25,9 @@ const ConfirmRemoveMemberModal = ({
           <b>{groupName}</b>?
         </>
       }
-      handleConfirm={handleRemoveMember}
+      handleConfirm={handleConfirm}
       handleCancel={() => setOpenConfirmRmvMemberModal(false)}
+      loading={loading}
     />
   );
 };

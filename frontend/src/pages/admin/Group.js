@@ -81,7 +81,6 @@ const Group = () => {
         `${API_URL}/groups/${group_id}/members/${rmvmember_id}`
       );
       setMembers(members.filter((member) => member.user_id !== rmvmember_id));
-      setOpenConfirmRmvMemberModal(false);
       setRmvmember_id(null);
     } catch (error) {
       console.log(error);

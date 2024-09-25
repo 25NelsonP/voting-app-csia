@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 
 const ConfirmDeleteUserModal = ({
@@ -6,6 +6,15 @@ const ConfirmDeleteUserModal = ({
   setOpenConfirmDeleteUserModal,
   userToRemove,
 }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    await handleDeleteUser(); // Perform deletion
+    setLoading(false); // Reset loading state
+    setOpenConfirmDeleteUserModal(false); // Close modal
+  };
+
   return (
     <ConfirmModal
       title={`Delete ${userToRemove}`}
@@ -16,8 +25,9 @@ const ConfirmDeleteUserModal = ({
           Are you sure you want to delete <b>{userToRemove}</b>
         </>
       }
-      handleConfirm={handleDeleteUser}
+      handleConfirm={handleConfirm}
       handleCancel={() => setOpenConfirmDeleteUserModal(false)}
+      loading={loading}
     />
   );
 };

@@ -72,7 +72,6 @@ const Admins = () => {
         administrators.filter((admin) => admin.user_id !== adminToRemove)
       );
       setUsers([...users, selectedAdmin]);
-      setOpenConfirmRmvAdminModal(false);
       setAdminToRemove(null);
     } catch (error) {
       console.log(error);

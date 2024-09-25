@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 
 const ConfirmRemoveAdminModal = ({
   handleRemoveAdmin,
   setOpenConfirmRmvAdminModal,
 }) => {
+  const [loading, setLoading] = useState(true);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    await handleRemoveAdmin();
+    setLoading(false); // Reset loading state
+    setOpenConfirmRmvAdminModal(false); // Close modal
+  };
+
   return (
     <ConfirmModal
       title="Remove Administrator"
       message="Are you sure you want to remove this administrator?"
-      handleConfirm={handleRemoveAdmin}
+      handleConfirm={handleConfirm}
       handleCancel={() => setOpenConfirmRmvAdminModal(false)}
+      loading={loading}
     />
   );
 };

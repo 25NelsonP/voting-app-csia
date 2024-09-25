@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import axios from "axios";
 
-const CreateGroupModal = ({ setShowModal, setGroups, groups }) => {
+const CreateGroupModal = ({ setShowModal, setGroups }) => {
   const [groupName, setGroupName] = useState("");
   const API_URL = process.env.REACT_APP_API_URL;
   const [creating, setCreating] = useState(false);
