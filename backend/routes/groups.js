@@ -117,48 +117,64 @@ router.delete("/:groupId/members/:memberId", async (req, res) => {
   }
 });
 
-//add user through google/csv import
+// Add user through Google/CSV import
 router.post("/import/:groupId", async (req, res) => {
   const { groupId } = req.params;
   const { emails } = req.body;
 
   // Email validation regex
   const emailRegex = /\S+@\S+\.\S+/;
+  const validEmails = emails.filter((email) => emailRegex.test(email));
+
+  if (validEmails.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "No valid email addresses provided." });
+  }
 
   try {
-    const newUsers = [];
-    const validEmails = emails.filter((email) => emailRegex.test(email)); // Filter valid emails
-    if (validEmails.length === 0) {
-      return res
-        .status(400)
-        .json({ error: "No valid email addresses provided." });
+    // Find or create users in bulk
+    const userPromises = validEmails.map((email) =>
+      User.findOrCreate({
+        where: { email },
+        defaults: { email },
+      })
+    );
+    const userResults = await Promise.all(userPromises);
+
+    // Prepare users for group membership checking
+    const users = userResults.map((result) => result[0]);
+    const userIds = users.map((user) => user.user_id);
+
+    // Check existing group memberships
+    const existingMembers = await GroupMember.findAll({
+      where: {
+        member_id: userIds,
+        group_id: groupId,
+      },
+    });
+
+    const existingMemberIds = existingMembers.map((member) => member.member_id);
+
+    // Filter users who are not already members
+    const newMembers = users.filter(
+      (user) => !existingMemberIds.includes(user.user_id)
+    );
+
+    // Create new group members in bulk
+    const newGroupMembers = newMembers.map((user) => ({
+      member_id: user.user_id,
+      group_id: groupId,
+    }));
+
+    if (newGroupMembers.length > 0) {
+      await GroupMember.bulkCreate(newGroupMembers);
     }
 
-    for (let email of validEmails) {
-      // Check if user exists
-      let user = await User.findOne({ where: { email } });
-
-      // If user doesn't exist, create a new one
-      if (!user) {
-        user = await User.create({ email });
-      }
-
-      // Check if the user is already a member of the group
-      const existingMember = await GroupMember.findOne({
-        where: { member_id: user.user_id, group_id: groupId },
-      });
-
-      // If not a member, add the user to the group
-      if (!existingMember) {
-        await GroupMember.create({
-          member_id: user.user_id,
-          group_id: groupId,
-        });
-        newUsers.push(user);
-      }
-    }
-
-    res.status(200).json({ newUsers });
+    res.status(200).json({
+      newUsers: newMembers,
+      message: `${newMembers.length} new users added to the group.`,
+    });
   } catch (error) {
     console.error("Error importing users", error);
     res.status(500).json({ error: "Error importing users" });
