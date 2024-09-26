@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CandidateCard from "./CandidateCard";
 
+//vote confirmation page component
 const ConfirmationPage = ({
   positions,
   selectedCandidates,

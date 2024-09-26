@@ -22,6 +22,7 @@ const Settings = () => {
   });
   const [dateError, setDateError] = useState(false);
 
+  //backend call
   useEffect(() => {
     const fetchElection = async () => {
       try {
@@ -57,6 +58,7 @@ const Settings = () => {
     fetchElection();
   }, [electionId]);
 
+  //checks if dates are valid, start date is not after end date
   const validateDates = (newFormState) => {
     const { start_date, end_date, use_startdate, use_enddate } = newFormState;
     if (
@@ -83,6 +85,7 @@ const Settings = () => {
     setFormState(newFormState);
   };
 
+  //backend saving
   const handleSave = async () => {
     if (!validateDates(formState)) {
       alert("End date must be after the start date.");
@@ -102,6 +105,7 @@ const Settings = () => {
     }
   };
 
+  //backend saving for delete
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this election?")) {
       setDeleting(true);

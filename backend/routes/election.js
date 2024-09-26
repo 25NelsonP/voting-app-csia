@@ -235,10 +235,10 @@ router.delete("/:electionId", async (req, res) => {
     if (!election) {
       return res.status(404).json({ message: "Election not found" });
     }
-
+    //Delete associated votes
     await Votes.destroy({ where: { election_id: electionId } });
 
-    // Delete associated candidates first
+    // Delete associated candidates
     for (const position of election.Positions) {
       await Candidate.destroy({ where: { position_id: position.position_id } });
       await position.destroy();

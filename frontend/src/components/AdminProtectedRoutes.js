@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import useSession from "../utils/useSession";
 import LoadingScreen from "./LoadingScreen";
 
+//verification for admin side pages
 const AdminProtectedRoute = ({ element }) => {
   const { user, loading } = useSession();
 

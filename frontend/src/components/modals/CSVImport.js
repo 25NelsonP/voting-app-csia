@@ -12,6 +12,7 @@ const ImportCSV = ({ groupId, handleCancel }) => {
     setFile(event.target.files[0]);
   };
 
+  //read the file with papaparse and import into the database
   const handleFileUpload = () => {
     setImporting(true);
     if (!file) {
@@ -34,6 +35,7 @@ const ImportCSV = ({ groupId, handleCancel }) => {
     setImporting(false);
   };
 
+  //backend call for import
   const importCsv = async (emails) => {
     try {
       await axios.post(
@@ -46,6 +48,7 @@ const ImportCSV = ({ groupId, handleCancel }) => {
     }
   };
 
+  //shows the instructions on how to make a csv file.
   const toggleInstructions = () => {
     setShowInstructions(!showInstructions);
   };

@@ -1,9 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const VoteSuccessfulPage = () => {
+  const [countdown, setCountdown] = useState(30);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Update countdown every second
+    const interval = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    // Redirect after 30 seconds
+    const timer = setTimeout(() => {
+      navigate("/");
+    }, 30000);
+
+    // Cleanup intervals and timeouts on component unmount
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
+  }, [navigate]);
+
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Header />
@@ -15,6 +36,7 @@ const VoteSuccessfulPage = () => {
         <div className="mb-10 text-center">
           <h2 className="text-2xl font-bold py-3">Thank You for Voting!</h2>
           <p>Your vote has been recorded successfully.</p>
+          <p>Redirecting to home in {countdown} seconds...</p>
         </div>
         <div className="p-2">
           <Link

@@ -16,3 +16,4 @@ export { default as Profile } from "./Profile";
 export { default as Responses } from "./admin/forms/Responses";
 export { default as Permissions } from "./admin/forms/Permissions";
 export { default as Settings } from "./admin/forms/Settings";
+//exporting all pages for easier import in app.js

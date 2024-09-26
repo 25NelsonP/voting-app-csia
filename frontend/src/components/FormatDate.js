@@ -1,5 +1,6 @@
 import React from "react";
 
+//date format on the election card display
 const FormatDate = ({ dateString }) => {
   const options = {
     day: "2-digit",

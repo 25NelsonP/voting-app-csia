@@ -5,14 +5,15 @@ const AddModal = ({ groups, handleAdd, setModalStatus }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const title = "Add Group";
-  //Pagination State
   const [currentGroupPage, setCurrentGroupPage] = useState(1);
   const itemsPerPage = 10;
 
+  //filtering groups by the search term
   const filteredGroups = groups.filter((group) =>
     group.group_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // called when add is clicked, used in form permissions
   const handleAddClick = async (e, groupId) => {
     setLoading(true);
     await handleAdd(e, groupId);
@@ -31,6 +32,7 @@ const AddModal = ({ groups, handleAdd, setModalStatus }) => {
       setCurrentGroupPage(currentGroupPage - 1);
     }
   };
+
   // Slicing groups and members for pagination
   const paginatedGroups = filteredGroups.slice(
     (currentGroupPage - 1) * itemsPerPage,

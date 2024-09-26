@@ -4,9 +4,11 @@ import LoadingScreen from "../components/LoadingScreen";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+//user information page
 const ViewProfile = () => {
   const { user, loading } = useSession();
 
+  // delete the local storage cookie for logout
   const handleLogout = async () => {
     localStorage.removeItem("jwtToken");
     window.location.href = "/";

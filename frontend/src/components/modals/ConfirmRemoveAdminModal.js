@@ -7,6 +7,7 @@ const ConfirmRemoveAdminModal = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
+  //when confirm button is clicked
   const handleConfirm = async () => {
     setLoading(true);
     await handleRemoveAdmin();

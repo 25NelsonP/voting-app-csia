@@ -1,6 +1,7 @@
 import React from "react";
 import CandidateCard from "./CandidateCard";
 
+//form filling component.
 const CandidatesForm = ({
   positions,
   selectedCandidates,

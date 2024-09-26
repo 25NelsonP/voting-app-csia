@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import useSession from "../utils/useSession";
 import LoadingScreen from "./LoadingScreen";
 
+//user verification
 const ProtectedRoute = ({ element }) => {
   const { user, loading } = useSession();
 

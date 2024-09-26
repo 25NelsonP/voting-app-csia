@@ -1,9 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const NotFoundPage = () => {
+  const [countdown, setCountdown] = useState(10);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Update countdown every second
+    const interval = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    // Redirect after 10 seconds
+    const timer = setTimeout(() => {
+      navigate("/");
+    }, 10000);
+
+    // Cleanup intervals and timeouts on component unmount
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
+  }, [navigate]);
+
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Header />
@@ -17,6 +38,7 @@ const NotFoundPage = () => {
             Oops! Something went wrong.
           </h2>
           <p>The page you are looking for doesn't exist.</p>
+          <p>Redirecting to home in {countdown} seconds...</p>
         </div>
         <div className="p-2">
           <Link

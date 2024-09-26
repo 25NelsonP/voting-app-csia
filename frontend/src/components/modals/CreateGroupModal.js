@@ -7,6 +7,7 @@ const CreateGroupModal = ({ setShowModal, setGroups }) => {
   const API_URL = process.env.REACT_APP_API_URL;
   const [creating, setCreating] = useState(false);
 
+  // create the group, backend and database add
   const handleAddGroup = async (e) => {
     setCreating(true);
     e.preventDefault();
@@ -21,6 +22,7 @@ const CreateGroupModal = ({ setShowModal, setGroups }) => {
 
       const newGroup = { group_id, group_name };
 
+      //update the group for frontend presentation
       setGroups((prevGroups) => {
         const updatedGroups = [...prevGroups, newGroup];
         return updatedGroups;

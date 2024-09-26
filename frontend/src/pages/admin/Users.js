@@ -8,6 +8,7 @@ import Footer from "../../components/Footer";
 import LoadingScreen from "../../components/LoadingScreen";
 import ConfirmDeleteUserModal from "../../components/modals/ConfirmDeleteUserModal";
 
+//displays all users
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);

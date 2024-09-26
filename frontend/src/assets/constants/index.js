@@ -15,7 +15,7 @@ export const adminHeaderLinks = [
     route: "/admin/manageGroups",
     label: "Manage Groups",
   },
-];
+]; //Paths for admin header
 
 export const formHeaderLinks = [
   {
@@ -34,4 +34,4 @@ export const formHeaderLinks = [
     route: "/admin/edit/permissions",
     label: "Permissions",
   },
-];
+]; //paths for form headers

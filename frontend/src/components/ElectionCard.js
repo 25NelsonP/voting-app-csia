@@ -2,6 +2,7 @@ import React from "react";
 import FormatDate from "./FormatDate";
 import { Link } from "react-router-dom";
 
+//election card for user side display
 const ElectionCard = ({ election }) => {
   return (
     <>

@@ -4,10 +4,12 @@ import logo from "./../assets/isylogo.png";
 import { RxAvatar } from "react-icons/rx";
 import useSession from "../utils/useSession";
 
+//header for all users
 function Header() {
-  const { user } = useSession();
+  const { user } = useSession(); //get user data
   const title = "ISY STUCO";
 
+  //if user is not logged in, display the general header
   if (!user) {
     return (
       <nav className="bg-amber px-4 py-3 flex justify-between relative w-full">
@@ -24,6 +26,7 @@ function Header() {
     );
   }
 
+  //if user is logged in, display the link to admin dashboard if the user is admin.
   return (
     <nav className="bg-amber px-4 py-3 flex justify-between relative w-full">
       <div className="flex space-x-4">

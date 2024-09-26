@@ -8,15 +8,16 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const AdminHome = () => {
-  const [votings, setVotings] = useState([]);
+  const [elections, setElections] = useState([]);
   const [loading, setLoading] = useState(true);
   const API_URL = process.env.REACT_APP_API_URL;
 
+  //fetch the elections
   useEffect(() => {
-    const fetchVotes = async () => {
+    const fetchElections = async () => {
       try {
         const res = await axios.get(`${API_URL}/elections`);
-        setVotings(res.data);
+        setElections(res.data);
         setLoading(false);
       } catch (error) {
         console.log("Error", error);
@@ -24,7 +25,7 @@ const AdminHome = () => {
       }
     };
 
-    fetchVotes();
+    fetchElections();
   }, [API_URL]);
 
   if (loading) {
@@ -39,9 +40,9 @@ const AdminHome = () => {
       <main className="flex-grow p-6">
         <h2 className="text-2xl font-bold mb-4"> Voting Forms </h2>
         <hr className="mb-2" />
-        {votings.length > 0 ? (
+        {elections.length > 0 ? (
           <ul className="space-y-3">
-            {votings.map((vote) => (
+            {elections.map((vote) => (
               <li
                 key={vote.election_id}
                 className="bg-white shadow p-6 rounded-lg flex justify-between items-center hover:bg-gray-50"

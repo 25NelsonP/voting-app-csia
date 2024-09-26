@@ -13,6 +13,7 @@ router.get("/:id", async (req, res) => {
   const electionId = req.params.id;
 
   try {
+    //search through EligibleVoter table and link with User
     const eligibleVoters = await EligibleVoter.findAll({
       where: { election_id: electionId },
       include: [
@@ -23,6 +24,7 @@ router.get("/:id", async (req, res) => {
       ],
     });
 
+    //Data formatting
     const students = eligibleVoters.map((voter) => ({
       student_id: voter.student_id,
       name: voter.User.name,
@@ -41,6 +43,7 @@ router.get("/groups/:id", async (req, res) => {
   const electionId = req.params.id;
 
   try {
+    //search the eligible groups
     const eligibleGroups = await EligibleGroup.findAll({
       where: { election_id: electionId },
       include: [
@@ -51,6 +54,7 @@ router.get("/groups/:id", async (req, res) => {
       ],
     });
 
+    //data formatting
     const groups = eligibleGroups.map((group) => ({
       group_id: group.group_id,
       group_name: group.Group.group_name,
@@ -63,7 +67,7 @@ router.get("/groups/:id", async (req, res) => {
   }
 });
 
-// Remove Access
+// Remove Access for a user
 router.delete("/:electionId/:studentId", async (req, res) => {
   const { electionId, studentId } = req.params;
 
@@ -103,7 +107,7 @@ router.delete("/groups/:electionId/:groupId", async (req, res) => {
   }
 });
 
-//Add Access
+//Add Access for a user
 router.post("/:id", async (req, res) => {
   const electionId = req.params.id;
   const studentId = req.body.student_id;

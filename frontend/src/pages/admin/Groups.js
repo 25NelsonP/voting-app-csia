@@ -21,6 +21,7 @@ const Groups = () => {
     numeric: true, // enable numeric sorting (e.g., "file2" before "file10")
   });
 
+  //fetch all groups from database
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -37,6 +38,7 @@ const Groups = () => {
 
   if (loading) return <LoadingScreen />;
 
+  // Filter and sort groups based on search term and sort order
   const filteredGroups = groups.filter((group) =>
     group.group_name.toLowerCase().includes(searchTerm.toLowerCase())
   );

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
 
+//stores the user token sent from backend into local storage.
 const AuthCallback = () => {
   const navigate = useNavigate();
   useEffect(() => {

@@ -21,6 +21,7 @@ const db = new Sequelize(
     port: process.env.DB_PORT, // The port to connect to
     dialect: "mysql", // The type of database
     dialectModule: mysql2, // The mysql2 module for MySQL connection
+    logging: false, // Disabled, but could Enable logging for debugging purposes
     dialectOptions:
       process.env.NODE_ENV === "production"
         ? {

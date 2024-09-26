@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 
+//used in Member adding for permission, admins and group
 const AddModal = ({ users, handleAdd, setModalStatus, type }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);

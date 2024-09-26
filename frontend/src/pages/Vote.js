@@ -8,6 +8,7 @@ import useSession from "../utils/useSession";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+//the page that combines form fill and confirmation for user form filling
 const VotingPage = () => {
   const location = useLocation();
 

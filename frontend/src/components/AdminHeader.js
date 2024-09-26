@@ -4,12 +4,14 @@ import { FaPlus, FaBars, FaTimes } from "react-icons/fa";
 import { adminHeaderLinks } from "./../assets/constants/index";
 import axios from "axios";
 
+//admin header only
 const Adminheader = () => {
-  const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate(); //for redirects
+  const API_URL = process.env.REACT_APP_API_URL; //get the backend api url in env
   const [creating, setCreating] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  //create a new form then redirect to the form.
   const handleCreateForm = async (e) => {
     setCreating(true);
     e.preventDefault();
@@ -24,6 +26,7 @@ const Adminheader = () => {
     }
   };
 
+  //sidebar for small screen devices
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -36,7 +39,7 @@ const Adminheader = () => {
         </NavLink>
       </div>
 
-      {/* Toggle button for mobile view */}
+      {/* Toggle sidebar button for small screen views, shows only when width is smaller than 768px */}
       <button className="md:hidden focus:outline-none" onClick={toggleSidebar}>
         {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
       </button>

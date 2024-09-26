@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+//login page
 const Login = () => {
   const navigate = useNavigate();
   const { user, loading: loaded } = useSession();
@@ -16,12 +17,14 @@ const Login = () => {
     return <LoadingScreen />;
   }
 
+  //redirect to home if already logged in
   if (user) {
     navigate("/");
     return null;
   }
   const API_URL = process.env.REACT_APP_API_URL;
 
+  //redirect to google login page and set loading to true when redirecting
   const handleLogin = () => {
     setLoading(true);
     window.location.href = `${API_URL}/auth/google`;

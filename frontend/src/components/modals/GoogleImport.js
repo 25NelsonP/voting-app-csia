@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaArrowRight, FaTimes } from "react-icons/fa";
 import axios from "axios";
 
+//import groups from school's google groups. (a custom api made by the school)
 const GoogleImport = ({ groupId, handleCancel }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [groups, setGroups] = useState([]);
@@ -23,6 +24,7 @@ const GoogleImport = ({ groupId, handleCancel }) => {
   );
 
   useEffect(() => {
+    //fetch all groups available
     const fetchGroups = async () => {
       setLoading(true);
       setError("");
@@ -49,6 +51,7 @@ const GoogleImport = ({ groupId, handleCancel }) => {
     fetchGroups();
   }, []);
 
+  //get members of a specific group.
   const handleGetGroup = async (groupEmail) => {
     setSelectedGroupEmail(groupEmail);
     setShowGroupMembers(true);

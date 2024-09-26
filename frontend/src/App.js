@@ -22,6 +22,8 @@ import {
 import AuthCallback from "./utils/AuthCallback";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import AdminProtectedRoute from "./components/AdminProtectedRoutes";
+
+//using react-router-dom for routing the pages
 function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">

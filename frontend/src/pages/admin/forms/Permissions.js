@@ -14,10 +14,10 @@ const Permissions = () => {
   const location = useLocation();
   const electionId = location.pathname.split("/")[4];
   const [loading, setLoading] = useState(true);
-  const [students, setStudents] = useState([]);
-  const [groups, setGroups] = useState([]);
-  const [groupEligible, setGroupEligible] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [students, setStudents] = useState([]); //all users eligible
+  const [groups, setGroups] = useState([]); //all groups
+  const [groupEligible, setGroupEligible] = useState([]); //the groups eligible
+  const [users, setUsers] = useState([]); // all users
   const [openAddUserModal, setOpenAddUserModal] = useState(false);
   const [openAddGroupModal, setOpenAddGroupModal] = useState(false);
   const [removingStudent, setRemovingStudent] = useState(null);

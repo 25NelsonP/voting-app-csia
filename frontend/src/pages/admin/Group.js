@@ -42,6 +42,7 @@ const Group = () => {
 
   const group_id = location.pathname.split("/")[3];
 
+  //backend fetch for group information
   useEffect(() => {
     const fetchGroupName = async () => {
       try {
@@ -69,6 +70,7 @@ const Group = () => {
     fetchData();
   }, [group_id, navigate, API_URL]);
 
+  // backend fetching for all users
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -83,6 +85,7 @@ const Group = () => {
     fetchUser();
   }, [members, API_URL]);
 
+  //backend saving for removing a member
   const handleRemoveMember = async () => {
     try {
       await axios.delete(
@@ -95,6 +98,7 @@ const Group = () => {
     }
   };
 
+  //backend saving for updating group name
   const handleUpdateGroupName = async () => {
     try {
       await axios.put(`${API_URL}/groups/${group_id}`, {
@@ -106,6 +110,7 @@ const Group = () => {
     }
   };
 
+  //backend saving for deleting group
   const handleDeleteGroup = async () => {
     try {
       await deleteAllMembers();
@@ -116,6 +121,7 @@ const Group = () => {
     }
   };
 
+  // called when deleting the whole form.
   const deleteAllMembers = async () => {
     try {
       const deletePromises = members.map((member) =>
@@ -128,6 +134,7 @@ const Group = () => {
     }
   };
 
+  //backend adding
   const handleAddMember = async (e, member_id) => {
     e.preventDefault();
 
@@ -159,6 +166,7 @@ const Group = () => {
     return <LoadingScreen />;
   }
 
+  //filter by searchterm
   const filteredMembers = members.filter((member) => {
     const name = member.name ? member.name.toLowerCase() : "";
     const email = member.email.toLowerCase();
@@ -166,6 +174,7 @@ const Group = () => {
     return name.includes(searchLower) || email.includes(searchLower);
   });
 
+  //sort the members
   const sortedMembers = [...filteredMembers].sort((a, b) => {
     const aValue = sortType === "name" ? a.name || a.email : a.email;
     const bValue = sortType === "name" ? b.name || b.email : b.email;

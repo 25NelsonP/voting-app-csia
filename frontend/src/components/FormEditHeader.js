@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { formHeaderLinks } from "./../assets/constants/index";
 
+//header for form editor
 const FormEditHeader = ({ electionId }) => {
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState("");

@@ -1,5 +1,6 @@
 import React from "react";
 
+//presents the candidate for the form and editor
 const CandidateCard = ({ candidate, positionId, isSelected, onSelect }) => {
   return (
     <div

@@ -18,8 +18,8 @@ const app = express();
 
 // Custom middleware to enforce origin checks with exceptions
 app.use((req, res, next) => {
-  const allowedOrigin = process.env.ORIGIN;
-  const openRoutes = ["/auth/google/redirect"];
+  const allowedOrigin = process.env.ORIGIN; //only the ORIGIN given in the ENV is allowed.
+  const openRoutes = ["/auth/google/redirect"]; //open as it is redirected back from google
 
   // Check if the route is in the openRoutes array
   if (openRoutes.includes(req.path)) {
@@ -74,6 +74,8 @@ app.get(
 );
 
 // Verify JWT token on every request
+// tokens are stored in the user's device and the backend, this will verify if the token is valid.
+//as well as returning the user information.
 app.get("/auth/user", async (req, res) => {
   const authHeader = req.headers.authorization;
 

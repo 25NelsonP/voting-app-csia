@@ -10,25 +10,32 @@ import LoadingScreen from "../../../components/LoadingScreen";
 
 const Edit = () => {
   const location = useLocation();
-  const electionId = location.pathname.split("/")[3];
-  const [positions, setPositions] = useState([]);
+  const electionId = location.pathname.split("/")[3]; //get election id from path
+  const [positions, setPositions] = useState([]); //positions state
   const [loading, setLoading] = useState(true);
 
+  //open the add/edit forms
+  const [addingCandidate, setAddingCandidate] = useState(null);
+  const [addingPosition, setAddingPosition] = useState(false);
+  const [editingPosition, setEditingPosition] = useState(null);
+  const [editingCandidate, setEditingCandidate] = useState(null);
+
+  //processing text
   const [processingPosition, setProcessingPosition] = useState(false);
   const [processingCandidate, setProcessingCandidate] = useState(false);
   const [deletingCandidate, setDeletingCandidate] = useState(false);
   const [deletingPosition, setDeletingPosition] = useState(false);
-  const [editingPosition, setEditingPosition] = useState(null);
-  const [editingCandidate, setEditingCandidate] = useState(null);
+
+  //states for the new value
   const [newPositionDescription, setNewPositionDescription] = useState("");
   const [newCandidateName, setNewCandidateName] = useState("");
   const [newCandidateGrade, setNewCandidateGrade] = useState("");
   const [newCandidateImageUrl, setNewCandidateImageUrl] = useState("");
-  const [addingCandidate, setAddingCandidate] = useState(null);
-  const [addingPosition, setAddingPosition] = useState(false);
+
   const BACKEND_API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
+    //get the positions and the corresponding candidate
     const fetchPositions = async () => {
       try {
         const res = await axios.get(
@@ -45,6 +52,7 @@ const Edit = () => {
   }, [electionId, BACKEND_API_URL]);
 
   const handleRemovePosition = async (positionId) => {
+    //delete the position
     setDeletingPosition(true);
     try {
       await deleteCandidates(positionId);
@@ -60,6 +68,7 @@ const Edit = () => {
     }
   };
 
+  //called when deleting a position, to delete the corresponding candidate
   const deleteCandidates = async (positionId) => {
     const position = positions.find((pos) => pos.position_id === positionId);
     try {
@@ -74,6 +83,7 @@ const Edit = () => {
     }
   };
 
+  //delete a candidate
   const handleRemoveCandidate = async (positionId, candidateId) => {
     setDeletingCandidate(true);
     try {
@@ -99,6 +109,7 @@ const Edit = () => {
     }
   };
 
+  //set editing states
   const handleEditPosition = (positionId) => {
     setEditingPosition(positionId);
     const position = positions.find((pos) => pos.position_id === positionId);
@@ -106,6 +117,7 @@ const Edit = () => {
     setAddingPosition(false);
   };
 
+  //backend saving
   const handleUpdatePosition = async (positionId) => {
     const position = positions.find((pos) => pos.position_id === positionId);
     if (newPositionDescription === position.title) {
@@ -133,6 +145,7 @@ const Edit = () => {
     }
   };
 
+  //set editing candidate states
   const handleEditCandidate = (positionId, candidateId) => {
     setAddingCandidate(false);
     setEditingCandidate({ positionId, candidateId });
@@ -145,6 +158,7 @@ const Edit = () => {
     setNewCandidateImageUrl(candidate.img_url);
   };
 
+  // backend saving
   const handleUpdateCandidate = async (positionId, candidateId) => {
     const position = positions.find((pos) => pos.position_id === positionId);
     const candidate = position.candidates.find(
@@ -196,6 +210,7 @@ const Edit = () => {
     }
   };
 
+  //set states for a new candidate
   const handleAddCandidate = (positionId) => {
     setEditingCandidate(false);
     setAddingCandidate(positionId);
@@ -204,6 +219,7 @@ const Edit = () => {
     setNewCandidateImageUrl("");
   };
 
+  // backend saving
   const handleSaveNewCandidate = async (positionId) => {
     if (!newCandidateName || !newCandidateGrade) {
       alert("Name and grade cannot be empty.");
@@ -235,12 +251,14 @@ const Edit = () => {
     }
   };
 
+  //set states for a new position
   const handleAddPosition = () => {
     setAddingPosition(true);
     setEditingPosition(false);
     setNewPositionDescription("");
   };
 
+  // backend saving
   const handleSaveNewPosition = async () => {
     setProcessingPosition(true);
     try {

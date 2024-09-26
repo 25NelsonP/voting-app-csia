@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+//backend call for authentication with the token in front and backend.
 const useSession = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

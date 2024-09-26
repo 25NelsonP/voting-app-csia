@@ -12,6 +12,7 @@ const Responses = () => {
   const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  //backend call
   useEffect(() => {
     const fetchResponses = async () => {
       try {
