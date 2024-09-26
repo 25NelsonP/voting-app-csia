@@ -29,6 +29,14 @@ const Group = () => {
   const [users, setUsers] = useState([]);
   const [importingcsv, setImportingcsv] = useState(false);
   const [importingGoogle, setImportingGoogle] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortType, setSortType] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
+  // Create a collator instance for locale-aware sorting
+  const collator = new Intl.Collator("en", {
+    sensitivity: "base", // base = ignore accents and case
+    numeric: true, // enable numeric sorting (e.g., "file2" before "file10")
+  });
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -151,6 +159,23 @@ const Group = () => {
     return <LoadingScreen />;
   }
 
+  const filteredMembers = members.filter((member) => {
+    const name = member.name ? member.name.toLowerCase() : "";
+    const email = member.email.toLowerCase();
+    const searchLower = searchTerm.toLowerCase();
+    return name.includes(searchLower) || email.includes(searchLower);
+  });
+
+  const sortedMembers = [...filteredMembers].sort((a, b) => {
+    const aValue = sortType === "name" ? a.name || a.email : a.email;
+    const bValue = sortType === "name" ? b.name || b.email : b.email;
+
+    if (sortOrder === "asc") {
+      return collator.compare(aValue, bValue);
+    } else {
+      return collator.compare(bValue, aValue);
+    }
+  });
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Header />
@@ -210,21 +235,49 @@ const Group = () => {
             </button>
           </div>
         </div>
-        {members.length > 0 ? (
+        <div className="w-full flex justify-between items-center mb-3 space-x-3">
+          {/* Searching */}
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search members..."
+            className="p-2 w-full border rounded-md"
+          />
+          <select
+            value={sortType}
+            onChange={(e) => setSortType(e.target.value)}
+            className="p-2 border rounded-md"
+          >
+            <option value="name">Sort by Name</option>
+            <option value="email">Sort by Email</option>
+          </select>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="p-2 border rounded-md"
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+        {sortedMembers.length > 0 ? (
           <div className="w-full overflow-x-auto rounded-lg shadow-md">
             <table className="w-full text-sm text-black">
               <thead className="text-white bg-blue-700">
                 <tr>
-                  <th className="border-b p-2 text-center w-4/5">Name</th>
+                  <th className="border-b p-2 text-center w-2/5">Name</th>
+                  <th className="border-b p-2 text-center w-2/5">Email</th>
                   <th className="border-b p-2 text-center"></th>
                 </tr>
               </thead>
               <tbody>
-                {members.map((member) => (
+                {sortedMembers.map((member) => (
                   <tr className="bg-gray-100 border-b " key={member.user_id}>
                     <td className="px-4 py-2 text-left">
-                      {member.name ? member.name : member.email}
+                      {member.name ? member.name : "N/A"}
                     </td>
+                    <td className="px-4 py-2 text-center">{member.email}</td>
                     <td className="px-4 py-2 text-right">
                       <button
                         onClick={() => confirmRemoveMember(member.user_id)}

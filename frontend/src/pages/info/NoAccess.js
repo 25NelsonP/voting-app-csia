@@ -13,7 +13,7 @@ const NoAccessPage = () => {
 
       <main className="flex flex-col items-center p-3">
         <div className="mb-10 text-center">
-          <p>Contact HS STUCO if you think this is an error.</p>
+          <p>Contact STUCO if you think this is an error.</p>
         </div>
         <div className="p-2">
           <Link

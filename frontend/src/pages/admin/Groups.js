@@ -13,6 +13,13 @@ const Groups = () => {
   const [loading, setLoading] = useState(true);
   const [openCreateGroupModal, setOpenCreateGroupModal] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+  // Create a collator instance for locale-aware sorting
+  const collator = new Intl.Collator("en", {
+    sensitivity: "base", // base = ignore accents and case
+    numeric: true, // enable numeric sorting (e.g., "file2" before "file10")
+  });
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -29,6 +36,21 @@ const Groups = () => {
   }, [API_URL]);
 
   if (loading) return <LoadingScreen />;
+
+  const filteredGroups = groups.filter((group) =>
+    group.group_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedGroups = [...filteredGroups].sort((a, b) => {
+    const aValue = a.group_name;
+    const bValue = b.group_name;
+
+    if (sortOrder === "asc") {
+      return collator.compare(aValue, bValue);
+    } else {
+      return collator.compare(bValue, aValue);
+    }
+  });
 
   return (
     <div className="min-h-screen flex flex-col items-center">
@@ -47,7 +69,25 @@ const Groups = () => {
             </button>
           </div>
         </div>
-        {groups.length > 0 ? (
+        <div className="w-full flex justify-between items-center mb-3 space-x-3">
+          {/* Searching */}
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search groups..."
+            className="p-2 w-full border rounded-md"
+          />
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="p-2 border rounded-md"
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+        {sortedGroups.length > 0 ? (
           <div className="w-full overflow-x-auto rounded-lg shadow-md">
             <table className="w-full text-sm text-black">
               <thead className="text-white bg-blue-700">
@@ -57,7 +97,7 @@ const Groups = () => {
                 </tr>
               </thead>
               <tbody>
-                {groups.map((groups) => (
+                {sortedGroups.map((groups) => (
                   <tr className="bg-gray-100 border-b " key={groups.group_id}>
                     <td className="px-4 py-2 text-left">{groups.group_name}</td>
                     <td className="p-4 text-right">

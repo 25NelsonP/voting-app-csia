@@ -18,14 +18,14 @@ const ConfirmModal = ({
         <div className="flex space-x-4">
           <button
             onClick={handleCancel}
-            className="bg-red-600 text-white p-2 rounded w-3/6 flex items-center justify-center"
+            className="bg-red-600 text-white p-2 rounded w-3/6 flex items-center justify-center hover:bg-red-800"
           >
             <p>{cancelLabel}</p>
           </button>
           <button
             onClick={handleConfirm}
             disabled={loading}
-            className="bg-green-600 text-white p-2 rounded w-3/5 flex items-center justify-center disabled:bg-green-200"
+            className="bg-green-600 hover:bg-green-800 text-white p-2 rounded w-3/5 flex items-center justify-center disabled:bg-green-200"
           >
             <p>{loading ? "Processing..." : confirmLabel}</p>
           </button>

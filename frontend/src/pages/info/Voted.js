@@ -16,7 +16,7 @@ const VotedPage = () => {
       <main className="flex flex-col items-center p-3">
         <div className="mb-10 text-center">
           <h2 className="text-2xl font-bold py-3">Thank You for Voting!</h2>
-          <p>Contact HS STUCO if you think this is an error.</p>
+          <p>Contact STUCO if you think this is an error.</p>
         </div>
         <div className="p-2">
           <Link

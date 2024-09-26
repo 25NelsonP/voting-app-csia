@@ -9,13 +9,13 @@ const ClosedPage = () => {
       <Header />
       <header className="bg-blue-600 text-white p-4 w-full text-center">
         <h1 className="text-xl font-bold">
-          This election is no longer accepting responses
+          This election is not accepting responses at this time.
         </h1>
       </header>
 
       <main className="flex flex-col items-center p-3">
         <div className="mb-10 text-center">
-          <p>Contact HS STUCO if you think this is an error.</p>
+          <p>Contact STUCO if you think this is an error.</p>
         </div>
         <div className="p-2">
           <Link

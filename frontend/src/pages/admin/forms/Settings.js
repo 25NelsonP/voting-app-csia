@@ -84,11 +84,11 @@ const Settings = () => {
   };
 
   const handleSave = async () => {
-    setSaving(true);
     if (!validateDates(formState)) {
       alert("End date must be after the start date.");
       return;
     }
+    setSaving(true);
     try {
       await axios.put(
         `${process.env.REACT_APP_API_URL}/elections/${electionId}`,
