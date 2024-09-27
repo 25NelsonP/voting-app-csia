@@ -9,9 +9,11 @@ Deploy the frontend and backend separately on different domains. Use .env.exampl
 # To run this project locally.
 
 cd backend
+
 npm start
 
 cd frontend
+
 npm start
 
 the link will be at localhost:3000 for frontend and localhost:8080 for backend.
