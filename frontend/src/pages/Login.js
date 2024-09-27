@@ -28,6 +28,7 @@ const Login = () => {
   const handleLogin = () => {
     setLoading(true);
     window.location.href = `${API_URL}/auth/google`;
+    setLoading(false);
   };
 
   return (

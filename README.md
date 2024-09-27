@@ -21,7 +21,11 @@ the link will be at localhost:3000 for frontend and localhost:8080 for backend.
 # Database
 
 MYSQL database is used in this project.
-Database information is to be added in the .env file in the backend.#
+Database information is to be added in the .env file in the backend.
+
+# Google Group Import
+
+It uses a custom api that includes the groups from google. Provided by the school.
 
 # Folder Structure
 
