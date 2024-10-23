@@ -20,17 +20,17 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         // Check if user already exists in the database
-        let user = await User.findOne({ where: { googleId: profile.id } });
+        let user = await User.findOne({ where: { google_id: profile.id } });
 
-        // If not found by googleId, check by email
+        // If not found by google_id, check by email
         if (!user) {
           user = await User.findOne({
             where: { email: profile.emails[0].value },
           });
 
-          // If found by email, update the user with googleId and possibly the name
+          // If found by email, update the user with google_id and possibly the name
           if (user) {
-            user.googleId = profile.id;
+            user.google_id = profile.id;
 
             if (user.name !== profile.displayName) {
               user.name = profile.displayName;
@@ -42,12 +42,12 @@ passport.use(
 
             await user.save();
           } else {
-            // Create a new user if no match found by googleId or email
+            // Create a new user if no match found by google_id or email
             user = await User.create({
               name: profile.displayName,
               email: profile.emails[0].value,
               is_admin: false,
-              googleId: profile.id,
+              google_id: profile.id,
             });
           }
         } else {

@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const users = await User.findAll({
-      attributes: ["user_id", "name", "email", "googleId"],
+      attributes: ["user_id", "name", "email", "google_id"],
     });
     return res.json(users);
   } catch (err) {
