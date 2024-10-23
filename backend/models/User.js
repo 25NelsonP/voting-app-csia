@@ -19,7 +19,7 @@ const User = db.define(
       allowNull: false,
       unique: true,
     },
-    googleId: {
+    google_id: {
       type: DataTypes.STRING,
       allowNull: true,
       unique: true,

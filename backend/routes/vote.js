@@ -8,7 +8,7 @@ import GroupMember from "../models/GroupMember.js";
 
 const router = express.Router();
 
-//Get Vote Results
+//Get Voting Results
 router.get("/:electionId", async (req, res) => {
   const { electionId } = req.params;
 
@@ -54,6 +54,7 @@ router.get("/:electionId", async (req, res) => {
   }
 });
 
+//Saving a vote
 router.post("/submit", async (req, res) => {
   const { voter_id, election_id, votes } = req.body;
 

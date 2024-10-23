@@ -7,7 +7,7 @@ import Election from "./Election.js";
 const EligibleGroup = db.define(
   "EligibleGroup",
   {
-    eligibleGroupid: {
+    eligible_groupid: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
