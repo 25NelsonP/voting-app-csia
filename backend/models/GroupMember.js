@@ -3,7 +3,7 @@ import db from "./../db.js";
 import User from "./User.js";
 import Group from "./Group.js";
 
-//Sequelize Model for Group_Members Table
+//Sequelize Model for GroupMembers Table
 const GroupMember = db.define(
   "GroupMember",
   {
@@ -27,7 +27,7 @@ const GroupMember = db.define(
     },
   },
   {
-    tableName: "Group_Members",
+    tableName: "GroupMembers",
     timestamps: false,
   }
 );

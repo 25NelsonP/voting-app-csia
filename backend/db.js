@@ -11,6 +11,7 @@ import dotenv from "dotenv";
 // }
 
 dotenv.config();
+
 // Define the Sequelize configuration
 const db = new Sequelize(
   process.env.DB_NAME, // The database name
