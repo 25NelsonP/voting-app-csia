@@ -19,6 +19,7 @@ const Admins = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortType, setSortType] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
+
   // Create a collator instance for locale-aware sorting
   const collator = new Intl.Collator("en", {
     sensitivity: "base", // base = ignore accents and case

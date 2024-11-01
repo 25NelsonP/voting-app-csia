@@ -15,6 +15,7 @@ const VotingPage = () => {
   const { user } = useSession();
 
   const electionId = location.pathname.split("/")[2];
+
   const [loading, setLoading] = useState(true);
   const [election, setElection] = useState([]);
   const [selectedCandidates, setSelectedCandidates] = useState({});

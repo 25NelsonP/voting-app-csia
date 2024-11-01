@@ -12,6 +12,7 @@ const router = express.Router();
 // Get all elections
 router.get("/", async (req, res) => {
   try {
+    //Fetch all elections from the database
     const elections = await Election.findAll();
 
     // Update the accepting_responses field based on current date
