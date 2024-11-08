@@ -3,15 +3,24 @@ import { FcGoogle } from "react-icons/fc";
 import logo from "./../assets/isylogo.png";
 import useSession from "../utils/useSession";
 import LoadingScreen from "../components/LoadingScreen";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 //login page
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading: loaded } = useSession();
   const [loading, setLoading] = useState(false);
+
+  // Use URLSearchParams to parse the redirect query parameter
+  const queryParams = new URLSearchParams(location.search);
+  const redirectPath = queryParams.get("redirect") || "/";
+
+  if (redirectPath) {
+    localStorage.setItem("redirectPath", redirectPath);
+  }
 
   if (loaded) {
     return <LoadingScreen />;

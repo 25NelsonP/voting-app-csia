@@ -66,10 +66,17 @@ const VotingPage = () => {
   }, [user, API_URL, navigate, electionId]);
 
   const selectCandidate = (positionId, candidateId) => {
-    setSelectedCandidates((prevSelectedCandidates) => ({
-      ...prevSelectedCandidates,
-      [positionId]: candidateId,
-    }));
+    if (selectedCandidates[positionId] === candidateId) {
+      setSelectedCandidates((prevSelectedCandidates) => ({
+        ...prevSelectedCandidates,
+        [positionId]: null,
+      }));
+    } else {
+      setSelectedCandidates((prevSelectedCandidates) => ({
+        ...prevSelectedCandidates,
+        [positionId]: candidateId,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {

@@ -25,6 +25,7 @@ const useSession = () => {
       })
       .catch(() => {
         setUser(null);
+        localStorage.removeItem("jwtToken");
       })
       .finally(() => {
         setLoading(false);

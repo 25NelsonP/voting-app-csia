@@ -36,6 +36,9 @@ const ViewProfile = () => {
           <p className="text-gray-800">
             <strong>Email:</strong> {user.email}
           </p>
+          <p>
+            <strong>Account Type:</strong> {user.is_admin ? "Admin" : "User"}
+          </p>
         </div>
         <button
           onClick={handleLogout}
