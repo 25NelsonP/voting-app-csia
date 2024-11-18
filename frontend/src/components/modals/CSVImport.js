@@ -44,6 +44,7 @@ const ImportCSV = ({ groupId, handleCancel }) => {
       );
       window.location.reload();
     } catch (error) {
+      alert("No valid email found in the given CSV");
       console.error("Error importing users", error);
     }
   };

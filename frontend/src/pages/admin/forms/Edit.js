@@ -450,7 +450,7 @@ const Edit = () => {
                       className="p-2 border rounded mb-2 w-full"
                     />
                     <input
-                      type="text"
+                      type="number"
                       id="newGrade"
                       value={newCandidateGrade}
                       disabled={processingCandidate}

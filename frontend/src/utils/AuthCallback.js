@@ -18,6 +18,7 @@ const AuthCallback = () => {
 
     if (redirectPath) {
       navigate(redirectPath);
+      localStorage.removeItem("redirectPath");
     } else {
       navigate("/");
     }

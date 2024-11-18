@@ -123,7 +123,7 @@ router.post("/import/:groupId", async (req, res) => {
   const { emails } = req.body;
 
   // Email validation regex
-  const emailRegex = /\S+@\S+\.\S+/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@isyedu\.org$/;
   const validEmails = emails.filter((email) => emailRegex.test(email));
 
   if (validEmails.length === 0) {
